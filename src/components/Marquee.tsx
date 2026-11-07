@@ -48,7 +48,7 @@ export default function Marquee() {
   const items = [...marquee, ...marquee];
 
   return (
-    <div ref={root} aria-label={marquee.join(", ")} role="marquee" className="relative overflow-hidden py-[clamp(20px,2.6vw,36px)]">
+    <div ref={root} aria-label={marquee.join(", ")} role="marquee" className="relative overflow-hidden py-[clamp(28px,3.4vw,52px)]">
       {/* Reduced motion: one copy, centred, items wrap as whole phrases with the bullets inline. */}
       <div
         ref={track}
