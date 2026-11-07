@@ -30,7 +30,11 @@ export default function Footer() {
 
       {/* Contact panel */}
       <section aria-label="Contact details" className="relative overflow-hidden bg-mist py-[clamp(36px,4vw,56px)]">
-        <Image src="/icons/bg-flame.svg" alt="" aria-hidden width={396} height={626} className="pointer-events-none absolute right-[8%] top-1/2 h-[150%] w-auto -translate-y-1/2 opacity-80 brightness-[2.3] saturate-0 mix-blend-soft-light" />
+        {/* The JJM mark, supplied white at 25% opacity, oversized and bleeding off the right edge as drawn.
+            Centring lives on the wrapper so the parallax transform on the image doesn't fight it. */}
+        <div className="pointer-events-none absolute -right-[12%] top-1/2 h-[110%] -translate-y-1/2 select-none md:-right-[1%] md:h-[165%]" aria-hidden>
+          <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} data-parallax="8" className="h-full w-auto" />
+        </div>
         <div className="site relative grid gap-10 md:grid-cols-[1fr_auto]" data-reveal>
           <ul className="flex flex-col items-start gap-3">
             <li><Chip label="Office" value={company.phone} href={company.phoneHref} /></li>
