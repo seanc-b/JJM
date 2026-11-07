@@ -10,6 +10,14 @@ import { sections } from "@/content/home";
 
 /** Scroll distance per photo, as a fraction of the viewport height. */
 const STEP_VH = 0.85;
+/**
+ * The soft landing, as a fraction of the viewport height. Over the last stretch of the approach
+ * the section's content slows to a stop instead of halting dead when the section locks. It takes
+ * twice this distance of scrolling to cover this distance on screen.
+ */
+const DOCK_VH = 0.25;
+/** How far the gear lags behind on the way in, as a fraction of the viewport height. */
+const GEAR_PARALLAX_VH = 0.16;
 /** The incoming photo starts this far into a step, so the outgoing one visibly moves first. */
 const LAG = 0.1;
 /** Each photo's move fills the rest of the step, so there's no scroll distance where nothing happens. */
@@ -97,7 +105,7 @@ const TOTAL = steps.length - 1 + TAIL;
  * ServicesAccordion takes over.
  */
 export default function ServicesScroller() {
-  const root = useRef<HTMLElement>(null);
+  const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
   const jump = useRef<gsap.core.Timeline | null>(null);
   const lenis = useLenis();
@@ -135,15 +143,47 @@ export default function ServicesScroller() {
 
         markActive(0);
 
+        const dockDistance = () => window.innerHeight * DOCK_VH;
+        const dock = el.querySelector("[data-dock]");
+
+        // Soft landing. The section locks (position: sticky) halfway through this range. The offset
+        // grows as it approaches and shrinks after, in step with the section's own travel stopping,
+        // so the content's speed on screen falls smoothly from scroll speed to zero, with no kink.
+        ScrollTrigger.create({
+          trigger: el,
+          start: () => `top ${dockDistance()}px`,
+          end: () => `top+=${dockDistance()} top`,
+          invalidateOnRefresh: true,
+          onUpdate: ({ progress: p }) => {
+            gsap.set(dock, { y: dockDistance() * (p < 0.5 ? p * p : (1 - p) * (1 - p)) });
+          },
+        });
+
+        // The gear lags behind the page on the way in, settling as the landing finishes.
+        gsap.fromTo(
+          icons[0],
+          { y: () => -window.innerHeight * GEAR_PARALLAX_VH },
+          {
+            y: 0,
+            ease: "power1.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: () => `top+=${dockDistance()} top`,
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: el,
-            start: "top top",
-            end: () => `+=${Math.round(TOTAL * window.innerHeight * STEP_VH)}`,
-            pin: true,
+            // Photos start as the landing ends, so scrolling always moves something.
+            start: () => `top+=${dockDistance()} top`,
+            end: "bottom bottom",
             scrub: 0.5,
-            anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               // The switcher moves as the outgoing text finishes fading, halfway through the step.
@@ -232,128 +272,136 @@ export default function ServicesScroller() {
   };
 
   return (
-    <section
+    // This outer box sets the scroll length; the section sticks to the top of the viewport inside it.
+    <div
       ref={root}
-      aria-label="Services"
-      // --u is 1vw on the design's proportions; on shorter, wider windows it follows the height instead.
-      className="relative hidden overflow-hidden [--u:min(1vw,1.875svh)] md:block motion-reduce:md:hidden"
+      className="hidden md:block motion-reduce:md:hidden"
+      style={{ height: `calc(100svh + ${((DOCK_VH + TOTAL * STEP_VH) * 100).toFixed(2)}svh)` }}
     >
-      {/* Oversized background icons, one per service, crossfaded by the timeline */}
-      <div data-icons className="pointer-events-none absolute inset-0 select-none" aria-hidden>
-        {sections.map((s, si) => {
-          const icon = BG_ICONS[s.id];
-          return (
-            <Image
-              key={s.id}
-              data-bg
-              src={s.bgIcon}
-              alt=""
-              width={Math.round(icon.w)}
-              height={Math.round(icon.h)}
-              priority={si === 0}
-              className="absolute h-auto max-w-none"
-              style={{
-                width: inU(icon.w),
-                left: `${((icon.left / 1500) * 100).toFixed(2)}vw`,
-                top: icon.top === undefined ? undefined : inU(icon.top),
-                bottom: icon.bottom === undefined ? undefined : inU(icon.bottom),
-              }}
-            />
-          );
-        })}
-      </div>
-
-      <div className="site relative grid h-svh grid-cols-12 items-center gap-x-8">
-        {/* Text column */}
-        <div className="relative col-span-5 flex h-full items-center lg:col-span-4">
-          {/* Text blocks stacked in one grid cell; the timeline shows one at a time */}
-          <div data-text-stack className="relative grid w-full">
-            {sections.map((s) => (
-              <div key={s.id} data-text className="[grid-area:1/1]">
-                <div className="ruled flex items-start justify-between gap-6 py-4">
-                  <h2 id={`${s.id}-title`} className="display text-[clamp(1.5rem,2.1vw,1.9rem)] text-navy">
-                    {s.title.map((line) => (
-                      <span key={line} className="block">
-                        {line}
-                      </span>
-                    ))}
-                  </h2>
-                  <Image src={s.icon} alt="" width={44} height={44} className="size-11 shrink-0" />
-                </div>
-                <p className="mt-7 max-w-[42ch] text-[clamp(1.1rem,1.6vw,1.5rem)] leading-[1.45] text-ink">
-                  <strong className="font-bold text-black">{s.lead}</strong>
-                  {s.body}
-                </p>
-                <div className="mt-8">
-                  <Button href={s.href} icon={<IconPlus />}>
-                    Learn more
-                  </Button>
-                </div>
-              </div>
-            ))}
+      <section
+        aria-label="Services"
+        // --u is 1vw on the design's proportions; on shorter, wider windows it follows the height instead.
+        className="sticky top-0 h-svh overflow-hidden [--u:min(1vw,1.875svh)]"
+      >
+        <div data-dock className="relative h-full">
+          {/* Oversized background icons, one per service, crossfaded by the timeline */}
+          <div data-icons className="pointer-events-none absolute inset-0 select-none" aria-hidden>
+            {sections.map((s, si) => {
+              const icon = BG_ICONS[s.id];
+              return (
+                <Image
+                  key={s.id}
+                  data-bg
+                  src={s.bgIcon}
+                  alt=""
+                  width={Math.round(icon.w)}
+                  height={Math.round(icon.h)}
+                  priority={si === 0}
+                  className="absolute h-auto max-w-none"
+                  style={{
+                    width: inU(icon.w),
+                    left: `${((icon.left / 1500) * 100).toFixed(2)}vw`,
+                    top: icon.top === undefined ? undefined : inU(icon.top),
+                    bottom: icon.bottom === undefined ? undefined : inU(icon.bottom),
+                  }}
+                />
+              );
+            })}
           </div>
 
-          {/* Service switcher: an outlined pill with a navy marker that slides to the active service */}
-          <nav
-            data-switcher
-            aria-label="Jump to a service"
-            className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 rounded-full border border-navy/30 bg-white p-1 [--active:0]"
-          >
-            <span
-              aria-hidden
-              className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/4)] rounded-full bg-navy transition-transform duration-700 ease-[var(--ease-out-expo)]"
-              style={{ transform: "translateX(calc(var(--active) * 100%))" }}
-            />
-            {sections.map((s, si) => (
-              <button
-                key={s.id}
-                type="button"
-                data-rail
-                aria-label={s.title.join(" ")}
-                onClick={() => jumpTo(si)}
-                className={`relative h-10 cursor-pointer rounded-full text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-white [&:not(.is-active)]:hover:bg-frost ${si === 0 ? "is-active" : ""}`}
-              >
-                {s.navLabel}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
+          <div className="site relative grid h-svh grid-cols-12 items-center gap-x-8">
+            {/* Text column */}
+            <div className="relative col-span-5 flex h-full items-center lg:col-span-4">
+              {/* Text blocks stacked in one grid cell; the timeline shows one at a time */}
+              <div data-text-stack className="relative grid w-full">
+                {sections.map((s) => (
+                  <div key={s.id} data-text className="[grid-area:1/1]">
+                    <div className="ruled flex items-start justify-between gap-6 py-4">
+                      <h2 id={`${s.id}-title`} className="display text-[clamp(1.5rem,2.1vw,1.9rem)] text-navy">
+                        {s.title.map((line) => (
+                          <span key={line} className="block">
+                            {line}
+                          </span>
+                        ))}
+                      </h2>
+                      <Image src={s.icon} alt="" width={44} height={44} className="size-11 shrink-0" />
+                    </div>
+                    <p className="mt-7 max-w-[42ch] text-[clamp(1.1rem,1.6vw,1.5rem)] leading-[1.45] text-ink">
+                      <strong className="font-bold text-black">{s.lead}</strong>
+                      {s.body}
+                    </p>
+                    <div className="mt-8">
+                      <Button href={s.href} icon={<IconPlus />}>
+                        Learn more
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-      {/* Photo stage: full height, from the text column to the viewport edge */}
-      <div data-stage className="absolute inset-y-0 left-[43%] right-0">
-        {steps.map((step, k) => {
-          const order = CORNER_ORDER[step.si % CORNER_ORDER.length];
-          const corner = order[step.ii % order.length];
-          const override = PHOTO_OVERRIDES[step.img.src];
-          const ratio = override?.ratio ?? step.aspect;
-          const widthPct = override?.widthPct ?? step.widthPct;
-          return (
-            <div
-              key={`${step.si}-${step.ii}`}
-              data-slide
-              className={`absolute will-change-transform ${override?.cls ?? corner.cls}`}
-              style={{
-                width: `min(${widthPct}%, calc(92svh * ${ratio.toFixed(3)}))`,
-                aspectRatio: ratio.toFixed(3),
-                transformOrigin: override?.origin ?? corner.origin,
-                bottom: override?.bottom,
-              }}
-            >
-              <Image
-                src={step.img.src}
-                alt={step.img.alt}
-                fill
-                // A cropped photo draws wider than its box, so it asks for a proportionally larger file.
-                sizes={`${Math.round(widthPct * 0.57 * (step.aspect / ratio))}vw`}
-                priority={k === 0}
-                className="object-cover"
-                style={{ objectPosition: override?.position }}
-              />
+              {/* Service switcher: an outlined pill with a navy marker that slides to the active service */}
+              <nav
+                data-switcher
+                aria-label="Jump to a service"
+                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 rounded-full border border-navy/30 bg-white p-1 [--active:0]"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/4)] rounded-full bg-navy transition-transform duration-700 ease-[var(--ease-out-expo)]"
+                  style={{ transform: "translateX(calc(var(--active) * 100%))" }}
+                />
+                {sections.map((s, si) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    data-rail
+                    aria-label={s.title.join(" ")}
+                    onClick={() => jumpTo(si)}
+                    className={`relative h-10 cursor-pointer rounded-full text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-white [&:not(.is-active)]:hover:bg-frost ${si === 0 ? "is-active" : ""}`}
+                  >
+                    {s.navLabel}
+                  </button>
+                ))}
+              </nav>
             </div>
-          );
-        })}
-      </div>
-    </section>
+          </div>
+
+          {/* Photo stage: full height, from the text column to the viewport edge */}
+          <div data-stage className="absolute inset-y-0 left-[43%] right-0">
+            {steps.map((step, k) => {
+              const order = CORNER_ORDER[step.si % CORNER_ORDER.length];
+              const corner = order[step.ii % order.length];
+              const override = PHOTO_OVERRIDES[step.img.src];
+              const ratio = override?.ratio ?? step.aspect;
+              const widthPct = override?.widthPct ?? step.widthPct;
+              return (
+                <div
+                  key={`${step.si}-${step.ii}`}
+                  data-slide
+                  className={`absolute will-change-transform ${override?.cls ?? corner.cls}`}
+                  style={{
+                    width: `min(${widthPct}%, calc(92svh * ${ratio.toFixed(3)}))`,
+                    aspectRatio: ratio.toFixed(3),
+                    transformOrigin: override?.origin ?? corner.origin,
+                    bottom: override?.bottom,
+                  }}
+                >
+                  <Image
+                    src={step.img.src}
+                    alt={step.img.alt}
+                    fill
+                    // A cropped photo draws wider than its box, so it asks for a proportionally larger file.
+                    sizes={`${Math.round(widthPct * 0.57 * (step.aspect / ratio))}vw`}
+                    priority={k === 0}
+                    className="object-cover"
+                    style={{ objectPosition: override?.position }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
