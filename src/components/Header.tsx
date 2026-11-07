@@ -82,8 +82,8 @@ export default function Header() {
   return (
     <>
       {/* Full header over the hero */}
-      <header className="absolute inset-x-0 top-0 z-30 text-white">
-        <div className="site flex h-[84px] items-center justify-between border-b border-white/35">
+      <header className="absolute inset-x-0 top-0 z-30 border-b border-white/35 text-white">
+        <div className="site flex h-[84px] items-center justify-between">
           <Link href="/" aria-label="JJM Mechanical Group, home" className="block transition-opacity duration-300 hover:opacity-80">
             <Image src="/brand/jjm-logo-white.svg" alt="" width={140} height={45} priority className="h-[42px] w-auto md:h-[46px]" />
           </Link>
