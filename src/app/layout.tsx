@@ -1,0 +1,36 @@
+import type { Metadata } from "next";
+import { Work_Sans } from "next/font/google";
+import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+
+const workSans = Work_Sans({
+  variable: "--font-work-sans",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "JJM Mechanical Group | Plumbing, Heating & Mechanical Contractor, Burnaby BC",
+  description:
+    "JJM Mechanical Group provides property management services, plumbing, heating, gas fitting and backflow certification across Metro Vancouver and the Lower Mainland.",
+};
+
+// Adds the `motion` class before first paint when the visitor allows motion,
+// so reveal targets start hidden only when they will actually be animated.
+const motionScript =
+  "if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('motion')}";
+
+export default function RootLayout({ children }: LayoutProps<"/">) {
+  return (
+    // suppressHydrationWarning: the inline script below adds a class before React hydrates.
+    <html lang="en" className={`${workSans.variable} h-full`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: motionScript }} />
+      </head>
+      <body className="min-h-full flex flex-col">
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
+    </html>
+  );
+}
