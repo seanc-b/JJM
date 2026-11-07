@@ -21,12 +21,37 @@ const TAIL = 0.35;
 const SMALL = 0.3;
 
 /** Each photo lives in its own corner of the stage and scales from that corner. */
-const CORNERS = [
-  { cls: "bottom-0 right-0", origin: "100% 100%" },
-  { cls: "top-0 left-0", origin: "0% 0%" },
-  { cls: "bottom-0 left-0", origin: "0% 100%" },
-  { cls: "top-0 right-0", origin: "100% 0%" },
+const BR = { cls: "bottom-0 right-0", origin: "100% 100%" };
+const TL = { cls: "top-0 left-0", origin: "0% 0%" };
+const BL = { cls: "bottom-0 left-0", origin: "0% 100%" };
+const TR = { cls: "top-0 right-0", origin: "100% 0%" };
+/**
+ * Corner order for a service's photos, alternating by service. Each service opens on the right,
+ * as in the design, so the first photo leaves that service's background icon in view. Consecutive
+ * services stay diagonal across the handover.
+ */
+const CORNER_ORDER = [
+  [BR, TL, BL],
+  [TR, BL, TL],
 ];
+
+/**
+ * Background icon placement, from the designer's 1500 x 800 artboard, where each icon sits at
+ * 100% of its SVG size. Sizes and offsets are in 1/15ths of those points (the --u unit), so
+ * they scale with the viewport. Each icon is anchored to the edge that crops it, which keeps
+ * the crop as drawn at any window height.
+ */
+const BG_ICONS: Record<string, { w: number; h: number; left: number; top?: number; bottom?: number }> = {
+  // Gear: hole and upper teeth cut off by the top of the viewport.
+  "property-management": { w: 524.35, h: 568.46, left: 413, top: -241 },
+  // Flame: tall, running just past the bottom of the viewport.
+  plumbing: { w: 395.75, h: 625.76, left: 548, bottom: -9 },
+  // Bookmark: flush to the top and cropped by the left edge.
+  backflow: { w: 344.16, h: 426.38, left: -30, top: 0 },
+  // Person: standing on the bottom of the viewport.
+  about: { w: 358.95, h: 376.05, left: 553, bottom: 0 },
+};
+const inU = (points: number) => `calc(var(--u) * ${(points / 15).toFixed(3)})`;
 
 const steps = sections.flatMap((s, si) =>
   s.images.map((img, ii) => {
@@ -139,19 +164,40 @@ export default function ServicesScroller() {
   };
 
   return (
-    <section ref={root} aria-label="Services" className="relative hidden overflow-hidden md:block motion-reduce:md:hidden">
-      <div className="site grid h-svh grid-cols-12 items-center gap-x-8">
+    <section
+      ref={root}
+      aria-label="Services"
+      // --u is 1vw on the design's proportions; on shorter, wider windows it follows the height instead.
+      className="relative hidden overflow-hidden [--u:min(1vw,1.875svh)] md:block motion-reduce:md:hidden"
+    >
+      {/* Oversized background icons, one per service, crossfaded by the timeline */}
+      <div className="pointer-events-none absolute inset-0 select-none" aria-hidden>
+        {sections.map((s, si) => {
+          const icon = BG_ICONS[s.id];
+          return (
+            <Image
+              key={s.id}
+              data-bg
+              src={s.bgIcon}
+              alt=""
+              width={Math.round(icon.w)}
+              height={Math.round(icon.h)}
+              priority={si === 0}
+              className="absolute h-auto max-w-none"
+              style={{
+                width: inU(icon.w),
+                left: `${((icon.left / 1500) * 100).toFixed(2)}vw`,
+                top: icon.top === undefined ? undefined : inU(icon.top),
+                bottom: icon.bottom === undefined ? undefined : inU(icon.bottom),
+              }}
+            />
+          );
+        })}
+      </div>
+
+      <div className="site relative grid h-svh grid-cols-12 items-center gap-x-8">
         {/* Text column */}
         <div className="relative col-span-5 flex h-full items-center lg:col-span-4">
-          {/* Oversized background icons, one per service, crossfaded by the timeline */}
-          <div className="pointer-events-none absolute -left-[14%] top-1/2 w-[30vw] max-w-[460px] -translate-y-1/2 select-none" aria-hidden>
-            <div className="grid">
-              {sections.map((s, si) => (
-                <Image key={s.id} data-bg src={s.bgIcon} alt="" width={520} height={568} priority={si === 0} className="h-auto w-full [grid-area:1/1]" />
-              ))}
-            </div>
-          </div>
-
           {/* Text blocks stacked in one grid cell; the timeline shows one at a time */}
           <div className="relative grid w-full">
             {sections.map((s) => (
@@ -201,7 +247,8 @@ export default function ServicesScroller() {
       {/* Photo stage: full height, from the text column to the viewport edge */}
       <div className="absolute inset-y-0 left-[43%] right-0">
         {steps.map((step, k) => {
-          const corner = CORNERS[k % CORNERS.length];
+          const order = CORNER_ORDER[step.si % CORNER_ORDER.length];
+          const corner = order[step.ii % order.length];
           return (
             <div
               key={`${step.si}-${step.ii}`}
