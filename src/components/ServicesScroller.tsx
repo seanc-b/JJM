@@ -339,15 +339,15 @@ export default function ServicesScroller() {
                 ))}
               </div>
 
-              {/* Service switcher: an outlined pill with a navy marker that slides to the active service */}
+              {/* Service switcher: hairlines top and bottom, like the section headings, with a heavier rule that slides to the active service */}
               <nav
                 data-switcher
                 aria-label="Jump to a service"
-                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 rounded-full border border-navy/30 bg-white p-1 [--active:0]"
+                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 border-y border-blue/45 bg-white [--active:0]"
               >
                 <span
                   aria-hidden
-                  className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/4)] rounded-full bg-navy transition-transform duration-700 ease-[var(--ease-out-expo)]"
+                  className="absolute -bottom-px left-0 h-0.5 w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
                   style={{ transform: "translateX(calc(var(--active) * 100%))" }}
                 />
                 {sections.map((s, si) => (
@@ -357,7 +357,7 @@ export default function ServicesScroller() {
                     data-rail
                     aria-label={s.title.join(" ")}
                     onClick={() => jumpTo(si)}
-                    className={`relative h-10 cursor-pointer rounded-full text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-white [&:not(.is-active)]:hover:bg-frost ${si === 0 ? "is-active" : ""}`}
+                    className={`relative h-11 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-blue ${si === 0 ? "is-active" : ""}`}
                   >
                     {s.navLabel}
                   </button>
