@@ -16,7 +16,7 @@ const tones = {
   solid: "border-blue bg-blue text-white hover:bg-navy hover:border-navy",
 };
 
-/** Outlined pill. On hover the label slides up and its twin slides in from below. */
+/** Outlined button with softly rounded corners. On hover the label slides up and its twin slides in from below. */
 export default function Button({ href, children, icon, tone = "dark", className = "", external }: Props) {
   const inner = (
     <>
@@ -31,7 +31,7 @@ export default function Button({ href, children, icon, tone = "dark", className 
       {icon && <span className="ml-2 -mr-1 flex size-4 items-center justify-center [&>svg]:size-4">{icon}</span>}
     </>
   );
-  const cls = `group inline-flex items-center rounded-full border px-6 py-3 text-[0.8125rem] font-medium uppercase tracking-[0.12em] transition-colors duration-500 ${tones[tone]} ${className}`;
+  const cls = `group inline-flex items-center rounded-xl border px-6 py-3 text-[0.8125rem] font-medium uppercase tracking-[0.12em] transition-colors duration-500 ${tones[tone]} ${className}`;
 
   if (external) {
     return (

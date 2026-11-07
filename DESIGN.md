@@ -60,6 +60,7 @@ typography:
     lineHeight: 1.5
     letterSpacing: "0em"
 rounded:
+  button: "12px"
   none: "0px"
   focus: "2px"
   pill-tab: "6px"
@@ -80,7 +81,7 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.navy}"
     typography: "{typography.button}"
-    rounded: "{rounded.full}"
+    rounded: "{rounded.button}"
     padding: "12px 24px"
   button-outline-hover:
     backgroundColor: "{colors.navy}"
@@ -89,7 +90,7 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.white}"
     typography: "{typography.button}"
-    rounded: "{rounded.full}"
+    rounded: "{rounded.button}"
     padding: "12px 24px"
   button-outline-light-hover:
     backgroundColor: "{colors.white}"
@@ -98,7 +99,7 @@ components:
     backgroundColor: "{colors.blue}"
     textColor: "{colors.white}"
     typography: "{typography.button}"
-    rounded: "{rounded.full}"
+    rounded: "{rounded.button}"
     padding: "12px 24px"
   button-solid-hover:
     backgroundColor: "{colors.navy}"
@@ -159,7 +160,7 @@ Motion is the second material. Lenis smooths the scroll; headline lines rise fro
 - Alternating full-bleed navy photo banners and white editorial sections
 - One typeface, Work Sans, in five weights; headings in uppercase bold
 - Hairline and dotted rules in translucent brand blue instead of boxes or shadows
-- Outlined pill buttons whose label slides up on hover
+- Outlined buttons with softly rounded corners, whose label slides up on hover
 - Oversized brand icons at 12% opacity as section backdrops
 - Scroll choreography (rise, wipe, parallax, drawn rules, velocity marquee) with full reduced-motion fallbacks
 
@@ -200,7 +201,7 @@ Two blues on white, with a grey ink for reading and two cool greys reserved for 
 - **Statement** (400, `clamp(1.6rem, 3.7vw, 3.5rem)`, 1, navy, sentence case): the services marquee, and the footer's same-day line at `clamp(1.5rem, 3.2vw, 3rem)` with line-height 1.25. Large, regular weight, not uppercase.
 - **Body** (400, `clamp(1.1rem, 1.6vw, 1.5rem)`, 1.45, ink, max 42ch): service paragraphs. The lead-in phrase is bold black.
 - **Label** (600, 0.8125rem, 0.08em, uppercase): hero bottom strip, contact-chip labels, partner names, news dates (tabular-nums). Navigation uses the same weight at 0.8125–0.875rem with 0.06em tracking; the menu links are 700 at 0.9375rem.
-- **Button** (500, 0.8125rem, 0.12em, uppercase): pill button labels. The Play tag uses 600 at 0.14em.
+- **Button** (500, 0.8125rem, 0.12em, uppercase): button labels. The Play tag uses 600 at 0.14em.
 - **Fine** (300, 0.75rem, ink): the copyright line only.
 
 ### Named Rules
@@ -227,15 +228,15 @@ The system is flat. Depth is tonal and photographic: navy photographs against wh
 
 ## Shapes
 
-Square by default: photographs, news cards, contact chips, the Play tag, the news-title plate and the menu panels all have 0 radius. Two round forms carry the brand: the fully rounded pill button (`{rounded.full}`) and the small round roundels (phone icon on blue, menu-link icon on white, marquee bullet). The compact header pill hangs from the top edge with only its bottom corners rounded (`{rounded.pill-tab}`, 6px). The focus ring and the placeholder tag use a 2px radius. Photos are clipped rectangles (`overflow: hidden`) whose image scales inside the frame; the wipe is a `clip-path: inset()` on the same rectangle.
+Square by default: photographs, news cards, contact chips, the Play tag, the news-title plate and the menu panels all have 0 radius. Two round forms carry the brand: the softly rounded button (`{rounded.button}`, 12px, as in the mockup) and the small round roundels (phone icon on blue, menu-link icon on white, marquee bullet). The compact header pill hangs from the top edge with only its bottom corners rounded (`{rounded.pill-tab}`, 6px). The focus ring and the placeholder tag use a 2px radius. Photos are clipped rectangles (`overflow: hidden`) whose image scales inside the frame; the wipe is a `clip-path: inset()` on the same rectangle.
 
 Lines are the signature geometry: 1px solid hairlines (blue 45% on white, white 35% on the hero header) and 2px dotted rules (blue 40%; white 40% dividing the menu links). The service heading sits between two hairlines that draw in from the left (`.ruled`, `--rule` 0 to 1, transform-origin left).
 
 ## Components
 
 ### Buttons
-Quiet, outlined, pill-shaped; the only "button" on a white section is one of these, and there is one per section.
-- **Shape:** fully rounded pill (9999px), 1px border, padding 12px 24px, label 0.8125rem / 500 / 0.12em uppercase.
+Quiet, outlined, softly rounded; the only "button" on a white section is one of these, and there is one per section.
+- **Shape:** 12px corners, as in the mockup, 1px border, padding 12px 24px, label 0.8125rem / 500 / 0.12em uppercase.
 - **Outline (dark, default):** transparent, navy text, border navy at 45%. Hover: navy fill, white text, full navy border. Optional trailing 16px stroke icon (plus) with 8px gap.
 - **Outline (light):** on photos. Transparent, white text, border white at 80%. Hover: white fill, navy text.
 - **Solid:** blue fill, white text; hover navy. Defined in the component but not used on the home page.
@@ -288,7 +289,7 @@ Easing is expo-out everywhere (`cubic-bezier(0.16, 1, 0.3, 1)` in CSS, `expo.out
 - **Do** alternate full-bleed navy-tinted photo bands with white editorial sections; the alternation is the page structure.
 - **Do** set every heading in Work Sans 700 uppercase at 1.04 line height, navy on white and white on photos.
 - **Do** separate content with 1px blue-45% hairlines or 2px dotted blue-40% rules, never with boxes.
-- **Do** use the outlined pill button, one per section, with its sliding label and expo-out timing.
+- **Do** use the outlined button, one per section, with its sliding label and expo-out timing.
 - **Do** give every motion a reduced-motion state in which the content is fully visible and still.
 - **Do** keep body copy in ink at 42ch or less, with any bold lead-in in black.
 - **Do** place a brand icon at full strength beside a heading and its oversized 12% twin behind the section.
