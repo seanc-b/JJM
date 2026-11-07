@@ -82,8 +82,8 @@ export type Section = {
   lead: string;
   body: string;
   href: string;
-  /** First image shows now; the rest are the alternates for the deferred scroll effect. */
-  images: { src: string; alt: string }[];
+  /** Shown in order by the pinned services scroller; w and h are the file's real pixel size. */
+  images: { src: string; alt: string; w: number; h: number }[];
   aspect: string;
 };
 
@@ -97,9 +97,9 @@ export const sections: Section[] = [
     body: ", we specialize in providing reliable and efficient mechanical services tailored to the unique needs of property management companies.",
     href: "/property-management",
     images: [
-      { src: "/images/property-crane-aerial.jpg", alt: "Aerial view of a crane lifting mechanical equipment onto a downtown rooftop" },
-      { src: "/images/property-boiler-skid.jpg", alt: "A packaged boiler skid with manifold piping before installation" },
-      { src: "/images/property-navien-wall.jpg", alt: "A wall of Navien water heaters with blue and braided supply lines" },
+      { src: "/images/property-crane-aerial.jpg", w: 1200, h: 1600, alt: "Aerial view of a crane lifting mechanical equipment onto a downtown rooftop" },
+      { src: "/images/property-boiler-skid.jpg", w: 1980, h: 1820, alt: "A packaged boiler skid with manifold piping before installation" },
+      { src: "/images/property-navien-wall.jpg", w: 2650, h: 2191, alt: "A wall of Navien water heaters with blue and braided supply lines" },
     ],
     aspect: "aspect-[5/6]",
   },
@@ -112,9 +112,9 @@ export const sections: Section[] = [
     body: " provides comprehensive plumbing, heating, and gas fitting services for residential and commercial clients across the Lower Mainland.",
     href: "/plumbing",
     images: [
-      { src: "/images/plumbing-boiler-room.jpg", alt: "A finished boiler room with copper piping, pumps and expansion tanks" },
-      { src: "/images/plumbing-meters.jpg", alt: "Three brass water meters on insulated white pipes" },
-      { src: "/images/plumbing-unit-open.jpg", alt: "The open control panel of a condensing water heater during commissioning" },
+      { src: "/images/plumbing-boiler-room.jpg", w: 1476, h: 1129, alt: "A finished boiler room with copper piping, pumps and expansion tanks" },
+      { src: "/images/plumbing-meters.jpg", w: 893, h: 1359, alt: "Three brass water meters on insulated white pipes" },
+      { src: "/images/plumbing-unit-open.jpg", w: 1036, h: 1500, alt: "The open control panel of a condensing water heater during commissioning" },
     ],
     aspect: "aspect-square",
   },
@@ -127,9 +127,9 @@ export const sections: Section[] = [
     body: ", JJM Mechanical Group is fully certified to install, test, and repair all makes and sizes of backflow prevention devices.",
     href: "/backflow",
     images: [
-      { src: "/images/backflow-assembly.jpg", alt: "A red and green double check valve backflow assembly with test tags" },
-      { src: "/images/backflow-gauge.jpg", alt: "A technician holding a backflow test gauge" },
-      { src: "/images/backflow-valve.jpg", alt: "A red OS&Y backflow valve with a tamper switch" },
+      { src: "/images/backflow-assembly.jpg", w: 2560, h: 1903, alt: "A red and green double check valve backflow assembly with test tags" },
+      { src: "/images/backflow-gauge.jpg", w: 1220, h: 1500, alt: "A technician holding a backflow test gauge" },
+      { src: "/images/backflow-valve.jpg", w: 2475, h: 3000, alt: "A red OS&Y backflow valve with a tamper switch" },
     ],
     aspect: "aspect-[3/2]",
   },
@@ -142,9 +142,9 @@ export const sections: Section[] = [
     body: " in the mechanical trade.",
     href: "/about",
     images: [
-      { src: "/images/about-crew-trench.jpg", alt: "The JJM crew replacing a ring main valve in an excavated trench" },
-      { src: "/images/about-team-shop.jpg", alt: "Five JJM team members in the shop in front of mechanical equipment" },
-      { src: "/images/about-team-crane.jpg", alt: "The JJM team in hard hats and hi-vis in front of a downtown crane lift" },
+      { src: "/images/about-crew-trench.jpg", w: 1014, h: 1499, alt: "The JJM crew replacing a ring main valve in an excavated trench" },
+      { src: "/images/about-team-shop.jpg", w: 1500, h: 708, alt: "Five JJM team members in the shop in front of mechanical equipment" },
+      { src: "/images/about-team-crane.jpg", w: 921, h: 1500, alt: "The JJM team in hard hats and hi-vis in front of a downtown crane lift" },
     ],
     aspect: "aspect-[5/7]",
   },
