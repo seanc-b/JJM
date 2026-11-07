@@ -10,13 +10,18 @@ import { sections } from "@/content/home";
 
 /** Scroll distance per photo, as a fraction of the viewport height. */
 const STEP_VH = 0.85;
-/** Each step rests first, then hands over to the next photo. These are fractions of a step. */
-const HOLD = 0.25;
-const HANDOVER = 0.6;
-/** The incoming photo starts this long after the outgoing one, so they cross rather than swap. */
-const LAG = 1 - HOLD - HANDOVER;
-/** Rest on the last photo before the pin releases, in steps. */
-const TAIL = 0.35;
+/** The incoming photo starts this far into a step, so the outgoing one visibly moves first. */
+const LAG = 0.1;
+/** Each photo's move fills the rest of the step, so there's no scroll distance where nothing happens. */
+const HANDOVER = 1 - LAG;
+/** A brief rest on the last photo before the pin releases, in steps. */
+const TAIL = 0.1;
+/**
+ * The photos' curve: slow and smooth, but moving from the first pixel of scroll. A plain inOut
+ * starts so flat it reads as stuck, so a little linear motion is mixed in to give it a start.
+ */
+const LINEAR_MIX = 0.2;
+const gentle = (p: number) => LINEAR_MIX * p + (1 - LINEAR_MIX) * (p < 0.5 ? 2 * p * p : 1 - 2 * (1 - p) * (1 - p));
 /** The size a photo shrinks to, and grows from. */
 const SMALL = 0.3;
 
@@ -52,6 +57,15 @@ const BG_ICONS: Record<string, { w: number; h: number; left: number; top?: numbe
   about: { w: 358.95, h: 376.05, left: 553, bottom: 0 },
 };
 const inU = (points: number) => `calc(var(--u) * ${(points / 15).toFixed(3)})`;
+
+/**
+ * One-off placements for photos the corner cycle doesn't suit. The wide team shot would read as
+ * a thin strip, so it fills the stage to the right edge and sits with its bottom two-thirds of
+ * the way down the screen, rather than in a corner.
+ */
+const PHOTO_OVERRIDES: Record<string, { widthPct: number; cls: string; origin: string; bottom: string }> = {
+  "/images/about-team-shop.jpg": { widthPct: 100, cls: "right-0", origin: "100% 100%", bottom: "33.33%" },
+};
 
 const steps = sections.flatMap((s, si) =>
   s.images.map((img, ii) => {
@@ -117,12 +131,12 @@ export default function ServicesScroller() {
             start: "top top",
             end: () => `+=${Math.round(TOTAL * window.innerHeight * STEP_VH)}`,
             pin: true,
-            scrub: 0.8,
+            scrub: 0.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              // The switcher moves as the outgoing text finishes fading (see the text tweens below).
-              const k = Math.floor(self.progress * TOTAL + 1 - HOLD - 0.2);
+              // The switcher moves as the outgoing text finishes fading, halfway through the step.
+              const k = Math.floor(self.progress * TOTAL + 0.5);
               markActive(steps[Math.min(steps.length - 1, k)].si);
             },
           },
@@ -131,7 +145,7 @@ export default function ServicesScroller() {
 
         steps.forEach((step, k) => {
           if (k === 0) return;
-          const t = k - 1 + HOLD;
+          const t = k - 1;
           const out = slides[k - 1];
           const inc = slides[k];
 
@@ -139,20 +153,21 @@ export default function ServicesScroller() {
           // "from" values at creation and overwrite them, hiding the first photo at the top of the pin.
 
           // Outgoing shrinks into its corner, fading only at the very small end.
-          tl.to(out, { scale: SMALL, duration: HANDOVER, ease: "power2.inOut" }, t);
+          tl.to(out, { scale: SMALL, duration: HANDOVER, ease: gentle }, t);
           tl.to(out, { opacity: 0, duration: HANDOVER * 0.2 }, t + HANDOVER * 0.8);
 
           // Incoming grows out of its own corner, opaque almost immediately.
-          tl.to(inc, { scale: 1, duration: HANDOVER, ease: "power2.inOut" }, t + LAG);
+          tl.to(inc, { scale: 1, duration: HANDOVER, ease: gentle }, t + LAG);
           tl.to(inc, { opacity: 1, duration: HANDOVER * 0.2 }, t + LAG);
 
+          // Text and icon swap around the middle of the step, while the photos are mid-cross.
           if (step.ii === 0) {
             const s = step.si;
-            tl.to(texts[s - 1], { autoAlpha: 0, y: -20, duration: 0.2 }, t);
-            tl.to(icons[s - 1], { autoAlpha: 0, scale: 0.9, duration: 0.2 }, t);
-            tl.to(texts[s], { autoAlpha: 1, y: 0, duration: 0.3 }, t + 0.22);
-            tl.to(rules[s], { "--rule": 1, duration: 0.35 }, t + 0.22);
-            tl.to(icons[s], { autoAlpha: 1, scale: 1, duration: 0.35 }, t + 0.22);
+            tl.to(texts[s - 1], { autoAlpha: 0, y: -20, duration: 0.2 }, t + 0.3);
+            tl.to(icons[s - 1], { autoAlpha: 0, scale: 0.9, duration: 0.2 }, t + 0.3);
+            tl.to(texts[s], { autoAlpha: 1, y: 0, duration: 0.3 }, t + 0.52);
+            tl.to(rules[s], { "--rule": 1, duration: 0.35 }, t + 0.52);
+            tl.to(icons[s], { autoAlpha: 1, scale: 1, duration: 0.35 }, t + 0.52);
           }
         });
         tl.to({}, { duration: TAIL });
@@ -299,22 +314,24 @@ export default function ServicesScroller() {
         {steps.map((step, k) => {
           const order = CORNER_ORDER[step.si % CORNER_ORDER.length];
           const corner = order[step.ii % order.length];
+          const override = PHOTO_OVERRIDES[step.img.src];
           return (
             <div
               key={`${step.si}-${step.ii}`}
               data-slide
-              className={`absolute will-change-transform ${corner.cls}`}
+              className={`absolute will-change-transform ${override?.cls ?? corner.cls}`}
               style={{
-                width: `min(${step.widthPct}%, calc(92svh * ${step.aspect.toFixed(3)}))`,
+                width: `min(${override?.widthPct ?? step.widthPct}%, calc(92svh * ${step.aspect.toFixed(3)}))`,
                 aspectRatio: `${step.img.w} / ${step.img.h}`,
-                transformOrigin: corner.origin,
+                transformOrigin: override?.origin ?? corner.origin,
+                bottom: override?.bottom,
               }}
             >
               <Image
                 src={step.img.src}
                 alt={step.img.alt}
                 fill
-                sizes={`${Math.round(step.widthPct * 0.57)}vw`}
+                sizes={`${Math.round((override?.widthPct ?? step.widthPct) * 0.57)}vw`}
                 priority={k === 0}
                 className="object-cover"
               />
