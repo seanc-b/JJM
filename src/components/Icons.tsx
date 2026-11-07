@@ -66,6 +66,12 @@ export const IconArrow = (p: P) => (
   </svg>
 );
 
+export const IconChevron = (p: P) => (
+  <svg {...base(p)}>
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
+
 export const IconPerson = (p: P) => (
   <svg {...base(p)}>
     <circle cx="12" cy="8.5" r="3.5" />

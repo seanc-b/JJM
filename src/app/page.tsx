@@ -3,10 +3,10 @@ import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import News from "@/components/News";
 import Banner from "@/components/Banner";
-import ServiceSection from "@/components/ServiceSection";
+import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
-import { bannerCustomers, bannerSince, sections } from "@/content/home";
+import { bannerCustomers, bannerSince } from "@/content/home";
 
 export default function Home() {
   return (
@@ -17,9 +17,7 @@ export default function Home() {
         <Marquee />
         <News />
         <Banner image={bannerSince.image} lines={bannerSince.lines} />
-        {sections.map((section) => (
-          <ServiceSection key={section.id} section={section} />
-        ))}
+        <Services />
         <Banner image={bannerCustomers.image} lines={bannerCustomers.lines} align="centre" />
       </main>
       <Footer />

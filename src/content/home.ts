@@ -79,8 +79,6 @@ export type Section = {
   title: string[];
   icon: string;
   bgIcon: string;
-  /** Tailwind classes positioning the oversized background icon. */
-  bgClass: string;
   lead: string;
   body: string;
   href: string;
@@ -95,7 +93,6 @@ export const sections: Section[] = [
     title: ["Property", "Management", "Services"],
     icon: "/icons/section-property.svg",
     bgIcon: "/icons/bg-gear.svg",
-    bgClass: "w-[34vw] max-w-[520px] left-[22%] -top-[10%]",
     lead: "At JJM Mechanical Group",
     body: ", we specialize in providing reliable and efficient mechanical services tailored to the unique needs of property management companies.",
     href: "/property-management",
@@ -111,7 +108,6 @@ export const sections: Section[] = [
     title: ["Plumbing", "Heating", "& Gas Fitting"],
     icon: "/icons/section-flame.svg",
     bgIcon: "/icons/bg-flame.svg",
-    bgClass: "w-[22vw] max-w-[340px] left-[36%] top-[6%]",
     lead: "JJM Mechanical Group",
     body: " provides comprehensive plumbing, heating, and gas fitting services for residential and commercial clients across the Lower Mainland.",
     href: "/plumbing",
@@ -127,7 +123,6 @@ export const sections: Section[] = [
     title: ["Backflow", "Certification"],
     icon: "/icons/section-backflow.svg",
     bgIcon: "/icons/bg-backflow.svg",
-    bgClass: "w-[22vw] max-w-[320px] -left-[2%] top-[2%]",
     lead: "As a proud member of the BCWWA since 2007",
     body: ", JJM Mechanical Group is fully certified to install, test, and repair all makes and sizes of backflow prevention devices.",
     href: "/backflow",
@@ -143,7 +138,6 @@ export const sections: Section[] = [
     title: ["About", "Us"],
     icon: "/icons/section-about.svg",
     bgIcon: "/icons/bg-about.svg",
-    bgClass: "w-[20vw] max-w-[300px] left-[36%] top-[30%]",
     lead: "JJM Mechanical Group has over 20 years of experience",
     body: " in the mechanical trade.",
     href: "/about",
