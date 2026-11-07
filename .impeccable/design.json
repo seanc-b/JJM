@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T10:43:05Z",
+  "title": "Design System: JJM Mechanical Group",
+  "extensions": {
+    "colorMeta": {
+      "navy": {
+        "role": "primary",
+        "displayName": "JJM Navy",
+        "canonical": "#17355d",
+        "tonalRamp": ["oklch(18% 0.04 262)", "oklch(26% 0.06 262)", "oklch(33% 0.08 262)", "oklch(42% 0.09 262)", "oklch(55% 0.09 262)", "oklch(70% 0.07 262)", "oklch(85% 0.04 262)", "oklch(95% 0.015 262)"]
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Brand Blue",
+        "canonical": "#3f74b7",
+        "tonalRamp": ["oklch(20% 0.05 258)", "oklch(30% 0.09 258)", "oklch(40% 0.12 258)", "oklch(53% 0.13 258)", "oklch(65% 0.11 258)", "oklch(77% 0.08 258)", "oklch(88% 0.045 258)", "oklch(96% 0.015 258)"]
+      },
+      "cobalt": {
+        "role": "secondary",
+        "displayName": "Cobalt (icon only)",
+        "canonical": "#204185",
+        "tonalRamp": ["oklch(18% 0.06 264)", "oklch(27% 0.1 264)", "oklch(37% 0.13 264)", "oklch(48% 0.14 264)", "oklch(60% 0.12 264)", "oklch(73% 0.09 264)", "oklch(86% 0.05 264)", "oklch(95% 0.015 264)"]
+      },
+      "sky": {
+        "role": "secondary",
+        "displayName": "Sky (icon only)",
+        "canonical": "#129cd8",
+        "tonalRamp": ["oklch(22% 0.06 235)", "oklch(34% 0.09 235)", "oklch(46% 0.12 235)", "oklch(58% 0.14 235)", "oklch(68% 0.13 235)", "oklch(79% 0.09 235)", "oklch(89% 0.05 235)", "oklch(96% 0.015 235)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#3e4d5d",
+        "tonalRamp": ["oklch(16% 0.015 245)", "oklch(26% 0.02 245)", "oklch(38% 0.025 245)", "oklch(50% 0.025 245)", "oklch(62% 0.02 245)", "oklch(75% 0.015 245)", "oklch(87% 0.01 245)", "oklch(96% 0.005 245)"]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "#c3c8d5",
+        "tonalRamp": ["oklch(18% 0.01 260)", "oklch(30% 0.015 260)", "oklch(42% 0.02 260)", "oklch(55% 0.02 260)", "oklch(68% 0.02 260)", "oklch(82% 0.015 260)", "oklch(90% 0.01 260)", "oklch(96% 0.005 260)"]
+      },
+      "frost": {
+        "role": "neutral",
+        "displayName": "Frost",
+        "canonical": "#e9ecf2",
+        "tonalRamp": ["oklch(18% 0.008 260)", "oklch(30% 0.01 260)", "oklch(44% 0.012 260)", "oklch(58% 0.012 260)", "oklch(72% 0.01 260)", "oklch(85% 0.008 260)", "oklch(94% 0.006 260)", "oklch(98% 0.003 260)"]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(30% 0 0)", "oklch(45% 0 0)", "oklch(60% 0 0)", "oklch(75% 0 0)", "oklch(88% 0 0)", "oklch(96% 0 0)", "oklch(100% 0 0)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only; lines authored as spans and risen on load." },
+      "headline": { "displayName": "Headline", "purpose": "Banner headlines on navy-tinted photos." },
+      "title": { "displayName": "Title", "purpose": "Service section headings inside the ruled block; News heading and menu tagline at adjusted sizes." },
+      "statement": { "displayName": "Statement", "purpose": "The services marquee and the same-day line: large, regular weight, sentence case." },
+      "body": { "displayName": "Body", "purpose": "Service paragraphs, ink, max 42ch, bold black lead-in." },
+      "label": { "displayName": "Label", "purpose": "Tracked uppercase for hero strip, chip labels, partner names, dates; nav uses it at 0.06em." },
+      "button": { "displayName": "Button", "purpose": "Pill button labels." },
+      "fine": { "displayName": "Fine", "purpose": "Copyright line only (Work Sans Light)." }
+    },
+    "shadows": [
+      { "name": "pill-float", "value": "0 12px 40px -12px rgba(23,53,93,0.6)", "purpose": "Compact header pill only, paired with backdrop-filter: blur(12px). No other element carries a shadow." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The system easing for every CSS transition (GSAP equivalent: expo.out)." },
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Declared in @theme; unused on the home page." },
+      { "name": "lenis", "value": "lerp 0.09, wheelMultiplier 1, touchMultiplier 1.4, autoRaf false (driven by gsap.ticker)", "purpose": "Smooth scroll; not created under prefers-reduced-motion." },
+      { "name": "data-reveal", "value": "opacity 0 -> 1, y 28px -> 0, 1.1s expo.out; load: delay 0.7s stagger 0.12; scroll: start top 92%, once, stagger 0.09", "purpose": "Fade-rise for blocks (news cards, text columns, footer)." },
+      { "name": "data-rise", "value": "yPercent 115 -> 0 per line in clipped span, 1.3s expo.out, stagger 0.09; load: delay 0.25s; scroll: start top 85%, once", "purpose": "Headline lines rising in sequence." },
+      { "name": "data-rules", "value": "--rule 0 -> 1 (scaleX from left), 1.4s expo.out, start top 88%, once", "purpose": "Self-drawing hairlines above and below a service heading." },
+      { "name": "data-wipe", "value": "clip-path inset(0 0 100% 0) -> inset(0 0 0% 0) 1.4s; inner img scale 1.18 -> 1 over 1.6s; expo.out; start top 82%, once", "purpose": "Framed photo reveal in service sections." },
+      { "name": "data-parallax", "value": "yPercent -n -> +n scrubbed across parent (n = 9 banners, 10 hero, 14 background icons)", "purpose": "Slow drift of tinted photos and background icons." },
+      { "name": "marquee", "value": "xPercent -50 over 60s linear loop; timeScale = direction * (1 + min(|velocity|/14, 3.5)), eased 0.8s power2.out; paused off-screen", "purpose": "Scroll-velocity services marquee; static wrapped line under reduced motion." },
+      { "name": "frame-hover", "value": "img transform scale(1.035) 1.1s ease-out-expo, hover-capable devices only", "purpose": "Photo lift on hover." },
+      { "name": "button-label-slide", "value": "label translateY(-100%) with twin from top:100%, 0.5s ease-out-expo; colours 0.5s", "purpose": "Pill button hover." },
+      { "name": "navlink-underline", "value": "1.5px currentColor, scaleX 0 -> 1 from left, 0.5s ease-out-expo", "purpose": "Nav link hover and current page." },
+      { "name": "header-pill", "value": "translateY(-120%) -> 0, 0.7s ease-out-expo, after scrollY > 55% of viewport", "purpose": "Compact header entrance." },
+      { "name": "menu-open", "value": "panels clip-path inset bottom 100% -> 0, 0.9s stagger 0.06; items y 18 -> 0 + fade 0.8s stagger 0.05 delay 0.2; expo.out", "purpose": "Two-panel menu entrance." },
+      { "name": "reduced-motion", "value": "html.motion absent; animation/transition durations 0.001ms; Lenis and GSAP matchMedia skipped", "purpose": "Every reveal target renders visible and still." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ],
+    "assets": {
+      "brand": ["/brand/jjm-logo-white.svg (hero header, 42-46px tall)", "/brand/jjm-wordmark-white.svg (compact header pill, 22px tall)"],
+      "sectionIcons": ["/icons/section-property.svg", "/icons/section-flame.svg", "/icons/section-backflow.svg", "/icons/section-about.svg"],
+      "backgroundIcons": ["/icons/bg-gear.svg", "/icons/bg-flame.svg", "/icons/bg-backflow.svg", "/icons/bg-about.svg (brand blue, 12% opacity baked into the SVG)", "/icons/bg-jjm-mark.svg (circular JJM mark, white at 25%, contact panel watermark with 8% parallax)"],
+      "placeholders": ["Partner logos (seven names rendered as text with a Placeholder tag)", "News items (both cards: thumbnails, titles, video links)", "Contact menu icon (drawn person glyph with a Placeholder tag)"]
+    }
+  },
+  "components": [
+    {
+      "name": "Outline Button (dark)",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Default pill on white sections; label slides up on hover, fill inverts to navy.",
+      "html": "<a href=\"#\" class=\"ds-btn ds-btn-dark\"><span class=\"ds-btn-label\"><span class=\"ds-btn-a\">Learn more</span><span class=\"ds-btn-b\" aria-hidden=\"true\">Learn more</span></span><span class=\"ds-btn-icon\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg></span></a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; border-radius: 9999px; border: 1px solid; padding: 12px 24px; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: color 0.5s cubic-bezier(0.16,1,0.3,1), background-color 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-dark { color: #17355d; border-color: rgba(23,53,93,0.45); background: transparent; } .ds-btn-dark:hover { background: #17355d; color: #ffffff; border-color: #17355d; } .ds-btn:focus-visible { outline: 2px solid #3f74b7; outline-offset: 3px; } .ds-btn-label { position: relative; display: block; overflow: hidden; line-height: 1; } .ds-btn-a, .ds-btn-b { display: block; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-b { position: absolute; left: 0; top: 100%; } .ds-btn:hover .ds-btn-a, .ds-btn:hover .ds-btn-b { transform: translateY(-100%); } .ds-btn-icon { display: flex; width: 16px; height: 16px; margin-left: 8px; margin-right: -4px; }"
+    },
+    {
+      "name": "Outline Button (light)",
+      "kind": "button",
+      "refersTo": "button-outline-light",
+      "description": "Pill on navy-tinted photographs (hero CTA); inverts to white on hover.",
+      "html": "<div style=\"background:#17355d;padding:24px;display:inline-block\"><a href=\"#\" class=\"ds-btn ds-btn-light\"><span class=\"ds-btn-label\"><span class=\"ds-btn-a\">Contact us</span><span class=\"ds-btn-b\" aria-hidden=\"true\">Contact us</span></span></a></div>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; border-radius: 9999px; border: 1px solid; padding: 12px 24px; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: color 0.5s cubic-bezier(0.16,1,0.3,1), background-color 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-light { color: #ffffff; border-color: rgba(255,255,255,0.8); background: transparent; } .ds-btn-light:hover { background: #ffffff; color: #17355d; } .ds-btn:focus-visible { outline: 2px solid #3f74b7; outline-offset: 3px; } .ds-btn-label { position: relative; display: block; overflow: hidden; line-height: 1; } .ds-btn-a, .ds-btn-b { display: block; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-b { position: absolute; left: 0; top: 100%; } .ds-btn:hover .ds-btn-a, .ds-btn:hover .ds-btn-b { transform: translateY(-100%); }"
+    },
+    {
+      "name": "Play Tag",
+      "kind": "button",
+      "refersTo": "play-tag",
+      "description": "Square blue tag under each news card linking to the video.",
+      "html": "<a href=\"#\" class=\"ds-play\">Play <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M7 5.5v13l11-6.5z\"/></svg></a>",
+      "css": ".ds-play { display: inline-flex; align-items: center; gap: 8px; background: #3f74b7; color: #ffffff; padding: 8px 16px; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background-color 0.4s; } .ds-play svg { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-play:hover { background: #17355d; } .ds-play:hover svg { transform: translateX(2px); } .ds-play:focus-visible { outline: 2px solid #3f74b7; outline-offset: 3px; }"
+    },
+    {
+      "name": "Contact Chip",
+      "kind": "chip",
+      "refersTo": "contact-chip",
+      "description": "White label/value pair on the mist contact panel; inverts to navy on hover.",
+      "html": "<div style=\"background:#c3c8d5;padding:24px;display:inline-block\"><a href=\"#\" class=\"ds-chip\"><span class=\"ds-chip-label\">Office</span><span class=\"ds-chip-value\">604.422.0204</span></a></div>",
+      "css": ".ds-chip { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; background: #ffffff; color: #17355d; padding: 10px 20px; text-decoration: none; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; transition: background-color 0.4s; } .ds-chip-label { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #3e4d5d; transition: color 0.4s; } .ds-chip-value { font-size: clamp(1rem, 1.3vw, 1.3rem); font-weight: 700; transition: color 0.4s; } .ds-chip:hover { background: #17355d; } .ds-chip:hover .ds-chip-label, .ds-chip:hover .ds-chip-value { color: #ffffff; } .ds-chip:focus-visible { outline: 2px solid #3f74b7; outline-offset: 3px; }"
+    },
+    {
+      "name": "Placeholder Tag",
+      "kind": "chip",
+      "refersTo": "placeholder-tag",
+      "description": "Development-only marker on content to replace before launch. Not a brand element.",
+      "html": "<span class=\"ds-placeholder\" title=\"Placeholder content: replace before launch\">Placeholder</span>",
+      "css": ".ds-placeholder { display: inline-flex; align-items: center; background: #fcd34d; color: #451a03; border-radius: 2px; padding: 2px 6px; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }"
+    },
+    {
+      "name": "News Card",
+      "kind": "card",
+      "refersTo": "news-title-plate",
+      "description": "Hairline-topped header, 16:9 framed photo with navy gradient and white title plates, Play tag right-aligned.",
+      "html": "<article class=\"ds-news\"><header class=\"ds-news-head\"><span class=\"ds-news-source\">Navien</span><span class=\"ds-news-sub\">Innovation in Action</span><span class=\"ds-news-date\">01.10.2026</span></header><a href=\"#\" class=\"ds-news-media\"><span class=\"ds-news-grad\"></span><span class=\"ds-news-title-wrap\"><span class=\"ds-news-title\">Residential Tower Eliminates Hot-Water Complaints with Navien's Tankless Water Heaters</span></span></a><div class=\"ds-news-foot\"><a href=\"#\" class=\"ds-play\">Play <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M7 5.5v13l11-6.5z\"/></svg></a></div></article>",
+      "css": ".ds-news { font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; max-width: 560px; } .ds-news-head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 4px; border-top: 1px solid rgba(63,116,183,0.4); padding-top: 12px; } .ds-news-source { font-size: clamp(1.25rem, 1.9vw, 1.8rem); font-weight: 500; text-transform: uppercase; line-height: 1; color: #3f74b7; } .ds-news-sub { font-size: 0.9375rem; color: #3e4d5d; } .ds-news-date { margin-left: auto; font-size: 0.8125rem; font-weight: 600; font-variant-numeric: tabular-nums; color: #3e4d5d; } .ds-news-media { position: relative; display: block; margin-top: 12px; aspect-ratio: 16 / 9; background: #17355d; overflow: hidden; text-decoration: none; } .ds-news-grad { position: absolute; left: 0; right: 0; bottom: 0; height: 50%; background: linear-gradient(to top, rgba(23,53,93,0.6), transparent); transition: opacity 0.5s; } .ds-news-media:hover .ds-news-grad { opacity: 0.8; } .ds-news-title-wrap { position: absolute; left: 24px; right: 80px; bottom: 24px; } .ds-news-title { -webkit-box-decoration-break: clone; box-decoration-break: clone; background: #ffffff; color: #17355d; padding: 4px 10px; font-size: clamp(0.95rem, 1.3vw, 1.3rem); font-weight: 700; line-height: 1.55; } .ds-news-foot { display: flex; justify-content: flex-end; margin-top: 12px; } .ds-play { display: inline-flex; align-items: center; gap: 8px; background: #3f74b7; color: #ffffff; padding: 8px 16px; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background-color 0.4s; } .ds-play:hover { background: #17355d; }"
+    },
+    {
+      "name": "Ruled Heading",
+      "kind": "custom",
+      "refersTo": "title",
+      "description": "Service section heading between two blue hairlines that draw in from the left, with the section icon at right.",
+      "html": "<div class=\"ds-ruled\"><h2 class=\"ds-ruled-title\"><span>Backflow</span><span>Certification</span></h2><svg class=\"ds-ruled-icon\" width=\"44\" height=\"44\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#3f74b7\" stroke-width=\"1.6\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M8 12h8M12 8v8\"/></svg></div>",
+      "css": ".ds-ruled { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 16px 0; max-width: 420px; --rule: 1; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; } .ds-ruled::before, .ds-ruled::after { content: ''; position: absolute; left: 0; right: 0; height: 1px; background: rgba(63,116,183,0.45); transform: scaleX(var(--rule)); transform-origin: left; } .ds-ruled::before { top: 0; } .ds-ruled::after { bottom: 0; } .ds-ruled-title { margin: 0; color: #17355d; font-size: clamp(1.5rem, 2.1vw, 1.9rem); font-weight: 700; line-height: 1.04; letter-spacing: -0.005em; text-transform: uppercase; } .ds-ruled-title span { display: block; } .ds-ruled-icon { flex-shrink: 0; }"
+    },
+    {
+      "name": "Compact Header Pill",
+      "kind": "nav",
+      "refersTo": "header-pill",
+      "description": "Fixed top-centre pill that slides down after the hero: translucent navy, blurred, wordmark and menu toggle.",
+      "html": "<div class=\"ds-pill\"><a href=\"#\" class=\"ds-pill-mark\" aria-label=\"JJM Mechanical Group, home\">JJM</a><button type=\"button\" class=\"ds-pill-btn\" aria-label=\"Open menu\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M4 7h16M4 12h16M4 17h16\"/></svg></button></div>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 20px; background: rgba(23,53,93,0.8); color: #ffffff; padding: 10px 24px; border-radius: 0 0 6px 6px; box-shadow: 0 12px 40px -12px rgba(23,53,93,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; } .ds-pill-mark { color: #ffffff; text-decoration: none; font-weight: 700; font-size: 1.125rem; letter-spacing: 0.04em; transition: opacity 0.3s; } .ds-pill-mark:hover { opacity: 0.8; } .ds-pill-btn { background: none; border: 0; color: inherit; padding: 4px; cursor: pointer; transition: opacity 0.3s; display: flex; } .ds-pill-btn:hover { opacity: 0.7; } .ds-pill-mark:focus-visible, .ds-pill-btn:focus-visible { outline: 2px solid #3f74b7; outline-offset: 3px; border-radius: 2px; }"
+    },
+    {
+      "name": "Primary Navigation",
+      "kind": "nav",
+      "refersTo": "label",
+      "description": "Hero header links: tracked uppercase white with an underline that grows from the left on hover and current page.",
+      "html": "<div style=\"background:#17355d;padding:20px 32px;display:inline-block\"><nav class=\"ds-nav\"><a href=\"#\" class=\"ds-navlink\" aria-current=\"page\">Property Management</a><a href=\"#\" class=\"ds-navlink\">Plumbing</a><a href=\"#\" class=\"ds-navlink\">Backflow</a><a href=\"#\" class=\"ds-navlink\">About Us</a><a href=\"#\" class=\"ds-navlink\">Contact</a></nav></div>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: clamp(18px, 2.2vw, 34px); font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; } .ds-navlink { position: relative; color: #ffffff; text-decoration: none; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; } .ds-navlink::after { content: ''; position: absolute; left: 0; right: 0; bottom: -0.35em; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-navlink:hover::after, .ds-navlink[aria-current='page']::after { transform: scaleX(1); } .ds-navlink:focus-visible { outline: 2px solid #3f74b7; outline-offset: 3px; border-radius: 2px; }"
+    },
+    {
+      "name": "Two-Panel Menu",
+      "kind": "nav",
+      "refersTo": "menu-panel-links",
+      "description": "Blue links panel with white icon roundels and dotted dividers beside a navy tagline panel.",
+      "html": "<div class=\"ds-menu\"><div class=\"ds-menu-links\"><ul><li><a href=\"#\" class=\"ds-menu-link\"><span class=\"ds-menu-roundel\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"><circle cx=\"12\" cy=\"8.5\" r=\"3.5\"/><path d=\"M5 19.5a7 7 0 0 1 14 0\"/></svg></span>Property Management</a></li><li><a href=\"#\" class=\"ds-menu-link\"><span class=\"ds-menu-roundel\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"><circle cx=\"12\" cy=\"8.5\" r=\"3.5\"/><path d=\"M5 19.5a7 7 0 0 1 14 0\"/></svg></span>Plumbing</a></li><li><a href=\"#\" class=\"ds-menu-link\"><span class=\"ds-menu-roundel\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"><circle cx=\"12\" cy=\"8.5\" r=\"3.5\"/><path d=\"M5 19.5a7 7 0 0 1 14 0\"/></svg></span>Contact</a></li></ul></div><div class=\"ds-menu-tagline\"><p>We provide comprehensive plumbing, heating, HVAC, and gas services.</p></div></div>",
+      "css": ".ds-menu { display: grid; grid-template-columns: 1fr 1fr; width: min(92vw, 820px); color: #ffffff; font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif; overflow: hidden; } .ds-menu-links { background: #3f74b7; padding: 32px clamp(20px, 4vw, 44px); } .ds-menu-links ul { list-style: none; margin: 0; padding: 0; } .ds-menu-links li + li { border-top: 2px dotted rgba(255,255,255,0.4); } .ds-menu-link { display: flex; align-items: center; gap: 16px; padding: 14px 0; color: #ffffff; text-decoration: none; font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.3s; } .ds-menu-link:hover { color: #17355d; } .ds-menu-roundel { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; background: #ffffff; color: #3f74b7; flex-shrink: 0; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-menu-link:hover .ds-menu-roundel { transform: scale(1.1); } .ds-menu-tagline { background: #17355d; padding: 40px clamp(20px, 4vw, 44px); } .ds-menu-tagline p { margin: 0; max-width: 18ch; font-size: 1.375rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.005em; text-transform: uppercase; } .ds-menu-link:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; border-radius: 2px; }"
+    },
+    {
+      "name": "Dotted Rule",
+      "kind": "custom",
+      "refersTo": "blue",
+      "description": "Edge-to-edge 2px dotted divider in translucent brand blue (News section, marquee, footer).",
+      "html": "<div class=\"ds-rule-dotted\"></div>",
+      "css": ".ds-rule-dotted { height: 0; width: 100%; border-top: 2px dotted rgba(63,116,183,0.4); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Plant Room at Full Bleed",
+    "overview": "The system reproduces the client designer's desktop mockup and extends it down to mobile. Its whole argument is made by alternation: photographs of JJM's own installations run edge to edge under a navy multiply tint with a white uppercase headline sitting right of centre, and between them the page returns to plain white sections where a navy heading, a brand-blue section icon, a paragraph of ink-grey body and one outlined pill button sit left of a framed photo. Nothing on the page is a tile, a card with a shadow, a stat, a testimonial or a sticky call to action. Trust is carried by the photography and by the restraint around it.\n\nDensity is low and the rhythm is long. Sections breathe with clamp()-driven padding, hairlines rather than boxes separate things, and the only ornament is the brand's own icon set, repeated oversized at 12% opacity behind each service section. Work Sans does every job: bold caps for display, regular for body, semibold tracked caps for labels and navigation, light for the copyright line.\n\nMotion is the second material. Lenis smooths the scroll; headline lines rise from clipped boxes; photos wipe open from the bottom and settle from a slight zoom; heading hairlines draw in from the left; the services marquee reads scroll velocity and reverses with the visitor. Every one of these has a reduced-motion state in which the page is simply still and complete.",
+    "keyCharacteristics": [
+      "Alternating full-bleed navy photo banners and white editorial sections",
+      "One typeface, Work Sans, in five weights; headings in uppercase bold",
+      "Hairline and dotted rules in translucent brand blue instead of boxes or shadows",
+      "Outlined pill buttons whose label slides up on hover",
+      "Oversized brand icons at 12% opacity as section backdrops",
+      "Scroll choreography (rise, wipe, parallax, drawn rules, velocity marquee) with full reduced-motion fallbacks"
+    ],
+    "rules": [
+      { "name": "The Tint Rule", "body": "Every photograph that carries text is tinted: a navy ground plus a left-to-right navy gradient (35% to 70%) in multiply blend at 85% opacity. Text on photos is white only.", "section": "colors" },
+      { "name": "The Translucent Blue Line Rule", "body": "Rules are never a solid colour. Hairlines are brand blue at 45% (or white at 35% on photos); dotted rules are brand blue at 40%. Full-strength blue is reserved for icons, fills and the accent text.", "section": "colors" },
+      { "name": "The Ink Body Rule", "body": "Headings are navy, body is ink. The one deliberate exception is the bold lead-in phrase of a service paragraph, which is black.", "section": "colors" },
+      { "name": "The One Family Rule", "body": "Work Sans is the only typeface. No display face, no mono, no system fallback showing by design.", "section": "typography" },
+      { "name": "The Caps Hierarchy Rule", "body": "Anything that is a heading, a nav item, a label or a button is uppercase. Body copy, the marquee, the same-day statement, email addresses, phone numbers and the Instagram handle are not.", "section": "typography" },
+      { "name": "The No-Box Rule", "body": "Content is never placed in a bordered or shadowed card. Separate with a hairline, a dotted rule, a change of ground (white, mist, frost, navy photo) or whitespace.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do alternate full-bleed navy-tinted photo bands with white editorial sections; the alternation is the page structure.",
+      "Do set every heading in Work Sans 700 uppercase at 1.04 line height, navy on white and white on photos.",
+      "Do separate content with 1px blue-45% hairlines or 2px dotted blue-40% rules, never with boxes.",
+      "Do use the outlined pill button, one per section, with its sliding label and expo-out timing.",
+      "Do give every motion a reduced-motion state in which the content is fully visible and still.",
+      "Do keep body copy in ink at 42ch or less, with any bold lead-in in black.",
+      "Do place a brand icon at full strength beside a heading and its oversized 12% twin behind the section."
+    ],
+    "donts": [
+      "Don't add a second typeface, a monospace or a system display face.",
+      "Don't put shadows on anything other than the compact header pill, or use bordered cards, stat tiles, testimonial cards or sticky calls to action.",
+      "Don't use cobalt or sky outside the icon artwork.",
+      "Don't set text on an untinted photograph.",
+      "Don't round the corners of photographs, chips, tags or panels; only pills, roundels and the header pill's bottom edge are round.",
+      "Don't canonise the amber placeholder tag as a brand colour; it exists to be removed."
+    ]
+  }
+}

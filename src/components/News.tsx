@@ -5,7 +5,7 @@ import { news } from "@/content/home";
 
 export default function News() {
   return (
-    <section aria-labelledby="news-heading" className="py-[clamp(40px,5vw,72px)]">
+    <section aria-labelledby="news-heading" className="pb-[clamp(40px,5vw,72px)]">
       {/* The dotted rules run edge to edge, as drawn. */}
       <div className="rule-dotted" />
       <div className="flex items-center justify-center gap-3 py-5 text-navy">
