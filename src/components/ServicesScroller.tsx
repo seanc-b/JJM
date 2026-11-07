@@ -74,7 +74,20 @@ const TOTAL = steps.length - 1 + TAIL;
 export default function ServicesScroller() {
   const root = useRef<HTMLElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
+  const jump = useRef<gsap.core.Timeline | null>(null);
   const lenis = useLenis();
+
+  /** Moves the switcher's marker and marks the active button. */
+  const markActive = (si: number) => {
+    const el = root.current;
+    if (!el) return;
+    el.querySelector<HTMLElement>("[data-switcher]")?.style.setProperty("--active", String(si));
+    el.querySelectorAll<HTMLElement>("[data-rail]").forEach((button, i) => {
+      button.classList.toggle("is-active", i === si);
+      if (i === si) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    });
+  };
 
   useGSAP(
     () => {
@@ -85,7 +98,6 @@ export default function ServicesScroller() {
         const rules = texts.map((t) => t.querySelector<HTMLElement>(".ruled")!);
         const icons = gsap.utils.toArray<HTMLElement>("[data-bg]", el);
         const slides = gsap.utils.toArray<HTMLElement>("[data-slide]", el);
-        const rails = gsap.utils.toArray<HTMLElement>("[data-rail]", el);
 
         gsap.set(texts, { autoAlpha: 0, y: 24 });
         gsap.set(rules, { "--rule": 0 });
@@ -96,8 +108,7 @@ export default function ServicesScroller() {
         gsap.set(slides, { scale: SMALL, opacity: 0 });
         gsap.set(slides[0], { scale: 1, opacity: 1 });
 
-        const setRail = (si: number) => rails.forEach((r, i) => r.classList.toggle("is-active", i === si));
-        setRail(0);
+        markActive(0);
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
@@ -110,9 +121,9 @@ export default function ServicesScroller() {
             anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              // The rail flips as the outgoing text finishes fading (see the text tweens below).
+              // The switcher moves as the outgoing text finishes fading (see the text tweens below).
               const k = Math.floor(self.progress * TOTAL + 1 - HOLD - 0.2);
-              setRail(steps[Math.min(steps.length - 1, k)].si);
+              markActive(steps[Math.min(steps.length - 1, k)].si);
             },
           },
         });
@@ -150,17 +161,48 @@ export default function ServicesScroller() {
           trigger.current = null;
         };
       });
-      return () => mm.revert();
+      return () => {
+        jump.current?.kill();
+        mm.revert();
+      };
     },
     { scope: root },
   );
 
+  /**
+   * Goes straight to a service without playing the photos in between: the content fades out,
+   * the scroll position and timeline jump while it's hidden, and the service's first photo
+   * grows in from its corner. Scrolling carries on normally from there.
+   */
   const jumpTo = (si: number) => {
     const st = trigger.current;
-    if (!st) return;
+    const el = root.current;
+    if (!st || !el) return;
     const y = st.start + (firstStep[si] / TOTAL) * (st.end - st.start);
-    if (lenis) lenis.scrollTo(y, { duration: 1.2 });
-    else window.scrollTo({ top: y, behavior: "smooth" });
+    if (Math.abs(window.scrollY - y) < 2) return;
+
+    const stage = el.querySelector("[data-stage]");
+    const text = el.querySelector("[data-text-stack]");
+    const icons = el.querySelector("[data-icons]");
+    const origin = CORNER_ORDER[si % CORNER_ORDER.length][0].origin;
+
+    markActive(si);
+    jump.current?.kill();
+    jump.current = gsap
+      .timeline()
+      .to([stage, text, icons], { opacity: 0, duration: 0.22, ease: "power2.in" })
+      .add(() => {
+        if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
+        else window.scrollTo(0, y);
+        st.update();
+        // Finish the scrub now, so the timeline lands on the service instead of playing up to it.
+        st.getTween()?.progress(1);
+        markActive(si);
+      })
+      .fromTo(stage, { scale: 0.9, transformOrigin: origin, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "expo.out" })
+      .fromTo(text, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "expo.out" }, "<0.05")
+      .fromTo(icons, { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.out" }, "<")
+      .set([stage, text, icons], { clearProps: "transform,transformOrigin,opacity" });
   };
 
   return (
@@ -171,7 +213,7 @@ export default function ServicesScroller() {
       className="relative hidden overflow-hidden [--u:min(1vw,1.875svh)] md:block motion-reduce:md:hidden"
     >
       {/* Oversized background icons, one per service, crossfaded by the timeline */}
-      <div className="pointer-events-none absolute inset-0 select-none" aria-hidden>
+      <div data-icons className="pointer-events-none absolute inset-0 select-none" aria-hidden>
         {sections.map((s, si) => {
           const icon = BG_ICONS[s.id];
           return (
@@ -199,7 +241,7 @@ export default function ServicesScroller() {
         {/* Text column */}
         <div className="relative col-span-5 flex h-full items-center lg:col-span-4">
           {/* Text blocks stacked in one grid cell; the timeline shows one at a time */}
-          <div className="relative grid w-full">
+          <div data-text-stack className="relative grid w-full">
             {sections.map((s) => (
               <div key={s.id} data-text className="[grid-area:1/1]">
                 <div className="ruled flex items-start justify-between gap-6 py-4">
@@ -225,27 +267,35 @@ export default function ServicesScroller() {
             ))}
           </div>
 
-          {/* Progress rail */}
-          <ol className="absolute bottom-[6svh] left-0 flex flex-col gap-2" aria-label="Services in this section">
+          {/* Service switcher: an outlined pill with a navy marker that slides to the active service */}
+          <nav
+            data-switcher
+            aria-label="Jump to a service"
+            className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 rounded-full border border-navy/30 bg-white p-1 [--active:0]"
+          >
+            <span
+              aria-hidden
+              className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/4)] rounded-full bg-navy transition-transform duration-700 ease-[var(--ease-out-expo)]"
+              style={{ transform: "translateX(calc(var(--active) * 100%))" }}
+            />
             {sections.map((s, si) => (
-              <li key={s.id}>
-                <button
-                  type="button"
-                  data-rail
-                  onClick={() => jumpTo(si)}
-                  className="group flex items-center gap-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-navy"
-                >
-                  <span className="block h-px w-3 bg-current transition-all duration-500 ease-[var(--ease-out-expo)] group-[.is-active]:w-7" aria-hidden />
-                  {s.title.join(" ")}
-                </button>
-              </li>
+              <button
+                key={s.id}
+                type="button"
+                data-rail
+                aria-label={s.title.join(" ")}
+                onClick={() => jumpTo(si)}
+                className={`relative h-10 cursor-pointer rounded-full text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-white [&:not(.is-active)]:hover:bg-frost ${si === 0 ? "is-active" : ""}`}
+              >
+                {s.navLabel}
+              </button>
             ))}
-          </ol>
+          </nav>
         </div>
       </div>
 
       {/* Photo stage: full height, from the text column to the viewport edge */}
-      <div className="absolute inset-y-0 left-[43%] right-0">
+      <div data-stage className="absolute inset-y-0 left-[43%] right-0">
         {steps.map((step, k) => {
           const order = CORNER_ORDER[step.si % CORNER_ORDER.length];
           const corner = order[step.ii % order.length];

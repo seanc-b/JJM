@@ -77,6 +77,8 @@ export const bannerCustomers = {
 export type Section = {
   id: string;
   title: string[];
+  /** Short name for the services switcher, matching the header nav. */
+  navLabel: string;
   icon: string;
   bgIcon: string;
   lead: string;
@@ -91,6 +93,7 @@ export const sections: Section[] = [
   {
     id: "property-management",
     title: ["Property", "Management", "Services"],
+    navLabel: "Property",
     icon: "/icons/section-property.svg",
     bgIcon: "/icons/bg-gear.svg",
     lead: "At JJM Mechanical Group",
@@ -106,6 +109,7 @@ export const sections: Section[] = [
   {
     id: "plumbing",
     title: ["Plumbing", "Heating", "& Gas Fitting"],
+    navLabel: "Plumbing",
     icon: "/icons/section-flame.svg",
     bgIcon: "/icons/bg-flame.svg",
     lead: "JJM Mechanical Group",
@@ -121,6 +125,7 @@ export const sections: Section[] = [
   {
     id: "backflow",
     title: ["Backflow", "Certification"],
+    navLabel: "Backflow",
     icon: "/icons/section-backflow.svg",
     bgIcon: "/icons/bg-backflow.svg",
     lead: "As a proud member of the BCWWA since 2007",
@@ -136,6 +141,7 @@ export const sections: Section[] = [
   {
     id: "about",
     title: ["About", "Us"],
+    navLabel: "About",
     icon: "/icons/section-about.svg",
     bgIcon: "/icons/bg-about.svg",
     lead: "JJM Mechanical Group has over 20 years of experience",
