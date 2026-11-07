@@ -49,15 +49,19 @@ export default function Marquee() {
 
   return (
     <div ref={root} aria-label={marquee.join(", ")} role="marquee" className="relative overflow-hidden border-b-2 border-dotted border-blue/40 py-[clamp(20px,2.6vw,36px)]">
-      <div ref={track} className="flex w-max whitespace-nowrap will-change-transform motion-reduce:w-auto motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:whitespace-normal">
+      {/* Reduced motion: one copy, centred, items wrap as whole phrases with the bullets inline. */}
+      <div
+        ref={track}
+        className="flex w-max whitespace-nowrap text-[clamp(1.6rem,3.7vw,3.5rem)] font-normal leading-none text-navy will-change-transform motion-reduce:block motion-reduce:w-auto motion-reduce:whitespace-normal motion-reduce:px-5 motion-reduce:text-center motion-reduce:text-[clamp(1.25rem,3.7vw,3.5rem)] motion-reduce:leading-[1.4]"
+      >
         {items.map((item, i) => (
           <span
             key={i}
             aria-hidden={i >= marquee.length}
-            className={`flex items-center text-[clamp(1.6rem,3.7vw,3.5rem)] font-normal leading-none text-navy ${i >= marquee.length ? "motion-reduce:hidden" : ""}`}
+            className={`flex items-center ${i >= marquee.length ? "motion-reduce:hidden" : "motion-reduce:inline"}`}
           >
-            <span className="px-[0.55em]">{item}</span>
-            <span className="size-[0.22em] rounded-full bg-navy" />
+            <span className="px-[0.55em] motion-reduce:inline-block motion-reduce:whitespace-nowrap">{item}</span>
+            <span className="size-[0.22em] rounded-full bg-navy motion-reduce:inline-block motion-reduce:align-middle" />
           </span>
         ))}
       </div>

@@ -5,7 +5,8 @@ import { news } from "@/content/home";
 
 export default function News() {
   return (
-    <section aria-labelledby="news-heading" className="site py-[clamp(40px,5vw,72px)]">
+    <section aria-labelledby="news-heading" className="py-[clamp(40px,5vw,72px)]">
+      {/* The dotted rules run edge to edge, as drawn. */}
       <div className="rule-dotted" />
       <div className="flex items-center justify-center gap-3 py-5 text-navy">
         <Image src="/icons/section-flame.svg" alt="" width={40} height={40} className="size-10" />
@@ -15,14 +16,14 @@ export default function News() {
       </div>
       <div className="rule-dotted" />
 
-      <ul className="mt-[clamp(32px,4vw,64px)] grid gap-x-[clamp(24px,3.5vw,52px)] gap-y-12 md:grid-cols-2">
+      <ul className="site mt-[clamp(32px,4vw,64px)] grid gap-x-[clamp(24px,3.5vw,52px)] gap-y-12 md:grid-cols-2">
         {news.map((item) => (
           <li key={item.title} data-reveal>
             <article>
-              <header className="flex items-baseline gap-3 border-t border-blue/40 pt-3">
+              <header className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-blue/40 pt-3">
                 <span className="text-[clamp(1.25rem,1.9vw,1.8rem)] font-medium uppercase leading-none text-blue">{item.source}</span>
                 <span className="text-[0.9375rem] text-ink">{item.subtitle}</span>
-                <span className="ml-auto text-[0.8125rem] font-semibold tabular-nums text-ink/70">{item.date}</span>
+                <span className="basis-full text-[0.8125rem] font-semibold tabular-nums text-ink md:ml-auto md:basis-auto">{item.date}</span>
               </header>
 
               <a

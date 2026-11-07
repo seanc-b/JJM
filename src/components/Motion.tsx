@@ -40,6 +40,11 @@ export default function Motion() {
         }
       });
 
+      // Heading hairlines draw in from the left
+      gsap.utils.toArray<HTMLElement>("[data-rules]").forEach((block) => {
+        gsap.to(block, { "--rule": 1, duration: 1.4, ease: EASE, scrollTrigger: { trigger: block, start: "top 88%", once: true } });
+      });
+
       // Photo wipes
       gsap.utils.toArray<HTMLElement>("[data-wipe]").forEach((box) => {
         const img = box.querySelector("img");

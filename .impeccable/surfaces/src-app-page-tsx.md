@@ -23,7 +23,7 @@ STORY: The visitor sees a real plant room on arrival, reads what JJM does in one
 
 FIRST VIEWPORT: Full-bleed Navien plant-room photo tinted navy, white logo top-left, five nav links and mail/phone icons top-right under a hairline. Headline "BUILT ON TRUST, DRIVEN BY CUSTOMER SATISFACTION" right-of-centre at 46px, outlined "CONTACT US" pill beneath it. Bottom-left "EMERGENCY 604.422.0204", bottom-right "STAY CONNECTED jjmmech". Primary action: Contact Us.
 
-FORM: The designer's mockup, reproduced. seed: none (unavailable)
+FORM: The designer's mockup, reproduced. The roll was run for the record (assigned index 6 of a grounded list) and its assignment is overridden by the brief-pinned mockup, which beats the roll. seed:cb00b31872f56c90
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 

@@ -49,12 +49,16 @@ export default function Header() {
   useEffect(() => {
     if (!open) return;
     const opener = menuButtonRef.current;
+    // Everything outside the dialog becomes inert so Tab stays within the menu.
+    const outside = Array.from(document.querySelectorAll<HTMLElement>("main, footer, header"));
+    outside.forEach((el) => (el.inert = true));
     lenis?.stop();
     document.documentElement.classList.add("overflow-hidden");
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
     firstLinkRef.current?.focus();
     return () => {
+      outside.forEach((el) => (el.inert = false));
       lenis?.start();
       document.documentElement.classList.remove("overflow-hidden");
       window.removeEventListener("keydown", onKey);
@@ -123,8 +127,8 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center gap-5 rounded-b-md bg-navy/80 px-6 py-2.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] backdrop-blur-md">
-          <Link href="/" className="text-[1.6rem] font-bold leading-none tracking-[0.04em]" aria-label="JJM Mechanical Group, home">
-            JJM
+          <Link href="/" className="block transition-opacity duration-300 hover:opacity-80" aria-label="JJM Mechanical Group, home">
+            <Image src="/brand/jjm-wordmark-white.svg" alt="" width={88} height={23} className="h-[22px] w-auto" />
           </Link>
           <button
             ref={menuButtonRef}

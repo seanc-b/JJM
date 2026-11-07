@@ -95,6 +95,32 @@ a {
   border-top: 2px dotted color-mix(in srgb, var(--color-blue) 40%, transparent);
 }
 
+/* Heading block whose top and bottom hairlines draw in from the left (--rule 0 → 1) */
+.ruled {
+  position: relative;
+  --rule: 1;
+}
+.ruled::before,
+.ruled::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-blue) 45%, transparent);
+  transform: scaleX(var(--rule));
+  transform-origin: left;
+}
+.ruled::before {
+  top: 0;
+}
+.ruled::after {
+  bottom: 0;
+}
+html.motion .ruled {
+  --rule: 0;
+}
+
 /* Photo tint used on hero and banners */
 .tint::after {
   content: "";

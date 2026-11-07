@@ -22,8 +22,9 @@ export default function ServiceSection({ section }: { section: Section }) {
       />
 
       <div className="site grid grid-cols-12 items-center gap-y-12">
-        <div className="col-span-12 md:col-span-5 lg:col-span-4 lg:col-start-1">
-          <div data-reveal className="flex items-start justify-between gap-6 border-y border-blue/40 py-4">
+        {/* One reveal for the text column; the heading's hairlines draw themselves (data-rules). */}
+        <div data-reveal className="col-span-12 md:col-span-5 lg:col-span-4 lg:col-start-1">
+          <div data-rules className="ruled flex items-start justify-between gap-6 py-4">
             <h2 id={`${section.id}-title`} className="display text-[clamp(1.5rem,2.1vw,1.9rem)] text-navy">
               {section.title.map((line) => (
                 <span key={line} className="block">
@@ -33,11 +34,11 @@ export default function ServiceSection({ section }: { section: Section }) {
             </h2>
             <Image src={section.icon} alt="" width={44} height={44} className="size-11 shrink-0" />
           </div>
-          <p data-reveal className="mt-7 max-w-[42ch] text-[clamp(1.05rem,1.35vw,1.4rem)] leading-[1.45] text-ink">
+          <p className="mt-7 max-w-[42ch] text-[clamp(1.1rem,1.6vw,1.5rem)] leading-[1.45] text-ink">
             <strong className="font-bold text-black">{section.lead}</strong>
             {section.body}
           </p>
-          <div data-reveal className="mt-8">
+          <div className="mt-8">
             <Button href={section.href} icon={<IconPlus />}>
               Learn more
             </Button>

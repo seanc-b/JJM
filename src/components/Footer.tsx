@@ -31,8 +31,8 @@ export default function Footer() {
       {/* Contact panel */}
       <section aria-label="Contact details" className="relative overflow-hidden bg-mist py-[clamp(36px,4vw,56px)]">
         <Image src="/icons/bg-flame.svg" alt="" aria-hidden width={396} height={626} className="pointer-events-none absolute right-[8%] top-1/2 h-[150%] w-auto -translate-y-1/2 opacity-80 brightness-[2.3] saturate-0 mix-blend-soft-light" />
-        <div className="site relative grid gap-10 md:grid-cols-[1fr_auto]">
-          <ul className="flex flex-col items-start gap-3" data-reveal>
+        <div className="site relative grid gap-10 md:grid-cols-[1fr_auto]" data-reveal>
+          <ul className="flex flex-col items-start gap-3">
             <li><Chip label="Office" value={company.phone} href={company.phoneHref} /></li>
             <li><Chip label="General inquiries" value={company.email} href={`mailto:${company.email}`} /></li>
             <li><Chip label="Accounting" value={company.accountingEmail} href={`mailto:${company.accountingEmail}`} /></li>
@@ -45,7 +45,7 @@ export default function Footer() {
               </a>
             </li>
           </ul>
-          <a href={company.phoneHref} data-reveal className="flex items-start gap-3 text-navy transition-opacity duration-300 hover:opacity-70 md:justify-self-end">
+          <a href={company.phoneHref} className="flex items-start gap-3 text-navy transition-opacity duration-300 hover:opacity-70 md:justify-self-end">
             <span className="flex size-7 items-center justify-center rounded-full bg-blue text-white">
               <IconPhone className="size-4" />
             </span>
@@ -73,7 +73,7 @@ export default function Footer() {
       <div className="site">
         <ul aria-label="Memberships and partners" className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4 py-8">
           {partners.map((name) => (
-            <li key={name} className="flex items-center gap-2 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-ink/70">
+            <li key={name} className="flex items-center gap-2 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-ink">
               <span className="block h-7 w-[1.5px] bg-blue/40" aria-hidden />
               {name}
               <Placeholder />
