@@ -144,7 +144,7 @@ export default function Header() {
       {/* Menu */}
       {open && (
         <div className="fixed inset-0 z-[35]" role="dialog" aria-modal="true" aria-label="Site menu" id="site-menu">
-          <button type="button" aria-label="Close menu" onClick={close} className="absolute inset-0 bg-navy/30 backdrop-blur-[2px]" />
+          <button type="button" aria-label="Close menu" onClick={close} className="absolute inset-0 bg-navy/30 backdrop-blur-[8px]" />
           <button
             type="button"
             onClick={close}
