@@ -36,7 +36,8 @@ export default function Motion() {
         if (block.dataset.rise === "load") {
           gsap.to(lines, { ...tween, delay: 0.25 });
         } else {
-          gsap.to(lines, { ...tween, scrollTrigger: { trigger: block, start: "top 85%", once: true } });
+          // Wait until the whole heading is on screen, so the rise is seen from the first line to the last.
+          gsap.to(lines, { ...tween, scrollTrigger: { trigger: block, start: "center 70%", once: true } });
         }
       });
 
