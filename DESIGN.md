@@ -267,7 +267,7 @@ A full-width band between two edges of the page with a 2px dotted blue-40% botto
 
 ### Navigation
 - **Hero header:** absolute over the hero, 84px tall, white, bottom hairline white at 35%. White logo left (42–46px tall), five uppercase semibold links centre-right (lg+) with a 1.5px underline that grows from the left on hover and on the current page, mail and phone stroke icons right (sm+), hamburger below lg.
-- **Compact header pill:** fixed top-centre, slides down after 55% of the viewport is scrolled (700ms, expo-out). Navy at 80% with 12px backdrop blur, bottom corners 6px, 10px 24px padding, white "JJM" wordmark 22px tall and a menu / close toggle.
+- **Compact header pill:** fixed top-centre, slides down after 55% of the viewport is scrolled (700ms, expo-out). Navy at 80% with 12px backdrop blur, bottom corners 6px, 10px 24px padding, white "JJM" wordmark 24px tall and a menu / close icon. The whole pill is one button that toggles the menu, deepening to solid navy on hover.
 - **Two-panel menu:** a modal dialog over a navy-30% blurred scrim; `min(92vw, 820px)` wide, two columns from md. Left panel blue: the five links in white bold 0.9375rem uppercase, divided by white-40% dotted rules, each with a 32px white roundel holding the section icon; links turn navy on hover and the roundel scales 1.1. Right panel navy: the tagline in `.display` at 1.25–1.375rem over a brightened background flame. Panels wipe open from the bottom (900ms, 60ms stagger) and items rise 18px (50ms stagger). Escape closes, focus moves to the first link and returns to the opener, everything else is inert and Lenis stops.
 
 ### Placeholder tag

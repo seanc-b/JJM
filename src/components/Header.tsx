@@ -126,22 +126,19 @@ export default function Header() {
           compact || open ? "translate-y-0" : "-translate-y-[120%]"
         }`}
       >
-        <div className="flex items-center gap-5 rounded-b-md bg-navy/80 px-6 py-2.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] backdrop-blur-md">
-          <Link href="/" className="block transition-opacity duration-300 hover:opacity-80" aria-label="JJM Mechanical Group, home">
-            <Image src="/brand/jjm-wordmark-white.svg" alt="" width={88} height={23} className="h-[22px] w-auto" />
-          </Link>
-          <button
-            ref={menuButtonRef}
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="site-menu"
-            className="p-1 transition-opacity duration-300 hover:opacity-70"
-          >
-            {open ? <IconClose className="size-6" /> : <IconMenu className="size-6" />}
-          </button>
-        </div>
+        {/* The whole pill is one button that opens and closes the menu. */}
+        <button
+          ref={menuButtonRef}
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="site-menu"
+          className="flex cursor-pointer items-center gap-5 rounded-b-md bg-navy/80 px-6 py-2.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] backdrop-blur-md transition-colors duration-300 hover:bg-navy"
+        >
+          <Image src="/brand/jjm-wordmark-white.svg" alt="" width={88} height={23} className="h-[24px] w-auto" />
+          <span className="p-1">{open ? <IconClose className="size-6" /> : <IconMenu className="size-6" />}</span>
+        </button>
       </div>
 
       {/* Menu */}
