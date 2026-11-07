@@ -60,11 +60,22 @@ const inU = (points: number) => `calc(var(--u) * ${(points / 15).toFixed(3)})`;
 
 /**
  * One-off placements for photos the corner cycle doesn't suit. The wide team shot would read as
- * a thin strip, so it fills the stage to the right edge and sits with its bottom two-thirds of
- * the way down the screen, rather than in a corner.
+ * a thin strip, so it fills the stage to the right edge and sits with its bottom about three-quarters
+ * of the way down the screen, rather than in a corner. Its sides are cropped for more height: the
+ * crop only trims equipment, and the position keeps all five people in frame.
  */
-const PHOTO_OVERRIDES: Record<string, { widthPct: number; cls: string; origin: string; bottom: string }> = {
-  "/images/about-team-shop.jpg": { widthPct: 100, cls: "right-0", origin: "100% 100%", bottom: "33.33%" },
+const PHOTO_OVERRIDES: Record<
+  string,
+  { widthPct: number; cls: string; origin: string; bottom: string; ratio: number; position: string }
+> = {
+  "/images/about-team-shop.jpg": {
+    widthPct: 100,
+    cls: "right-0",
+    origin: "100% 100%",
+    bottom: "26%",
+    ratio: 1.8,
+    position: "42% 50%",
+  },
 };
 
 const steps = sections.flatMap((s, si) =>
@@ -315,14 +326,16 @@ export default function ServicesScroller() {
           const order = CORNER_ORDER[step.si % CORNER_ORDER.length];
           const corner = order[step.ii % order.length];
           const override = PHOTO_OVERRIDES[step.img.src];
+          const ratio = override?.ratio ?? step.aspect;
+          const widthPct = override?.widthPct ?? step.widthPct;
           return (
             <div
               key={`${step.si}-${step.ii}`}
               data-slide
               className={`absolute will-change-transform ${override?.cls ?? corner.cls}`}
               style={{
-                width: `min(${override?.widthPct ?? step.widthPct}%, calc(92svh * ${step.aspect.toFixed(3)}))`,
-                aspectRatio: `${step.img.w} / ${step.img.h}`,
+                width: `min(${widthPct}%, calc(92svh * ${ratio.toFixed(3)}))`,
+                aspectRatio: ratio.toFixed(3),
                 transformOrigin: override?.origin ?? corner.origin,
                 bottom: override?.bottom,
               }}
@@ -331,9 +344,11 @@ export default function ServicesScroller() {
                 src={step.img.src}
                 alt={step.img.alt}
                 fill
-                sizes={`${Math.round((override?.widthPct ?? step.widthPct) * 0.57)}vw`}
+                // A cropped photo draws wider than its box, so it asks for a proportionally larger file.
+                sizes={`${Math.round(widthPct * 0.57 * (step.aspect / ratio))}vw`}
                 priority={k === 0}
                 className="object-cover"
+                style={{ objectPosition: override?.position }}
               />
             </div>
           );
