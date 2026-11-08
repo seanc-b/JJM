@@ -7,7 +7,6 @@ import SectionTitle from "@/components/SectionTitle";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
-import ContactActions from "@/components/ContactActions";
 import { servicePages, type ServicePage as Page, type Watermark } from "@/content/pages";
 import { nav } from "@/content/home";
 import { noWidow } from "@/lib/text";
@@ -120,11 +119,6 @@ export default function ServicePage({ slug }: { slug: string }) {
                     {noWidow(text)}
                   </p>
                 ))}
-                {page.contactActions && (
-                  <div data-reveal className="pt-[0.25em]">
-                    <ContactActions />
-                  </div>
-                )}
               </div>
             </PageIntro>
           </div>
