@@ -284,8 +284,9 @@ html.motion [data-wipe] {
    where no link is current, it scales in or out on the spot instead. */
 ::view-transition-group(nav-dot) {
   z-index: 101;
-  animation-duration: 600ms;
-  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Ease-out: sets off briskly and slows gradually as it settles under the new link. */
+  animation-duration: 800ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 ::view-transition-old(nav-dot),
 ::view-transition-new(nav-dot) {
