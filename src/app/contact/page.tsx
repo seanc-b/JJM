@@ -91,7 +91,8 @@ export default function Page() {
                 <div className="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-navy/15 to-transparent" />
               </div>
               <div className="site relative z-[2] pb-[clamp(56px,7.7vw,116px)] pt-[clamp(48px,6.1vw,92px)]">
-                <div className="mx-auto max-w-[1228px]">
+                {/* A comfortable single column, narrower than the intro above; the photo band stays full width. */}
+                <div className="mx-auto max-w-[760px]">
                   <ContactForm />
                 </div>
               </div>
