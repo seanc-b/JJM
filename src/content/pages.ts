@@ -28,6 +28,8 @@ export type ServicePage = {
   watermark: Watermark;
   /** Left-column heading, one entry per line as drawn. */
   heading: string[];
+  /** Puts the contact buttons (form, call) under the heading, for a heading that invites contact. */
+  headingActions?: boolean;
   /** Body paragraphs; the first may open with a bold lead-in. */
   lead: string;
   paragraphs: string[];
@@ -50,6 +52,7 @@ export const servicePages: ServicePage[] = [
     icon: "/icons/section-property.svg",
     watermark: { src: "/icons/bg-gear.svg", ratio: 524.35 / 568.46, x: 521, y: 178, width: 449 },
     heading: ["Contact us today."],
+    headingActions: true,
     lead: "At JJM Mechanical Group,",
     paragraphs: [
       " we specialize in providing reliable and efficient mechanical services tailored to the unique needs of property management companies.",

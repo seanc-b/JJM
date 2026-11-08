@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "@/components/Button";
+import ContactActions from "@/components/ContactActions";
 import Link from "next/link";
 import CopyButton from "@/components/CopyButton";
 import { IconInstagram, IconPhone } from "@/components/Icons";
@@ -80,13 +80,8 @@ export default function Footer({ tagline = sameDay, current, cta }: Props) {
           {tagline}
         </p>
         {cta && (
-          <div data-reveal className="mt-[clamp(20px,2.4vw,32px)] flex flex-wrap justify-center gap-3">
-            <Button href="/contact" tone="solid">
-              Request service
-            </Button>
-            <Button href={company.phoneHref} icon={<IconPhone />}>
-              {`Call ${company.phone}`}
-            </Button>
+          <div data-reveal className="mt-[clamp(20px,2.4vw,32px)]">
+            <ContactActions className="justify-center" />
           </div>
         )}
       </div>

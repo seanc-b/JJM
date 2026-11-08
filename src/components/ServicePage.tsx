@@ -7,6 +7,7 @@ import SectionTitle from "@/components/SectionTitle";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
+import ContactActions from "@/components/ContactActions";
 import { servicePages, type ServicePage as Page, type Watermark } from "@/content/pages";
 import { nav } from "@/content/home";
 import { noWidow } from "@/lib/text";
@@ -44,19 +45,37 @@ export const artboardUnit = { "--u": "clamp(0.5px, calc(100vw / 1500), 1px)" } a
  * The centred two-column intro under a title band: the ruled heading on the left, the page's own
  * content (paragraphs, a contact list) on the right.
  */
-export function PageIntro({ heading, children, className = "pb-[clamp(56px,7.3vw,110px)]" }: { heading: string[]; children: ReactNode; className?: string }) {
+export function PageIntro({
+  heading,
+  children,
+  actions,
+  className = "pb-[clamp(56px,7.3vw,110px)]",
+}: {
+  heading: string[];
+  children: ReactNode;
+  /** Shown under the ruled heading, such as buttons for a heading that asks for contact. */
+  actions?: ReactNode;
+  className?: string;
+}) {
   return (
     <div className={`site pt-[clamp(48px,6.9vw,104px)] ${className}`}>
       <div className="mx-auto grid max-w-[966px] gap-10 md:grid-cols-[450fr_466fr] md:gap-[clamp(32px,3.33vw,50px)]">
-        <div data-reveal data-rules className="ruled self-start py-4">
-          <h3 className="text-[clamp(1.125rem,2vw,1.875rem)] font-bold uppercase leading-[1.04] tracking-[-0.005em] text-navy">
-            {heading.map((line, i) => (
-              <span key={line} className="md:block">
-                {line}
-                {i < heading.length - 1 && " "}
-              </span>
-            ))}
-          </h3>
+        <div className="self-start">
+          <div data-reveal data-rules className="ruled py-4">
+            <h3 className="text-[clamp(1.125rem,2vw,1.875rem)] font-bold uppercase leading-[1.04] tracking-[-0.005em] text-navy">
+              {heading.map((line, i) => (
+                <span key={line} className="md:block">
+                  {line}
+                  {i < heading.length - 1 && " "}
+                </span>
+              ))}
+            </h3>
+          </div>
+          {actions && (
+            <div data-reveal className="mt-6">
+              {actions}
+            </div>
+          )}
         </div>
         {children}
       </div>
@@ -110,7 +129,7 @@ export default function ServicePage({ slug }: { slug: string }) {
           <div className="relative pt-[clamp(32px,3.9vw,58px)]">
             <SectionTitle id={titleId} title={page.title} icon={page.icon} />
 
-            <PageIntro heading={page.heading}>
+            <PageIntro heading={page.heading} actions={page.headingActions ? <ContactActions /> : undefined}>
               {/* Pulled up so the first line's capitals sit on the heading's top rule (half-leading + ascender). */}
               <div className="space-y-[1.25em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.3] text-ink md:-mt-[0.34em]">
                 {page.paragraphs.map((text, i) => (
