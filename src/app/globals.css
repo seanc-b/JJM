@@ -64,6 +64,10 @@ body {
   outline-offset: 3px;
   border-radius: 2px;
 }
+/* Form fields draw their focus ring on the white box around them instead; the form status line takes focus without one (ContactForm). */
+[data-no-ring]:focus-visible {
+  outline: none;
+}
 
 a {
   text-underline-offset: 0.2em;

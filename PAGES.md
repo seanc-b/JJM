@@ -32,15 +32,20 @@ Property Management, Plumbing, Backflow and About Us are **one template with dif
 
 Copy for each page lives in `src/content/pages.ts`, taken verbatim from the PDFs. Each page is its own static route (`src/app/<slug>/page.tsx`) rendering `ServicePage`.
 
-## Contact page (its own session)
+## Contact page (built 2026-11-08, `src/app/contact/page.tsx`)
 
-Same hero (van photo, "Providing services across the Lower Mainland") and title band ("Let's talk", person icon). Then:
-- Intro: heading "Contact us for more information"; right column is a label/value list (Office, General inquiries, Accounting, Address) instead of paragraphs. Watermark is a map pin with a flame inside (x 513, ~467 wide), which isn't in the icon folder.
-- "Send us a message" title band (pen icon), then a form on a mist-tinted photo (`PIC-02-CONTACT-JJM-bg.jpg`): Name, Email address, Subject, Message (placeholder "We will get back to you as soon as possible."), Send button.
-- "Find us" title band (flame icon), then a full-width map with a navy top bar and notch.
-- Tagline: "We are located in Burnaby, BC. Lorem ipsum" (placeholder copy, needs real text).
+Same hero (`news-van.jpg`, the mockup's van photo, "Providing services across the Lower Mainland") and title band ("Let's talk", person icon). Then:
+- Intro: `PageIntro` (shared with `ServicePage`) with "Contact us for more information" and a label/value list (Office, General inquiries, Accounting, Address), each a link. Watermark: `bg-pin.svg`, a map pin with the flame in a white disc, left 510, 112 below the hero, 470 wide. It runs down past the "Send us a message" band into the top of the form photo, so the pin, intro, band and form share one container and the pin sits above the photo but under the fields.
+- "Send us a message" band (pen icon), 58 gap, then the form on `contact-form-ductwork.jpg` (greyscale, washed 80% with #dfe2ea): fields max 1228 wide, 92 top / 116 bottom padding. Name, Email address, Subject, then a white card holding the message box, a hairline and the Send button. `ContactForm` posts to the `sendMessage` server action (`src/app/contact/actions.ts`): Name, Email and Message are required, a honeypot catches bots, typed values survive an error.
+- "Find us" band (flame icon), 50 gap, a 10px navy bar with a downward notch, then a keyless Google Maps embed (486 tall, slightly desaturated), lazy-loaded.
+- Tagline: "We are located in Burnaby, BC." (the mockup ends in "Lorem ipsum").
 
-Open items for Contact: the pin, person and pen icons must be exported from `JJM website CONTACT_vf.ai` (or drawn); the form needs a destination (deferred decision: email service or Payload); the map needs a provider (a Google Maps embed is simplest).
+Icons `section-contact.svg`, `section-pen.svg` and `bg-pin.svg` were redrawn from the PDF to match the other section icons; the person icon also replaces the drawn placeholder in the header menu.
+
+Still open for Contact:
+- **Form delivery.** `deliver()` in `actions.ts` logs in development and reports failure in production (with the office email and phone), so nothing is dropped silently. Wire it to an email service or Payload before launch.
+- The rest of the tagline sentence.
+- The Google embed can't be styled to the mockup's pale blue; a styled map needs a Maps API key (or Mapbox).
 
 ## Copy decisions
 

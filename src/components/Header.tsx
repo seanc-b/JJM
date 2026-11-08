@@ -7,15 +7,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, useGSAP, EASE, motionAllowed } from "@/lib/gsap";
 import { useLenis } from "@/components/SmoothScroll";
 import { company, nav, type NavLink } from "@/content/home";
-import { IconClose, IconMail, IconMenu, IconPerson, IconPhone } from "@/components/Icons";
-import Placeholder from "@/components/Placeholder";
+import { IconClose, IconMail, IconMenu, IconPhone } from "@/components/Icons";
 
-const menuIcon: Record<NavLink["icon"], string | null> = {
+const menuIcon: Record<NavLink["icon"], string> = {
   property: "/icons/section-property.svg",
   flame: "/icons/section-flame.svg",
   backflow: "/icons/section-backflow.svg",
   about: "/icons/section-about.svg",
-  contact: null, // no icon supplied yet; drawn placeholder below
+  contact: "/icons/section-contact.svg",
 };
 
 export default function Header() {
@@ -169,14 +168,9 @@ export default function Header() {
                       className="group flex items-center gap-4 py-3.5 text-[0.9375rem] font-bold uppercase tracking-[0.06em] transition-colors duration-300 hover:text-navy"
                     >
                       <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-blue transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-110">
-                        {menuIcon[item.icon] ? (
-                          <Image src={menuIcon[item.icon]!} alt="" width={22} height={22} className="size-[22px]" />
-                        ) : (
-                          <IconPerson className="size-[18px]" />
-                        )}
+                        <Image src={menuIcon[item.icon]} alt="" width={22} height={22} className="size-[22px]" />
                       </span>
                       {item.label}
-                      {!menuIcon[item.icon] && <Placeholder className="ml-auto" />}
                     </Link>
                   </li>
                 ))}
