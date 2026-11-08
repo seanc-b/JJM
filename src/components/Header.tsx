@@ -14,6 +14,8 @@ const menuIcon = (icon: NavLink["icon"], tone: "white" | "navy") => `/icons/menu
 
 export default function Header() {
   const [compact, setCompact] = useState(false);
+  // Whether the header (and its dot) is still on screen; see the nav dot below.
+  const [headerInView, setHeaderInView] = useState(true);
   const [open, setOpen] = useState(false);
   const lenis = useLenis();
   const pathname = usePathname();
@@ -27,6 +29,7 @@ export default function Header() {
     const check = () => {
       raf = 0;
       setCompact(window.scrollY > window.innerHeight * 0.55);
+      setHeaderInView(window.scrollY < 60);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(check);
@@ -91,8 +94,12 @@ export default function Header() {
                   <Link href={item.href} aria-current={item.href === pathname ? "page" : undefined} className="navlink text-[0.8125rem] font-semibold uppercase tracking-[0.06em] xl:text-[0.875rem]">
                     {item.label}
                     {/* One dot per page, under the current link. Its view-transition name lets the browser
-                        glide it from the old link to the new one as the page changes (globals.css). */}
-                    {item.href === pathname && <span aria-hidden className="navdot" style={{ viewTransitionName: "nav-dot" }} />}
+                        glide it from the old link to the new one as the page changes (globals.css). Once the
+                        header has scrolled away (say, leaving through the sticky menu) the old dot drops its
+                        name, so it doesn't swoop in from above the screen: the new one scales up in place. */}
+                    {item.href === pathname && (
+                      <span aria-hidden className="navdot" style={{ viewTransitionName: headerInView ? "nav-dot" : "none" }} />
+                    )}
                   </Link>
                 </li>
               ))}
