@@ -242,9 +242,12 @@ html.motion [data-reveal] {
 html.motion [data-rise] > span > span {
   transform: translateY(115%);
 }
-/* News captions: each line waits below its band until it rises in (News.tsx). */
+/* News captions: each line's bar waits closed and its text below its line until the entrance (News.tsx). */
 html.motion [data-caption]:not([data-risen]) [data-line-rise] {
   transform: translateY(110%);
+}
+html.motion [data-caption]:not([data-risen]) [data-bar] {
+  --r: 100%;
 }
 html.motion [data-hero-photo] {
   opacity: 0;

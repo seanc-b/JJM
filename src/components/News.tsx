@@ -17,8 +17,8 @@ const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-ou
  * The photo caption: white bars of navy text, one per line. Where the lines break depends on the width,
  * so they're measured after layout, and again on resize, and each line gets its own copies, clipped to
  * that line's band. Before measuring, a single band covers the whole caption.
- *  - The caption draws the white bars, with its own text transparent. A copy of the text per line rises
- *    up inside its bar in turn when the caption first scrolls into view, like the hero headline.
+ *  - Each line has its own white bar and text copy. When the caption first scrolls into view, the bars
+ *    wipe in from the left in turn, then the text rises into each line, like the hero headline.
  *  - On hover a navy copy with white text wipes across each line in turn (.wipe-line in globals.css).
  */
 const BLEED = 6;
@@ -64,8 +64,9 @@ function WipeCaption({ text }: { text: string }) {
     return () => ro.disconnect();
   }, []);
 
-  // The entrance, once per page view. Lines start below their bands (CSS sets that before paint, until
-  // data-risen), and rise in turn when the caption nears the viewport. Re-runs if the lines are
+  // The entrance, once per page view, as one motion: each line's white bar wipes in from the left, a
+  // beat after the line above, and the text rises into its line as the bars finish. Bars start closed and
+  // text below its line (CSS sets that before paint, until data-risen). Re-runs if the lines are
   // re-measured before it has played; after that, newly drawn lines simply show.
   useEffect(() => {
     const el = box.current;
@@ -74,9 +75,11 @@ function WipeCaption({ text }: { text: string }) {
       el.dataset.risen = "";
       return;
     }
+    const bars = Array.from(el.querySelectorAll<HTMLElement>("[data-bar]"));
     const lines = Array.from(el.querySelectorAll<HTMLElement>("[data-line-rise]"));
     // Each line starts just under its own text box, so it's never seen until it rises into place.
     const height = el.getBoundingClientRect().height + 2 * BLEED;
+    gsap.set(bars, { "--r": "100%" });
     gsap.set(lines, {
       y: (i: number) => {
         const t = textClip(bands[i], pad);
@@ -84,21 +87,21 @@ function WipeCaption({ text }: { text: string }) {
       },
       yPercent: 0,
     });
-    const tween = gsap.to(lines, {
-      y: 0,
-      duration: 1.2,
-      ease: EASE,
-      stagger: 0.12,
-      paused: true,
-      onComplete: () => {
-        el.dataset.risen = "";
-        gsap.set(lines, { clearProps: "transform" });
-      },
-    });
-    const st = ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: () => void tween.play() });
+    const tl = gsap
+      .timeline({
+        paused: true,
+        onComplete: () => {
+          el.dataset.risen = "";
+          gsap.set(bars, { clearProps: "--r" });
+          gsap.set(lines, { clearProps: "transform" });
+        },
+      })
+      .to(bars, { "--r": "0%", duration: 0.6, ease: "power3.out", stagger: 0.1 }, 0)
+      .to(lines, { y: 0, duration: 1.1, ease: EASE, stagger: 0.1 }, 0.3);
+    const st = ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: () => void tl.play() });
     return () => {
       st.kill();
-      tween.kill();
+      tl.kill();
     };
   }, [bands, pad]);
 
@@ -109,10 +112,22 @@ function WipeCaption({ text }: { text: string }) {
 
   return (
     <span ref={box} data-caption className="absolute bottom-6 left-6 right-10 md:right-20">
-      {/* The white bars, drawn by the caption itself; its own text is transparent, since the risen copies draw it. */}
-      <span ref={base} className={`${caption} bg-white text-transparent`}>
+      {/* The caption itself, for layout, measuring and screen readers; the copies below draw it. */}
+      <span ref={base} className={`${caption} text-transparent`}>
         {text}
       </span>
+      {bands.map((b, i) => (
+        // A white bar per line, wiped open from the left by its right inset (--r).
+        <span
+          key={`bar-${i}`}
+          data-bar
+          aria-hidden
+          className="absolute"
+          style={{ inset: -BLEED, padding: BLEED, clipPath: `inset(${b.top}px var(--r, 0%) ${b.bottom}px 0)` }}
+        >
+          <span className={`${caption} bg-white text-transparent`}>{text}</span>
+        </span>
+      ))}
       {bands.map((b, i) => (
         // Two clips on the line's text box: the outer one stays put and masks the rise, as in the hero; the
         // inner one moves with the text, so it only ever draws its own line (never the line above).
