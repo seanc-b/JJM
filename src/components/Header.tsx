@@ -24,7 +24,6 @@ function ContactIcon({
   value,
   copyLabel,
   children,
-  above = false,
   className = "hidden sm:block",
 }: {
   href: string;
@@ -32,8 +31,6 @@ function ContactIcon({
   value: string;
   copyLabel: string;
   children: ReactNode;
-  /** Open the panel above the icon (for icons near the bottom of a box) instead of below. */
-  above?: boolean;
   className?: string;
 }) {
   return (
@@ -41,7 +38,7 @@ function ContactIcon({
       <a href={href} aria-label={label} className="block transition-opacity duration-300 hover:opacity-70">
         {children}
       </a>
-      <div className={`contact-pop absolute right-0 z-40 ${above ? "bottom-full pb-3" : "top-full pt-3"}`}>
+      <div className="contact-pop absolute right-0 top-full z-40 pt-3">
         <div className="flex items-center gap-3 whitespace-nowrap bg-white py-1.5 pl-4 pr-1.5 text-navy shadow-[0_12px_32px_-12px_rgba(23,53,93,0.5)]">
           <span className="text-[0.9375rem] font-semibold">{value}</span>
           <CopyButton
@@ -131,7 +128,7 @@ export default function Header() {
       const panels = menuRef.current.querySelectorAll("[data-panel]");
       const items = menuRef.current.querySelectorAll("[data-item]");
       gsap.set(menuRef.current, { autoAlpha: 1 });
-      gsap.fromTo(panels, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.9, ease: EASE, stagger: 0.06 });
+      gsap.fromTo(panels, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.9, ease: EASE, stagger: 0.06, clearProps: "clipPath" });
       gsap.fromTo(items, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, ease: EASE, stagger: 0.05, delay: 0.2 });
     },
     { dependencies: [open] },
@@ -226,7 +223,7 @@ export default function Header() {
         <div className="fixed inset-0 z-[35]" role="dialog" aria-modal="true" aria-label="Site menu" id="site-menu">
           <button type="button" aria-label="Close menu" onClick={close} className="absolute inset-0 bg-navy/30 backdrop-blur-[8px]" />
 
-          <div ref={menuRef} className="invisible absolute left-1/2 top-[56px] grid w-[min(92vw,812px)] -translate-x-1/2 grid-cols-1 overflow-hidden text-white md:grid-cols-[402fr_410fr]">
+          <div ref={menuRef} className="invisible absolute left-1/2 top-[56px] grid w-[min(92vw,812px)] -translate-x-1/2 grid-cols-1 text-white md:grid-cols-[402fr_410fr]">
             <div data-panel className="bg-blue py-[25px] pl-[clamp(20px,3vw,38px)] pr-[clamp(20px,3vw,40px)]">
               <ul className="divide-y divide-dashed divide-white/35">
                 {nav.map((item, i) => {
@@ -251,20 +248,23 @@ export default function Header() {
                 })}
               </ul>
             </div>
-            <div data-panel className="relative flex items-center overflow-hidden bg-navy pb-16 pt-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
+            <div data-panel className="relative flex items-center bg-navy pb-16 pt-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
               {/* Placed from the mockup: flame tip near the top right, rings centred low on the left edge. */}
-              <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} aria-hidden className="pointer-events-none absolute left-[4.4%] top-[-40%] h-[211%] w-auto max-w-none opacity-20" />
+              {/* Clipped in a layer of its own, not by the panel, so the contact icons' panels can open below the box. */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} className="absolute left-[4.4%] top-[-40%] h-[211%] w-auto max-w-none opacity-20" />
+              </div>
               <p data-item className="relative text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
                 We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
               </p>
               {/* Email and phone as icons in the bottom-right corner, so the statement stays centred. As in the
                   header, hovering (mouse or trackpad) shows the detail with a Copy button; a tap mails or dials. Email
-                  sits in the corner so its wider panel, opening right-aligned above it, stays inside the box. */}
+                  sits in the corner so its wider panel, opening right-aligned below it, lines up with the box. */}
               <div data-item className="absolute bottom-[clamp(16px,2.2vw,28px)] right-[clamp(16px,2.2vw,28px)] flex items-center gap-5">
-                <ContactIcon href={company.phoneHref} label={`Call ${company.phone}`} value={company.phone} copyLabel="phone number" above className="block">
+                <ContactIcon href={company.phoneHref} label={`Call ${company.phone}`} value={company.phone} copyLabel="phone number" className="block">
                   <IconPhone className="size-6" />
                 </ContactIcon>
-                <ContactIcon href={`mailto:${company.email}`} label="Email JJM" value={company.email} copyLabel="email address" above className="block">
+                <ContactIcon href={`mailto:${company.email}`} label="Email JJM" value={company.email} copyLabel="email address" className="block">
                   <IconMail className="size-6" />
                 </ContactIcon>
               </div>
