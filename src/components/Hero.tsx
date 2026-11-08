@@ -35,7 +35,7 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
         <div className={`col-span-12 md:col-span-7 md:col-start-6 ${home ? "lg:col-span-6 lg:col-start-7" : "lg:col-span-5 lg:col-start-8"}`}>
           {eyebrow && (
             <p data-reveal="load" className="label mb-5 flex items-center gap-3 text-white">
-              <Image src={eyebrow.icon} alt="" width={32} height={32} className="size-8 shrink-0" />
+              <Image src={eyebrow.icon} alt="" width={40} height={40} className="size-10 shrink-0" />
               {eyebrow.label}
             </p>
           )}
