@@ -39,6 +39,7 @@ export default function Page() {
           image={{ src: "/images/news-van.jpg", alt: "A JJM Mechanical Group service van" }}
           lines={["Providing", "services", "across the", "Lower", "Mainland"]}
           eyebrow={{ label: "Contact", icon: heroIcon("/contact") }}
+          scrollTo={{ target: "contact-content", label: "Skip to contact details" }}
         />
 
         {/* The map-pin watermark runs from the intro down towards the form, so one container holds
@@ -49,7 +50,7 @@ export default function Page() {
             <WatermarkIcon src="/icons/bg-pin.svg" ratio={469.39 / 735.57} x={510} y={112} width={469} />
           </div>
 
-          <section aria-labelledby="contact-title" className="relative z-[2] pt-[clamp(32px,3.9vw,58px)]">
+          <section id="contact-content" aria-labelledby="contact-title" className="relative z-[2] pt-[clamp(32px,3.9vw,58px)]">
             <SectionTitle id="contact-title" title="Let’s talk" icon="/icons/section-person.svg" />
             <PageIntro heading={["Contact us for more", "information"]} className="pb-[clamp(48px,5.2vw,78px)]">
               {/* Pulled up so the first line's capitals sit on the heading's top rule (half-leading + ascender). */}

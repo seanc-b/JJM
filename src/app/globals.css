@@ -199,6 +199,23 @@ html.motion .navdot-pop {
     transform: scale(0);
   }
 }
+/* The hero's scroll-down arrow (ScrollCue) bobs gently, over and over, to say "scroll". Only when motion is
+   allowed: the reduced-motion rule below shortens animations rather than stopping them. */
+@media (prefers-reduced-motion: no-preference) {
+  .cue-bob {
+    animation: cue-bob 2.6s ease-in-out infinite;
+  }
+}
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
 /* Wipe hover: a navy copy of an element (.wipe-fill) sits on top of it, clipped to nothing, and opens from
    left to right when its trigger is hovered or focused. .wipe is a trigger on its own (the footer chips);
    .wipe-group triggers when any link inside it is (a news card: its photo link and its Play button). */

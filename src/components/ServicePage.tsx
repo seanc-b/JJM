@@ -138,7 +138,7 @@ export default function ServicePage({ slug }: { slug: string }) {
           ))}
         </div>
       </main>
-      <Footer tagline={page.tagline} current={href} cta />
+      <Footer tagline={page.tagline} current={href} />
       </PageTransition>
       {/* Mounted last so its effects run after this page's DOM has hydrated. */}
       <Motion />

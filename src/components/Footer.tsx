@@ -1,5 +1,4 @@
 import Image from "next/image";
-import ContactActions from "@/components/ContactActions";
 import Link from "next/link";
 import CopyButton from "@/components/CopyButton";
 import { IconInstagram, IconPhone } from "@/components/Icons";
@@ -68,23 +67,14 @@ type Props = {
   tagline?: string;
   /** The current page's href, set in bold in the footer nav as drawn. */
   current?: string;
-  /** Adds "Request service" and "Call" buttons under the tagline, so a service page ends with a next step. */
-  cta?: boolean;
 };
 
-export default function Footer({ tagline = sameDay, current, cta }: Props) {
+export default function Footer({ tagline = sameDay, current }: Props) {
   return (
     <footer>
-      <div className="site py-[clamp(36px,5vw,72px)] text-center">
-        <p data-reveal className="text-[clamp(1.5rem,3.2vw,3rem)] leading-tight text-navy">
-          {tagline}
-        </p>
-        {cta && (
-          <div data-reveal className="mt-[clamp(20px,2.4vw,32px)]">
-            <ContactActions className="justify-center" />
-          </div>
-        )}
-      </div>
+      <p data-reveal className="site py-[clamp(36px,5vw,72px)] text-center text-[clamp(1.5rem,3.2vw,3rem)] leading-tight text-navy">
+        {tagline}
+      </p>
 
       {/* Contact panel */}
       <section aria-label="Contact details" className="relative overflow-hidden bg-mist py-[clamp(36px,4vw,56px)]">
