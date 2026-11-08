@@ -9,7 +9,7 @@ Property Management, Plumbing, Backflow and About Us are **one template with dif
 ## Service page template (top to bottom)
 
 1. **Header.** The existing `Header`, with the current page underlined (`aria-current="page"` on the matching nav link).
-2. **Hero.** The home `Hero` at page height: 1500 × 806 (`clamp(560px, 53.73vw, 100svh)`) instead of `100svh`. Tinted photo, white 46 pt uppercase headline starting at x≈886 (col 8 of 12), emergency phone bottom-left and Instagram bottom-right as on home. Only About has a CTA button (Contact us).
+2. **Hero.** The home `Hero`, full viewport height (`100svh`, Sean 2026-11-08) although the mockups draw it 1500 × 806. Tinted photo, white 46 pt uppercase headline starting at x≈886 (col 8 of 12), emergency phone bottom-left and Instagram bottom-right as on home. Only About has a CTA button (Contact us).
 3. **Section title band.** Full-bleed 2 px dotted rules above and below (top rule 58 below the hero, band ~76 tall), with the 44 px section icon and the page title centred between them: navy 700 uppercase, 40 pt.
 4. **Intro.** A centred two-column block (left x 274–724, right x 774–1240, about 104 below the band). Left: the heading in a `.ruled` block (hairlines top and bottom), navy 700 uppercase 30 pt. Right: body paragraphs at 20 pt with a bold lead-in.
 5. **Watermark.** The page's oversized 12% blue icon behind the band and intro, at 100% of its SVG size on the artboard:

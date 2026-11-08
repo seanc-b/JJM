@@ -21,17 +21,28 @@ function onPage(selector: string) {
   return gsap.utils.toArray<HTMLElement>(selector).filter((el) => !el.closest(HIDDEN_PAGE));
 }
 
+/**
+ * Arrival sequence: the hero photo fades up from navy, then the headline rises, then the rest of the
+ * first screen. After an in-app navigation it starts a beat later, once the old page has faded out
+ * (PageTransition). Module state survives client navigations, so this tells the first load apart.
+ */
+let arrivedBefore = false;
+
 export default function Motion() {
   useGSAP(() => {
     const mm = gsap.matchMedia();
+    const start = arrivedBefore ? 0.3 : 0.1;
+    arrivedBefore = true;
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.to(onPage("[data-hero-photo]"), { opacity: 1, duration: 1.2, ease: "power2.out", delay: start });
+
       // Reveals: "load" ones run on mount (first viewport); the rest on scroll-enter.
       const reveals = onPage("[data-reveal]");
       gsap.set(reveals, { y: 28 });
       const onLoad = reveals.filter((el) => el.dataset.reveal === "load");
       const onScroll = reveals.filter((el) => el.dataset.reveal !== "load");
-      gsap.to(onLoad, { autoAlpha: 1, y: 0, duration: 1.1, ease: EASE, stagger: 0.12, delay: 0.7 });
+      gsap.to(onLoad, { autoAlpha: 1, y: 0, duration: 1.1, ease: EASE, stagger: 0.12, delay: start + 1 });
       ScrollTrigger.batch(onScroll, {
         start: "top 92%",
         once: true,
@@ -46,7 +57,7 @@ export default function Motion() {
         gsap.set(lines, { yPercent: 115, y: 0 });
         const tween = { yPercent: 0, duration: 1.3, ease: EASE, stagger: 0.09 };
         if (block.dataset.rise === "load") {
-          gsap.to(lines, { ...tween, delay: 0.25 });
+          gsap.to(lines, { ...tween, delay: start + 0.5 });
         } else {
           // Wait until the whole heading is on screen, so the rise is seen from the first line to the last.
           gsap.to(lines, { ...tween, scrollTrigger: { trigger: block, start: "center 70%", once: true } });

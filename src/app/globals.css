@@ -190,6 +190,9 @@ html.motion [data-reveal] {
 html.motion [data-rise] > span > span {
   transform: translateY(115%);
 }
+html.motion [data-hero-photo] {
+  opacity: 0;
+}
 html.motion [data-wipe] {
   clip-path: inset(0 0 100% 0);
 }
@@ -204,12 +207,13 @@ html.motion [data-wipe] {
 }
 
 /* ---------- Page transitions (PageTransition + React <ViewTransition>) ---------- */
-/* The old page fades out quickly; the new one fades in a beat later, rising a few px into place. */
+/* The old page fades out quickly; the new one fades in on the navy a beat later. Its hero photo starts
+   hidden, so it arrives as plain navy and the photo fades up after (Motion). */
 ::view-transition-old(.page-fade) {
   animation: 200ms ease-in both page-out;
 }
 ::view-transition-new(.page-fade) {
-  animation: 650ms var(--ease-out-quart) 140ms both page-in;
+  animation: 300ms ease-out 120ms both page-in;
 }
 @keyframes page-out {
   to {
@@ -219,7 +223,6 @@ html.motion [data-wipe] {
 @keyframes page-in {
   from {
     opacity: 0;
-    translate: 0 14px;
   }
 }
 /* The header over the hero is the same on every page, so it holds still while the content changes. */

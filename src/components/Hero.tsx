@@ -7,7 +7,7 @@ type Props = {
   image: { src: string; alt: string };
   lines: string[];
   cta?: { label: string; href: string };
-  /** "home": the full-viewport landing hero. "page": the shorter inner-page hero, 1500×806 on the artboard. */
+  /** Both are full viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
   size?: "home" | "page";
 };
 
@@ -16,9 +16,10 @@ export default function Hero({ image, lines, cta, size = "home" }: Props) {
   return (
     <section
       className={`relative isolate overflow-hidden bg-navy text-white ${home ? "min-h-[640px]" : "min-h-[560px]"}`}
-      style={{ height: home ? "100svh" : "clamp(560px, 53.73vw, 100svh)" }}
+      style={{ height: "100svh" }}
     >
-      <div className="tint absolute inset-0">
+      {/* The photo fades up from the navy ground on arrival (Motion, data-hero-photo), then the text follows. */}
+      <div data-hero-photo className="tint absolute inset-0">
         <div data-parallax="10" className="absolute inset-0">
           <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="scale-[1.12] object-cover object-[60%_center]" />
         </div>
