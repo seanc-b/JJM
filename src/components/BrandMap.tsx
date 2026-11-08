@@ -78,7 +78,31 @@ const PAINT: Record<string, Record<string, string>> = {
 };
 
 /** Positron hides most street names until you're zoomed right in; these bring them in sooner (zoom levels). */
-const MINZOOM: Record<string, number> = { "highway-name-major": 11, "highway-name-minor": 13.5, "highway-name-path": 15 };
+const MINZOOM: Record<string, number> = { "highway-name-major": 11, "highway-name-minor": 13, "highway-name-path": 15 };
+
+/**
+ * Street names, closer to Google's: every named road class (Positron skips motorways, pedestrian streets and
+ * busways), repeated more often along long roads, and growing a little as you zoom in.
+ */
+const NAME_CLASSES: Record<string, string[]> = {
+  "highway-name-major": ["motorway", "trunk", "primary", "secondary", "tertiary"],
+  "highway-name-minor": ["minor", "service", "track", "pedestrian", "busway", "raceway"],
+};
+const NAME_LAYOUT = {
+  "symbol-spacing": 320,
+  "text-padding": 1,
+  "text-size": ["interpolate", ["linear"], ["zoom"], 13, 11.5, 16, 13, 18, 15],
+};
+
+function streetNames<L extends StyleSpecification["layers"][number]>(layer: L): L {
+  if (!layer.id.startsWith("highway-name") || layer.type !== "symbol") return layer;
+  const classes = NAME_CLASSES[layer.id];
+  return {
+    ...layer,
+    ...(classes ? { filter: ["match", ["get", "class"], classes, true, false] } : {}),
+    layout: { ...layer.layout, ...NAME_LAYOUT },
+  };
+}
 
 /** Detail Positron leaves out, added in the palette: place and business names (no icons), and house numbers. */
 const EXTRA_LAYERS = [
@@ -117,7 +141,7 @@ async function brandStyle(): Promise<StyleSpecification> {
   style.layers = style.layers.map((layer) => {
     const over = PAINT[layer.id] ?? (layer.id.startsWith("label_") ? { "text-color": C.navy, "text-halo-color": C.frost } : null);
     const next = over ? ({ ...layer, paint: { ...("paint" in layer ? layer.paint : {}), ...over } } as typeof layer) : layer;
-    return layer.id in MINZOOM ? { ...next, minzoom: MINZOOM[layer.id] } : next;
+    return streetNames(layer.id in MINZOOM ? { ...next, minzoom: MINZOOM[layer.id] } : next);
   });
   // Above the roads, below the street names and place labels, so road names win where they collide.
   const at = style.layers.findIndex((l) => l.id === "highway-name-path");
