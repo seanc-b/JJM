@@ -17,8 +17,8 @@ const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-ou
  * The photo caption: white bars of navy text, one per line. Where the lines break depends on the width,
  * so they're measured after layout, and again on resize, and each line gets its own copies, clipped to
  * that line's band. Before measuring, a single band covers the whole caption.
- *  - What shows is a white copy per line. When the caption first scrolls into view, each rises out of its
- *    band in turn, like the hero headline. The caption itself stays, invisible, for layout and readers.
+ *  - The caption draws the white bars, with its own text transparent. A copy of the text per line rises
+ *    up inside its bar in turn when the caption first scrolls into view, like the hero headline.
  *  - On hover a navy copy with white text wipes across each line in turn (.wipe-line in globals.css).
  */
 const BLEED = 6;
@@ -86,18 +86,25 @@ function WipeCaption({ text }: { text: string }) {
 
   return (
     <span ref={box} data-caption className="absolute bottom-6 left-6 right-10 md:right-20">
-      <span ref={base} className={`${caption} bg-white text-navy opacity-0`}>
+      {/* The white bars, drawn by the caption itself; its own text is transparent, since the risen copies draw it. */}
+      <span ref={base} className={`${caption} bg-white text-transparent`}>
         {text}
       </span>
       {bands.map((b, i) => (
+        // Two clips on the same band: the outer one stays put and masks the rise; the inner one moves with
+        // the text, so it only ever draws its own line (never the line above sliding through).
         <span
           key={`show-${i}`}
           aria-hidden
           className="absolute"
-          style={{ inset: -BLEED, padding: BLEED, clipPath: `inset(${b.top}px 0 ${b.bottom}px 0)` }}
+          style={{ inset: -BLEED, clipPath: `inset(${b.top}px 0 ${b.bottom}px 0)` }}
         >
-          <span data-line-rise className="block">
-            <span className={`${caption} bg-white text-navy`}>{text}</span>
+          <span
+            data-line-rise
+            className="absolute inset-0"
+            style={{ padding: BLEED, clipPath: `inset(${b.top}px 0 ${b.bottom}px 0)` }}
+          >
+            <span className={`${caption} text-navy`}>{text}</span>
           </span>
         </span>
       ))}
