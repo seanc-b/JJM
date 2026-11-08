@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import ContactForm from "@/components/ContactForm";
+import CopyButton from "@/components/CopyButton";
 import { PageIntro, WatermarkIcon, artboardUnit, heroIcon } from "@/components/ServicePage";
 import { company } from "@/content/home";
 
@@ -18,10 +19,11 @@ export const metadata: Metadata = {
 const mapQuery = encodeURIComponent(`${company.name}, ${company.address}`);
 const mapHref = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 
-const details = [
-  { label: "Office", value: company.phone, href: company.phoneHref },
-  { label: "General inquiries", value: company.email, href: `mailto:${company.email}` },
-  { label: "Accounting", value: company.accountingEmail, href: `mailto:${company.accountingEmail}` },
+// copy: what the copy button beside the link puts on the clipboard, and how screen readers name it.
+const details: { label: string; value: string | string[]; href: string; copy?: { value: string; label: string } }[] = [
+  { label: "Office", value: company.phone, href: company.phoneHref, copy: { value: company.phone, label: "office phone number" } },
+  { label: "General inquiries", value: company.email, href: `mailto:${company.email}`, copy: { value: company.email, label: "general inquiries email" } },
+  { label: "Accounting", value: company.accountingEmail, href: `mailto:${company.accountingEmail}`, copy: { value: company.accountingEmail, label: "accounting email" } },
   { label: "Address", value: ["8331 Eastlake Dr Unit 107,", "Burnaby, BC V5A 4W2, Canada"], href: mapHref },
 ];
 
@@ -58,7 +60,8 @@ export default function Page() {
                 {details.map((d) => (
                   <div key={d.label} data-reveal>
                     <dt className="font-bold uppercase text-navy">{d.label}</dt>
-                    <dd>
+                    {/* The link mails or dials; the copy button beside it is for mouse and trackpad users (touch taps do the native thing). */}
+                    <dd className="flex items-center gap-1">
                       <a
                         href={d.href}
                         {...(d.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -72,6 +75,13 @@ export default function Page() {
                             ))
                           : d.value}
                       </a>
+                      {d.copy && (
+                        <CopyButton
+                          value={d.copy.value}
+                          label={d.copy.label}
+                          className="hidden size-9 shrink-0 cursor-pointer items-center justify-center text-navy/55 transition-colors duration-300 hover:text-blue [@media(hover:hover)_and_(pointer:fine)]:inline-flex"
+                        />
+                      )}
                     </dd>
                   </div>
                 ))}
