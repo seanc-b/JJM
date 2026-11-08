@@ -19,7 +19,7 @@ export default function Marquee() {
   useGSAP(
     () => {
       if (!track.current || !motionAllowed()) return;
-      tween.current = gsap.to(track.current, { xPercent: -50, duration: 60, ease: "none", repeat: -1 });
+      tween.current = gsap.to(track.current, { xPercent: -50, duration: 48, ease: "none", repeat: -1 });
       ScrollTrigger.create({
         trigger: root.current,
         start: "top bottom",
