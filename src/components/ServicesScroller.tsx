@@ -46,13 +46,16 @@ const TL = { cls: "top-0 left-0", origin: "0% 0%" };
 const BL = { cls: "bottom-0 left-0", origin: "0% 100%" };
 const TR = { cls: "top-0 right-0", origin: "100% 0%" };
 /**
- * Corner order for a service's photos, alternating by service. Each service opens on the right,
- * as in the design, so the first photo leaves that service's background icon in view. Consecutive
- * services stay diagonal across the handover.
+ * Corner for each photo, by service. Chosen by simulating every handover at common desktop sizes with
+ * the real photo proportions, so no two photos visibly overlap as one shrinks and the next grows. Each
+ * service opens on the right, leaving its background icon in view, except About, which opens top-left:
+ * its wide team photo spans the stage, and a photo shrinking on the right would cross it.
  */
 const CORNER_ORDER = [
-  [BR, TL, BL],
-  [TR, BL, TL],
+  [BR, BL, TL], // Property management
+  [BR, TR, BL], // Plumbing
+  [BR, BL, BR], // Backflow
+  [TL, BL, BL], // About (the second, the wide team photo, has its own placement)
 ];
 
 /**
@@ -272,9 +275,9 @@ export default function ServicesScroller() {
           // Only `to` tweens here: starting states are set once above. A fromTo would apply its
           // "from" values at creation and overwrite them, hiding the first photo at the top of the pin.
 
-          // Outgoing shrinks into its corner, fading only at the very small end.
+          // Outgoing shrinks into its corner and fades as it goes, gone by halfway, well before the crossing.
           tl.to(out, { scale: SMALL, duration: HANDOVER, ease: gentle }, t);
-          tl.to(out, { opacity: 0, duration: HANDOVER * 0.2 }, t + HANDOVER * 0.8);
+          tl.to(out, { opacity: 0, duration: HANDOVER * 0.4 }, t + HANDOVER * 0.1);
 
           // Incoming grows out of its own corner, opaque almost immediately.
           tl.to(inc, { scale: 1, duration: HANDOVER, ease: gentle }, t + LAG);
