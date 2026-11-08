@@ -206,7 +206,11 @@ export default function VideoModal({ youtubeId, title, onClose }: Props) {
           allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
           allowFullScreen
           tabIndex={-1}
-          className="pointer-events-none absolute inset-0 size-full border-0"
+          // Twice the panel's height and centred: the video still fills the panel edge to edge (YouTube
+          // letterboxes it in the middle of the taller player), while the overlays YouTube pins to the
+          // player's top and bottom edges at the start (copy link, "More videos", the title) land in the
+          // clipped overflow.
+          className="pointer-events-none absolute inset-x-0 top-[-50%] h-[200%] w-full border-0"
         />
 
         {/* Click anywhere on the video to play or pause. It also keeps the pointer off the player, so YouTube's hover UI never shows. */}
