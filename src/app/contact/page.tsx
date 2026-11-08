@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import ContactForm from "@/components/ContactForm";
-import { PageIntro, WatermarkIcon, artboardUnit } from "@/components/ServicePage";
+import { PageIntro, WatermarkIcon, artboardUnit, heroIcon } from "@/components/ServicePage";
 import { company } from "@/content/home";
 
 export const metadata: Metadata = {
@@ -22,8 +22,7 @@ const details = [
   { label: "Office", value: company.phone, href: company.phoneHref },
   { label: "General inquiries", value: company.email, href: `mailto:${company.email}` },
   { label: "Accounting", value: company.accountingEmail, href: `mailto:${company.accountingEmail}` },
-  // The mockup sets the address on two lines with the unit first.
-  { label: "Address", value: ["#107-8331 Eastlake Drive,", "Burnaby, BC, V5A 4W2"], href: mapHref },
+  { label: "Address", value: ["8331 Eastlake Dr Unit 107,", "Burnaby, BC V5A 4W2, Canada"], href: mapHref },
 ];
 
 /** Gap between a title band and what follows it, matching the 58 px under the hero. */
@@ -39,6 +38,7 @@ export default function Page() {
           size="page"
           image={{ src: "/images/news-van.jpg", alt: "A JJM Mechanical Group service van" }}
           lines={["Providing", "services", "across the", "Lower", "Mainland"]}
+          eyebrow={{ label: "Contact", icon: heroIcon("/contact") }}
         />
 
         {/* The map-pin watermark runs from the intro down towards the form, so one container holds

@@ -29,17 +29,18 @@ export default function ContactForm() {
   // After a failed submit, take the keyboard to the first field that needs fixing; after a send, to the confirmation.
   useEffect(() => {
     if (state.status === "invalid") {
-      const first = (["name", "email", "subject", "message"] as Field[]).find((k) => err[k]);
+      const first = (["name", "email", "phone", "subject", "message"] as Field[]).find((k) => err[k]);
       if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
     } else if (state.status === "sent" || state.status === "error") {
       statusRef.current?.focus();
     }
   }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const input = (name: Exclude<Field, "message">, label: string, type = "text", autoComplete?: string) => (
+  const input = (name: Exclude<Field, "message">, label: string, type = "text", autoComplete?: string, optional = false) => (
     <div>
       <label htmlFor={`contact-${name}`} className={labelCls}>
         {label}
+        {optional && <span className="ml-1.5 font-medium normal-case text-navy">(optional)</span>}
       </label>
       <div className={`${boxCls} ${err[name] ? invalidCls : focusCls}`}>
         <input
@@ -61,7 +62,11 @@ export default function ContactForm() {
   return (
     <form ref={formRef} action={action} noValidate className="flex flex-col gap-[clamp(14px,1.6vw,24px)]">
       {input("name", "Name", "text", "name")}
-      {input("email", "Email address", "email", "email")}
+      {/* Email and phone side by side from md; stacked on phones. */}
+      <div className="grid gap-[clamp(14px,1.6vw,24px)] md:grid-cols-2">
+        {input("email", "Email address", "email", "email")}
+        {input("phone", "Phone", "tel", "tel", true)}
+      </div>
       {input("subject", "Subject")}
 
       <div>

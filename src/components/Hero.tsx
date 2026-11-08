@@ -7,11 +7,13 @@ type Props = {
   image: { src: string; alt: string };
   lines: string[];
   cta?: { label: string; href: string };
+  /** A small line above the headline naming the page, beside its white menu icon. Inner pages only. */
+  eyebrow?: { label: string; icon: string };
   /** Both are full viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
   size?: "home" | "page";
 };
 
-export default function Hero({ image, lines, cta, size = "home" }: Props) {
+export default function Hero({ image, lines, cta, eyebrow, size = "home" }: Props) {
   const home = size === "home";
   return (
     <section
@@ -28,6 +30,12 @@ export default function Hero({ image, lines, cta, size = "home" }: Props) {
       {/* The page hero centres its headline on the whole photo, as drawn; home clears the header first. */}
       <div className={`site relative grid h-full grid-cols-12 items-center ${home ? "pt-[84px]" : ""}`}>
         <div className={`col-span-12 md:col-span-7 md:col-start-6 ${home ? "lg:col-span-6 lg:col-start-7" : "lg:col-span-5 lg:col-start-8"}`}>
+          {eyebrow && (
+            <p data-reveal="load" className="label mb-5 flex items-center gap-3 text-white">
+              <Image src={eyebrow.icon} alt="" width={32} height={32} className="size-8 shrink-0" />
+              {eyebrow.label}
+            </p>
+          )}
           <h1 data-rise="load" className="display text-[clamp(2.1rem,4.6vw,3.05rem)]">
             {lines.map((line) => (
               <span key={line}>

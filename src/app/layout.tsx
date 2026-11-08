@@ -11,6 +11,8 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
+  // The live site's address, so shared links and the sharing image (opengraph-image.tsx) get full URLs.
+  metadataBase: new URL("https://jjmmechanicalgroup.ca"),
   title: "JJM Mechanical Group | Plumbing, Heating & Mechanical Contractor, Burnaby BC",
   description:
     "JJM Mechanical Group provides property management services, plumbing, heating, gas fitting and backflow certification across Metro Vancouver and the Lower Mainland.",

@@ -2,7 +2,7 @@
 
 import { company } from "@/content/home";
 
-export type Field = "name" | "email" | "subject" | "message";
+export type Field = "name" | "email" | "phone" | "subject" | "message";
 
 export type ContactState = {
   status: "idle" | "sent" | "invalid" | "error";
@@ -12,7 +12,7 @@ export type ContactState = {
   values?: Partial<Record<Field, string>>;
 };
 
-const limits: Record<Field, number> = { name: 120, email: 200, subject: 200, message: 5000 };
+const limits: Record<Field, number> = { name: 120, email: 200, phone: 40, subject: 200, message: 5000 };
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
@@ -40,6 +40,9 @@ export async function sendMessage(_prev: ContactState, formData: FormData): Prom
   if (!values.name) errors.name = "Please enter your name.";
   if (!values.email) errors.email = "Please enter your email address.";
   else if (!emailPattern.test(values.email)) errors.email = "That email address doesn't look right.";
+  // Phone is optional; if given, it needs enough digits to call back (7 local, up to 15 international).
+  const digits = values.phone.replace(/\D/g, "").length;
+  if (values.phone && (digits < 7 || digits > 15 || /[^\d\s()+.\-x]/i.test(values.phone))) errors.phone = "That phone number doesn't look right.";
   if (!values.message) errors.message = "Please write a message.";
   for (const k of Object.keys(limits) as Field[]) {
     if (values[k].length > limits[k]) errors[k] = `Please keep this under ${limits[k]} characters.`;

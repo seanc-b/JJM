@@ -91,7 +91,7 @@ export default function ServicesAccordion() {
                     </p>
                     <div className="mt-6">
                       <Button href={s.href} icon={<IconPlus />}>
-                        Learn more
+                        {s.cta}
                       </Button>
                     </div>
                     <ul className="mt-8 flex flex-col gap-4 md:grid md:grid-cols-3">

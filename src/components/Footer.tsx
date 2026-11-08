@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Button from "@/components/Button";
 import Link from "next/link";
 import CopyButton from "@/components/CopyButton";
 import { IconInstagram, IconPhone } from "@/components/Icons";
@@ -67,14 +68,28 @@ type Props = {
   tagline?: string;
   /** The current page's href, set in bold in the footer nav as drawn. */
   current?: string;
+  /** Adds "Request service" and "Call" buttons under the tagline, so a service page ends with a next step. */
+  cta?: boolean;
 };
 
-export default function Footer({ tagline = sameDay, current }: Props) {
+export default function Footer({ tagline = sameDay, current, cta }: Props) {
   return (
     <footer>
-      <p data-reveal className="site py-[clamp(36px,5vw,72px)] text-center text-[clamp(1.5rem,3.2vw,3rem)] leading-tight text-navy">
-        {tagline}
-      </p>
+      <div className="site py-[clamp(36px,5vw,72px)] text-center">
+        <p data-reveal className="text-[clamp(1.5rem,3.2vw,3rem)] leading-tight text-navy">
+          {tagline}
+        </p>
+        {cta && (
+          <div data-reveal className="mt-[clamp(20px,2.4vw,32px)] flex flex-wrap justify-center gap-3">
+            <Button href="/contact" tone="solid">
+              Request service
+            </Button>
+            <Button href={company.phoneHref} icon={<IconPhone />}>
+              {`Call ${company.phone}`}
+            </Button>
+          </div>
+        )}
+      </div>
 
       {/* Contact panel */}
       <section aria-label="Contact details" className="relative overflow-hidden bg-mist py-[clamp(36px,4vw,56px)]">
@@ -88,7 +103,7 @@ export default function Footer({ tagline = sameDay, current }: Props) {
             <li><Chip label="Office" value={company.phone} href={company.phoneHref} copy={company.phone} /></li>
             <li><Chip label="General inquiries" value={company.email} href={`mailto:${company.email}`} copy={company.email} /></li>
             <li><Chip label="Accounting" value={company.accountingEmail} href={`mailto:${company.accountingEmail}`} copy={company.accountingEmail} /></li>
-            <li><Chip label="Address" value={company.address} href="https://maps.google.com/?q=8331+Eastlake+Dr+%23107+Burnaby+BC+V5A+4W2" /></li>
+            <li><Chip label="Address" value={company.address} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${company.name}, ${company.address}`)}`} /></li>
             <li className="mt-2">
               <a href={company.instagramHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-navy transition-opacity duration-300 hover:opacity-70">
                 <span className="label">Stay connected</span>

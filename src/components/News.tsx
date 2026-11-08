@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { gsap, ScrollTrigger, EASE, motionAllowed } from "@/lib/gsap";
 import { IconPlay } from "@/components/Icons";
-import Placeholder from "@/components/Placeholder";
 import VideoModal from "@/components/VideoModal";
 import { news, type NewsItem } from "@/content/home";
 
@@ -22,6 +21,12 @@ const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-ou
  *  - On hover a navy copy with white text wipes across each line in turn (.wipe-line in globals.css).
  */
 const BLEED = 6;
+
+/** "2026-10-01" → "October 1, 2026". Read as a calendar date, so no time zone can shift the day. */
+function formatDate(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-CA", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
 
 type Band = { top: number; bottom: number };
 /** A band is a line's bar plus a pixel each way; its text window drops that pixel and the bar's padding. */
@@ -214,7 +219,7 @@ export default function News() {
               <header className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-blue/40 pt-3">
                 <span className="text-[clamp(1.25rem,1.9vw,1.8rem)] font-medium uppercase leading-none text-blue">{item.source}</span>
                 <span className="text-[0.9375rem] text-ink">{item.subtitle}</span>
-                <span className="basis-full text-[0.8125rem] font-semibold tabular-nums text-ink md:ml-auto md:basis-auto">{item.date}</span>
+                <time dateTime={item.date} className="basis-full text-[0.8125rem] font-semibold tabular-nums text-ink md:ml-auto md:basis-auto">{formatDate(item.date)}</time>
               </header>
 
               <a
@@ -229,7 +234,6 @@ export default function News() {
                 <Image src={item.image.src} alt={item.image.alt} fill sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
                 <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-navy/60 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
                 <WipeCaption text={item.title} />
-                {item.placeholder && <Placeholder className="absolute left-3 top-3" />}
               </a>
 
               <div className="mt-3 flex justify-end">

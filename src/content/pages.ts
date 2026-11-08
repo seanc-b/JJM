@@ -45,6 +45,7 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/pm-hero-heater-wall.jpg", alt: "A long row of tankless water heaters with colour-coded supply piping in a residential plant room" },
       lines: ["We specialize", "in property", "management", "services"],
+      cta: { label: "Contact us", href: "/contact" },
     },
     title: "Property Management Services",
     icon: "/icons/section-property.svg",
@@ -71,11 +72,12 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/plumbing-hero-boiler-plant.jpg", alt: "A row of condensing boilers with grey venting rising into an old brick building" },
       lines: ["We provide", "comprehensive", "plumbing, heating,", "HVAC, and gas", "services."],
+      cta: { label: "Contact us", href: "/contact" },
     },
     title: "Plumbing, Heating & Gas Fitting",
     icon: "/icons/section-flame.svg",
     watermark: { src: "/icons/bg-flame.svg", ratio: 395.75 / 625.76, x: 513, y: 0, width: 455 },
-    heading: ["We also offer", "customized preventative", "maintenance program"],
+    heading: ["We offer", "customized preventative", "maintenance programs"],
     lead: "JJM Mechanical Group",
     paragraphs: [
       " provides comprehensive plumbing, heating, and gas fitting services for residential and commercial clients across the Lower Mainland. Our licensed technicians deliver expert installation, repair, and maintenance for all mechanical systems — including boilers, furnaces, water heaters, and gas-fired appliances.",
@@ -97,6 +99,7 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/backflow-hero-rpz.jpg", alt: "A bronze reduced-pressure backflow assembly between two yellow-handled ball valves" },
       lines: ["Proud member", "of the BCWWA", "since 2007"],
+      cta: { label: "Contact us", href: "/contact" },
     },
     title: "Backflow Certification",
     icon: "/icons/section-backflow.svg",
@@ -105,7 +108,7 @@ export const servicePages: ServicePage[] = [
     lead: "As a proud member of the BCWWA since 2007",
     paragraphs: [
       ", JJM Mechanical Group is fully certified to install, test, and repair all makes and sizes of backflow prevention devices. We also provide comprehensive testing and recertification services to ensure your systems remain in top working order.",
-      "In addition to backflow services, we offer detailed hazard assessments and water management planning reports. Please note that, as of December 19, 2014, all backflow prevention devices and related potable water fittings in British Columbia must comply with lead-free regulations and include both testable and non-testable devices, as well as brass fittings.",
+      "In addition to backflow services, we offer detailed hazard assessments and water management planning reports. All backflow prevention devices and related potable water fittings in British Columbia, including testable and non-testable devices and brass fittings, must meet lead-free requirements.",
     ],
     photos: [
       { src: "/images/backflow-assembly.jpg", alt: "A red and green double check valve backflow assembly with test tags", position: "50% 30%" },

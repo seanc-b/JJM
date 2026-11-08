@@ -9,7 +9,7 @@ export const company = {
   phoneHref: "tel:+16044220204",
   email: "jjm@jjmmechanicalgroup.ca",
   accountingEmail: "accounts@jjmmechanicalgroup.ca",
-  address: "8331 Eastlake Dr, #107, Burnaby, BC V5A 4W2",
+  address: "8331 Eastlake Dr Unit 107, Burnaby, BC V5A 4W2, Canada",
   instagram: "jjmmech",
   instagramHref: "https://www.instagram.com/jjmmech",
   year: 2026,
@@ -36,6 +36,7 @@ export const marquee = ["Property Management Services", "Plumbing, Heating & Gas
 export type NewsItem = {
   source: string;
   subtitle: string;
+  /** ISO date (YYYY-MM-DD); shown spelled out, "October 1, 2026". */
   date: string;
   title: string;
   image: { src: string; alt: string };
@@ -43,29 +44,26 @@ export type NewsItem = {
   youtubeId: string;
   /** The video on YouTube: the link when JavaScript is off or opened in a new tab. */
   videoUrl: string;
-  placeholder?: boolean;
 };
 
 export const news: NewsItem[] = [
   {
     source: "Navien",
     subtitle: "Innovation in Action",
-    date: "01.10.2026",
+    date: "2026-10-01",
     title: "Residential Tower Eliminates Hot-Water Complaints with Navien's Tankless Water Heaters",
     image: { src: "/images/property-navien-wall.jpg", alt: "Navien tankless water heaters mounted in a row" },
     youtubeId: "q_gBUxBfcHc",
     videoUrl: "https://www.youtube.com/watch?v=q_gBUxBfcHc",
-    placeholder: true,
   },
   {
     source: "Geotab",
     subtitle: "Improving Safety & Productivity",
-    date: "01.10.2026",
+    date: "2026-10-01",
     title: "How Fleet Telematics Keeps JJM's Service Vans Safe and On Time Across the Lower Mainland",
     image: { src: "/images/news-van.jpg", alt: "A JJM Mechanical Group service van" },
     youtubeId: "h2nErrkXQ8g",
     videoUrl: "https://www.youtube.com/watch?v=h2nErrkXQ8g",
-    placeholder: true,
   },
 ];
 
@@ -89,6 +87,8 @@ export type Section = {
   lead: string;
   body: string;
   href: string;
+  /** The button label, naming where it goes (not a bare "Learn more"). */
+  cta: string;
   /** Shown in order by the pinned services scroller; w and h are the file's real pixel size. */
   images: { src: string; alt: string; w: number; h: number }[];
   aspect: string;
@@ -104,6 +104,7 @@ export const sections: Section[] = [
     lead: "At JJM Mechanical Group",
     body: ", we specialize in providing reliable and efficient mechanical services tailored to the unique needs of property management companies.",
     href: "/property-management",
+    cta: "Explore property services",
     images: [
       { src: "/images/property-crane-aerial.jpg", w: 1200, h: 1600, alt: "Aerial view of a crane lifting mechanical equipment onto a downtown rooftop" },
       { src: "/images/property-boiler-skid.jpg", w: 1980, h: 1820, alt: "A packaged boiler skid with manifold piping before installation" },
@@ -120,6 +121,7 @@ export const sections: Section[] = [
     lead: "JJM Mechanical Group",
     body: " provides comprehensive plumbing, heating, and gas fitting services for residential and commercial clients across the Lower Mainland.",
     href: "/plumbing",
+    cta: "Explore plumbing services",
     images: [
       { src: "/images/plumbing-boiler-room.jpg", w: 1476, h: 1129, alt: "A finished boiler room with copper piping, pumps and expansion tanks" },
       { src: "/images/plumbing-meters.jpg", w: 893, h: 1359, alt: "Three brass water meters on insulated white pipes" },
@@ -136,6 +138,7 @@ export const sections: Section[] = [
     lead: "As a proud member of the BCWWA since 2007",
     body: ", JJM Mechanical Group is fully certified to install, test, and repair all makes and sizes of backflow prevention devices.",
     href: "/backflow",
+    cta: "Explore backflow services",
     images: [
       { src: "/images/backflow-assembly.jpg", w: 2560, h: 1903, alt: "A red and green double check valve backflow assembly with test tags" },
       { src: "/images/backflow-gauge.jpg", w: 1220, h: 1500, alt: "A technician holding a backflow test gauge" },
@@ -149,9 +152,10 @@ export const sections: Section[] = [
     navLabel: "About",
     icon: "/icons/section-about.svg",
     bgIcon: "/icons/bg-about.svg",
-    lead: "JJM Mechanical Group has over 20 years of experience",
-    body: " in the mechanical trade.",
+    lead: "Founded in 2012 by Jay Mallan",
+    body: ", JJM Mechanical Group draws on over 20 years of experience in the mechanical trade.",
     href: "/about",
+    cta: "Meet the team",
     images: [
       { src: "/images/about-crew-trench.jpg", w: 1014, h: 1499, alt: "The JJM crew replacing a ring main valve in an excavated trench" },
       { src: "/images/about-team-shop.jpg", w: 1500, h: 708, alt: "Five JJM team members in the shop in front of mechanical equipment" },

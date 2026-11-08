@@ -426,7 +426,7 @@ export default function ServicesScroller() {
                     </p>
                     <div className="mt-8">
                       <Button href={s.href} icon={<IconPlus />}>
-                        Learn more
+                        {s.cta}
                       </Button>
                     </div>
                   </div>

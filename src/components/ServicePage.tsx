@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import { servicePages, type ServicePage as Page, type Watermark } from "@/content/pages";
+import { nav } from "@/content/home";
 import { noWidow } from "@/lib/text";
 
 /**
@@ -74,6 +75,12 @@ export function serviceMetadata(slug: string): Metadata {
   return { title: page.metaTitle, description: page.metaDescription };
 }
 
+/** The white menu icon for a page, by its nav entry. */
+export function heroIcon(href: string) {
+  const icon = nav.find((n) => n.href === href)?.icon ?? "about";
+  return `/icons/menu/${icon}-white.svg`;
+}
+
 export default function ServicePage({ slug }: { slug: string }) {
   const page = getPage(slug);
   const href = `/${page.slug}`;
@@ -83,7 +90,13 @@ export default function ServicePage({ slug }: { slug: string }) {
       <Header />
       <PageTransition>
       <main>
-        <Hero size="page" image={page.hero.image} lines={page.hero.lines} cta={page.hero.cta} />
+        <Hero
+          size="page"
+          image={page.hero.image}
+          lines={page.hero.lines}
+          cta={page.hero.cta}
+          eyebrow={{ label: page.title, icon: heroIcon(href) }}
+        />
 
         <section
           aria-labelledby={titleId}
@@ -117,7 +130,7 @@ export default function ServicePage({ slug }: { slug: string }) {
           ))}
         </div>
       </main>
-      <Footer tagline={page.tagline} current={href} />
+      <Footer tagline={page.tagline} current={href} cta />
       </PageTransition>
       {/* Mounted last so its effects run after this page's DOM has hydrated. */}
       <Motion />
