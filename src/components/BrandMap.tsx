@@ -229,7 +229,7 @@ export default function BrandMap({ title, fallbackSrc, className = "" }: Props) 
     <div className="relative w-full">
       <div className={`relative w-full overflow-hidden bg-frost ${className}`}>
         {/* Sized with h-full, not inset-0: MapLibre makes its container position: relative. */}
-        <div ref={box} role="region" aria-label={title} className="h-full w-full" />
+        <div ref={box} role="region" aria-label={title} className="brand-map h-full w-full" />
       </div>
       {/* The office card, in the site's style: over the map's top-left corner from md, under the map on phones
           (where it would cover the pin). */}
