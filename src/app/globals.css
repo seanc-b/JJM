@@ -163,8 +163,8 @@ html.motion .ruled {
   }
 }
 
-/* Nav: the current page is marked by a light blue dot under its link (.navdot, rendered by Header).
-   Hovering another link shows a fainter dot in the same spot. Header only; the footer nav has no dot. */
+/* Nav: the current page is marked by a light blue dot under its link (.navdot, rendered by Header). Hover
+   only dims the other links; the dot itself moves when the page changes. Header only; the footer has no dot. */
 .navlink {
   position: relative;
   transition: opacity 0.35s ease;
@@ -173,8 +173,7 @@ html.motion .ruled {
 .navlist:has(.navlink:hover) .navlink:not(:hover) {
   opacity: 0.5;
 }
-.navdot,
-.navlink::after {
+.navdot {
   position: absolute;
   left: 50%;
   top: calc(100% + 0.7em);
@@ -194,19 +193,6 @@ html.motion .navdot-pop {
     transform: scale(0);
   }
 }
-.navlink::after {
-  content: "";
-  opacity: 0;
-  transform: scale(0);
-  transition:
-    transform 0.5s var(--ease-out-expo),
-    opacity 0.3s ease;
-}
-.navlink:not([aria-current="page"]):hover::after {
-  opacity: 0.55;
-  transform: scale(1);
-}
-
 /* Wipe hover: a navy copy of an element (.wipe-fill) sits on top of it, clipped to nothing, and opens from
    left to right when its trigger is hovered or focused. .wipe is a trigger on its own (the footer chips);
    .wipe-group triggers when any link inside it is (a news card: its photo link and its Play button). */
