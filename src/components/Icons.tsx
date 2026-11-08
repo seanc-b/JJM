@@ -54,6 +54,39 @@ export const IconPlay = (p: P) => (
   </svg>
 );
 
+export const IconPause = (p: P) => (
+  <svg {...base({ fill: "currentColor", stroke: "none", ...p })}>
+    <rect x="6.5" y="5" width="3.6" height="14" rx="0.6" />
+    <rect x="13.9" y="5" width="3.6" height="14" rx="0.6" />
+  </svg>
+);
+
+export const IconVolume = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+    <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" />
+  </svg>
+);
+
+export const IconMuted = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+    <path d="m16 9.5 5 5M21 9.5l-5 5" />
+  </svg>
+);
+
+export const IconExpand = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+  </svg>
+);
+
+export const IconCollapse = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+  </svg>
+);
+
 export const IconPlus = (p: P) => (
   <svg {...base(p)}>
     <path d="M12 5v14M5 12h14" />
