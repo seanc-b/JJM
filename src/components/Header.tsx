@@ -95,6 +95,9 @@ export default function Header() {
                 <li key={item.href}>
                   <Link href={item.href} aria-current={item.href === pathname ? "page" : undefined} className="navlink text-[0.8125rem] font-semibold uppercase tracking-[0.06em] xl:text-[0.875rem]">
                     {item.label}
+                    {/* One dot per page, under the current link. Its view-transition name lets the browser
+                        glide it from the old link to the new one as the page changes (globals.css). */}
+                    {item.href === pathname && <span aria-hidden className="navdot" style={{ viewTransitionName: "nav-dot" }} />}
                   </Link>
                 </li>
               ))}

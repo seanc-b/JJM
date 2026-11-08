@@ -5,6 +5,7 @@
   --color-blue: #3f74b7;
   --color-cobalt: #204185;
   --color-sky: #129cd8;
+  --color-glacier: #5ab8ee;
   --color-ink: #3e4d5d;
   --color-mist: #c3c8d5;
   --color-frost: #e9ecf2;
@@ -156,25 +157,33 @@ html.motion .ruled {
   }
 }
 
-/* Nav link underline that grows from the left */
+/* Nav: the current page is marked by a light blue dot under its link (.navdot, rendered by Header).
+   Hovering another link shows a fainter dot in the same spot. */
 .navlink {
   position: relative;
 }
+.navdot,
+.navlink::after {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 0.7em);
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 9999px;
+  background: var(--color-glacier);
+}
 .navlink::after {
   content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.35em;
-  height: 1.5px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.5s var(--ease-out-expo);
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    opacity 0.3s ease;
 }
-.navlink:hover::after,
-.navlink[aria-current="page"]::after {
-  transform: scaleX(1);
+.navlink:not([aria-current="page"]):hover::after {
+  opacity: 0.55;
+  transform: scale(1);
 }
 
 /* ---------- Motion initial states (only when motion is allowed) ---------- */
@@ -253,5 +262,29 @@ html.motion [data-wipe] {
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none !important;
+  }
+}
+
+/* The nav dot glides from the old page's link to the new one. Coming from or going to the home page,
+   where no link is current, it scales in or out on the spot instead. */
+::view-transition-group(nav-dot) {
+  z-index: 101;
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+}
+::view-transition-old(nav-dot),
+::view-transition-new(nav-dot) {
+  animation: none;
+}
+::view-transition-new(nav-dot):only-child {
+  animation: 500ms cubic-bezier(0.16, 1, 0.3, 1) both nav-dot-in;
+}
+::view-transition-old(nav-dot):only-child {
+  animation: 300ms ease-in both nav-dot-in reverse;
+}
+@keyframes nav-dot-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
   }
 }
