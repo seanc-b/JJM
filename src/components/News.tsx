@@ -1,9 +1,23 @@
+"use client";
+
 import Image from "next/image";
+import { useCallback, useState, type MouseEvent } from "react";
 import { IconPlay } from "@/components/Icons";
 import Placeholder from "@/components/Placeholder";
-import { news } from "@/content/home";
+import VideoModal from "@/components/VideoModal";
+import { news, type NewsItem } from "@/content/home";
 
 export default function News() {
+  const [playing, setPlaying] = useState<NewsItem | null>(null);
+  const close = useCallback(() => setPlaying(null), []);
+
+  // The links still point at YouTube, so a new-tab click (or no JavaScript) goes there instead.
+  const open = (item: NewsItem) => (e: MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    setPlaying(item);
+  };
+
   return (
     <section aria-labelledby="news-heading" className="pb-[clamp(40px,5vw,72px)]">
       {/* The dotted rules run edge to edge, as drawn. */}
@@ -30,7 +44,9 @@ export default function News() {
                 href={item.videoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Watch: ${item.title}`}
+                onClick={open(item)}
+                aria-haspopup="dialog"
+                aria-label={`Play video: ${item.title}`}
                 className="frame group relative mt-3 block aspect-[16/9] bg-navy"
               >
                 <Image src={item.image.src} alt={item.image.alt} fill sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
@@ -46,6 +62,9 @@ export default function News() {
                   href={item.videoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={open(item)}
+                  aria-haspopup="dialog"
+                  aria-label={`Play video: ${item.title}`}
                   className="group inline-flex items-center gap-2 bg-blue px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors duration-400 hover:bg-navy"
                 >
                   Play
@@ -56,6 +75,8 @@ export default function News() {
           </li>
         ))}
       </ul>
+
+      {playing && <VideoModal youtubeId={playing.youtubeId} title={playing.title} onClose={close} />}
     </section>
   );
 }

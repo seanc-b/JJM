@@ -79,7 +79,7 @@ Copy decisions (confirmed 2026-11-07):
 - Header nav label is "Plumbing" (not "Plumbing & Heating") to save space; footer nav matches.
 - Fix "ADRESS" → "Address" and "JJMmechanical Group" → "JJM Mechanical Group".
 
-Placeholders are acceptable for now for: news thumbnails and videos, and the small menu icons. Mark them clearly so they are replaced before launch.
+The two news videos were supplied on 2026-11-08 (Navien: youtube q_gBUxBfcHc; Geotab card: youtube h2nErrkXQ8g, titled "Zeemac_V2" on a channel called JtotheB, so its card copy is unconfirmed). Placeholders are acceptable for now for: news thumbnails, dates and the Geotab headline, and the small menu icons. Mark them clearly so they are replaced before launch.
 
 Undecided:
 - Hosting provider and deployment setup.

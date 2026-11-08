@@ -266,6 +266,9 @@ White rectangle, 10px 20px, on the mist panel: a `label` in ink then the value i
 ### Marquee
 A full-width band between two edges of the page with a 2px dotted blue-40% bottom rule. Three service names in navy regular at `clamp(1.6rem, 3.7vw, 3.5rem)`, each followed by a 0.22em navy dot, duplicated once for the loop. Drifts left at a 60s period; scroll velocity boosts it up to 4.5x and scrolling up reverses it; it pauses off-screen. Reduced motion: a single centred, wrapping copy with the dots inline.
 
+### Video modal
+The news cards' thumbnail and Play tag open their YouTube video in a modal over the page, on the menu's scrim (navy 40% with an 8px backdrop blur). The player (youtube-nocookie, autoplay) sits in a black 16:9 frame up to 1100px wide and 82svh tall, rising from 0.96 scale over 700ms expo-out. The page behind is inert and stops scrolling; Escape, the close button or a click on the scrim closes it, and focus returns to the opener. The links still point at YouTube, so a new-tab click or no JavaScript goes there.
+
 ### Navigation
 - **Hero header:** absolute over the hero, 84px tall, white, bottom hairline white at 35%. White logo left (42–46px tall), five uppercase semibold links centre-right (lg+) with a 1.5px underline that grows from the left on hover and on the current page, mail and phone stroke icons right (sm+), hamburger below lg.
 - **Compact header pill:** fixed top-centre, slides down after 55% of the viewport is scrolled (700ms, expo-out). Navy at 80% with 12px backdrop blur, bottom corners 6px, 10px 24px padding, white "JJM" wordmark 24px tall and a menu / close icon. The whole pill is one button that toggles the menu, deepening to solid navy on hover.

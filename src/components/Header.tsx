@@ -122,6 +122,7 @@ export default function Header() {
 
       {/* Compact pill */}
       <div
+        data-compact-pill
         className={`fixed left-1/2 top-0 z-40 -translate-x-1/2 transition-transform duration-700 ease-[var(--ease-out-expo)] ${
           compact || open ? "translate-y-0" : "-translate-y-[120%]"
         }`}

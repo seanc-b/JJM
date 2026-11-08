@@ -39,6 +39,9 @@ export type NewsItem = {
   date: string;
   title: string;
   image: { src: string; alt: string };
+  /** YouTube video id, played in the video modal. */
+  youtubeId: string;
+  /** The video on YouTube: the link when JavaScript is off or opened in a new tab. */
   videoUrl: string;
   placeholder?: boolean;
 };
@@ -50,7 +53,8 @@ export const news: NewsItem[] = [
     date: "01.10.2026",
     title: "Residential Tower Eliminates Hot-Water Complaints with Navien's Tankless Water Heaters",
     image: { src: "/images/property-navien-wall.jpg", alt: "Navien tankless water heaters mounted in a row" },
-    videoUrl: "https://www.youtube.com/@navieninc",
+    youtubeId: "q_gBUxBfcHc",
+    videoUrl: "https://www.youtube.com/watch?v=q_gBUxBfcHc",
     placeholder: true,
   },
   {
@@ -59,7 +63,8 @@ export const news: NewsItem[] = [
     date: "01.10.2026",
     title: "How Fleet Telematics Keeps JJM's Service Vans Safe and On Time Across the Lower Mainland",
     image: { src: "/images/news-van.jpg", alt: "A JJM Mechanical Group service van" },
-    videoUrl: "https://www.youtube.com/@geotab",
+    youtubeId: "h2nErrkXQ8g",
+    videoUrl: "https://www.youtube.com/watch?v=h2nErrkXQ8g",
     placeholder: true,
   },
 ];
