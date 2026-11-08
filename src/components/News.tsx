@@ -23,10 +23,18 @@ const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-ou
  */
 const BLEED = 6;
 
+type Band = { top: number; bottom: number };
+/** A band is a line's bar plus a pixel each way; its text window drops that pixel and the bar's padding. */
+function textClip(b: Band, pad: Band): Band {
+  return { top: b.top + 1 + pad.top, bottom: b.bottom + 1 + pad.bottom };
+}
+
 function WipeCaption({ text }: { text: string }) {
   const box = useRef<HTMLSpanElement>(null);
   const base = useRef<HTMLSpanElement>(null);
   const [bands, setBands] = useState<{ top: number; bottom: number }[]>([{ top: 0, bottom: 0 }]);
+  // The bar's vertical padding. The rising text is masked inside it, to the line's text box, as in the hero.
+  const [pad, setPad] = useState({ top: 0, bottom: 0 });
 
   useLayoutEffect(() => {
     const el = box.current;
@@ -46,6 +54,9 @@ function WipeCaption({ text }: { text: string }) {
         if (!next.some((b) => Math.abs(b.top - band.top) < 2)) next.push(band);
       }
       setBands((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+      const cs = getComputedStyle(span);
+      const p = { top: parseFloat(cs.paddingTop) || 0, bottom: parseFloat(cs.paddingBottom) || 0 };
+      setPad((prev) => (prev.top === p.top && prev.bottom === p.bottom ? prev : p));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -64,8 +75,15 @@ function WipeCaption({ text }: { text: string }) {
       return;
     }
     const lines = Array.from(el.querySelectorAll<HTMLElement>("[data-line-rise]"));
+    // Each line starts just under its own text box, so it's never seen until it rises into place.
     const height = el.getBoundingClientRect().height + 2 * BLEED;
-    gsap.set(lines, { y: (i: number) => (height - bands[i].top - bands[i].bottom) * 1.1, yPercent: 0 });
+    gsap.set(lines, {
+      y: (i: number) => {
+        const t = textClip(bands[i], pad);
+        return height - t.top - t.bottom + 2;
+      },
+      yPercent: 0,
+    });
     const tween = gsap.to(lines, {
       y: 0,
       duration: 1.2,
@@ -82,7 +100,12 @@ function WipeCaption({ text }: { text: string }) {
       st.kill();
       tween.kill();
     };
-  }, [bands]);
+  }, [bands, pad]);
+
+  const textInset = (b: Band) => {
+    const t = textClip(b, pad);
+    return `inset(${t.top}px 0 ${t.bottom}px 0)`;
+  };
 
   return (
     <span ref={box} data-caption className="absolute bottom-6 left-6 right-10 md:right-20">
@@ -91,19 +114,15 @@ function WipeCaption({ text }: { text: string }) {
         {text}
       </span>
       {bands.map((b, i) => (
-        // Two clips on the same band: the outer one stays put and masks the rise; the inner one moves with
-        // the text, so it only ever draws its own line (never the line above sliding through).
+        // Two clips on the line's text box: the outer one stays put and masks the rise, as in the hero; the
+        // inner one moves with the text, so it only ever draws its own line (never the line above).
         <span
           key={`show-${i}`}
           aria-hidden
           className="absolute"
-          style={{ inset: -BLEED, clipPath: `inset(${b.top}px 0 ${b.bottom}px 0)` }}
+          style={{ inset: -BLEED, clipPath: textInset(b) }}
         >
-          <span
-            data-line-rise
-            className="absolute inset-0"
-            style={{ padding: BLEED, clipPath: `inset(${b.top}px 0 ${b.bottom}px 0)` }}
-          >
+          <span data-line-rise className="absolute inset-0" style={{ padding: BLEED, clipPath: textInset(b) }}>
             <span className={`${caption} text-navy`}>{text}</span>
           </span>
         </span>
