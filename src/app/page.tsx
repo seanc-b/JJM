@@ -15,7 +15,7 @@ export default function Home() {
       <Header />
       <PageTransition>
       <main>
-        <Hero image={hero.image} lines={hero.lines} cta={hero.cta} />
+        <Hero image={hero.image} lines={hero.lines} cta={hero.cta} scrollTo={{ target: "home-content", label: "Skip to our services and news" }} />
         <Marquee />
         <News />
         <Banner image={bannerSince.image} lines={bannerSince.lines} />

@@ -10,7 +10,7 @@ type Props = {
   cta?: { label: string; href: string };
   /** A small line above the headline naming the page, beside its white menu icon. Inner pages only. */
   eyebrow?: { label: string; icon: string };
-  /** A long down arrow under the headline linking to the page content (an element id). Inner pages only. */
+  /** A long down arrow under the headline linking to the page content (an element id). */
   scrollTo?: { target: string; label: string };
   /** Both are full viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
   size?: "home" | "page";
