@@ -435,18 +435,19 @@ export default function ServicesScroller() {
                 ))}
               </div>
 
-              {/* Service switcher: a block bar like the site's buttons. The current service is a solid blue block
-                  (white label) that slides to whichever is active (--active). Along the bottom edge a light line
-                  fills in darker from the left as you scroll through the whole section (--progress, 0–1, set by
-                  the scroll timeline), showing how far along the four services you are. */}
+              {/* Service switcher: a block bar like the site's buttons. Behind the labels a slightly darker grey
+                  fills in from the left as you scroll through the whole section (--progress, 0–1, set by the scroll
+                  timeline), showing how far along the four services you are. The current service is marked by a
+                  blue underline that slides to it (--active) and a darker label. */}
               <nav
                 data-switcher
                 aria-label="Jump to a service"
                 className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 bg-frost [--active:0] [--progress:0]"
               >
+                <span aria-hidden className="absolute inset-0 origin-left bg-mist/70" style={{ transform: "scaleX(var(--progress))" }} />
                 <span
                   aria-hidden
-                  className="absolute inset-y-0 left-0 w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
+                  className="absolute bottom-0 left-0 h-[3px] w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
                   style={{ transform: "translateX(calc(var(--active) * 100%))" }}
                 />
                 {sections.map((s, si) => (
@@ -456,15 +457,11 @@ export default function ServicesScroller() {
                     data-rail
                     aria-label={s.title.join(" ")}
                     onClick={() => jumpTo(si)}
-                    className={`relative h-12 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-navy/70 transition-colors duration-500 hover:text-navy [&.is-active]:text-white ${si === 0 ? "is-active" : ""}`}
+                    className={`relative h-12 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink/60 transition-colors duration-500 hover:text-navy [&.is-active]:text-navy ${si === 0 ? "is-active" : ""}`}
                   >
                     {s.navLabel}
                   </button>
                 ))}
-                {/* Progress: a light track along the bottom, filling in navy. */}
-                <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] bg-mist">
-                  <span className="absolute inset-0 origin-left bg-navy" style={{ transform: "scaleX(var(--progress))" }} />
-                </span>
               </nav>
             </div>
           </div>
