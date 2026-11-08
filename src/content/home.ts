@@ -169,12 +169,14 @@ export type Partner = { name: string; src: string; w: number; h: number; height:
  * Footer logos, trimmed to their artwork. height is the displayed height in px on desktop, set by eye
  * so a round seal and a long wordmark look the same visual weight in one row.
  */
+// Heights balance the logos by eye, not by box: wide, heavy marks (Navien's lettering, WorkSafeBC's solid
+// block) sit smaller so no logo reads louder than the rest. Proportions are always kept.
 export const partners: Partner[] = [
   { name: "British Columbia Safety Authority", src: "/partners/bc-safety-authority.png", w: 176, h: 85, height: 40 },
-  { name: "BCWWA, BC Water & Waste Association", src: "/partners/bcwwa.png", w: 292, h: 70, height: 30 },
-  { name: "Interprovincial Standard Red Seal", src: "/partners/red-seal.png", w: 151, h: 153, height: 50 },
+  { name: "BCWWA, BC Water & Waste Association", src: "/partners/bcwwa.png", w: 292, h: 70, height: 28 },
+  { name: "Interprovincial Standard Red Seal", src: "/partners/red-seal.png", w: 151, h: 153, height: 46 },
   { name: "FortisBC", src: "/partners/fortisbc.png", w: 333, h: 72, height: 26 },
   { name: "Proud TECA Member, Thermal Environmental Comfort Association", src: "/partners/teca-member.png", w: 247, h: 81, height: 34 },
-  { name: "Navien", src: "/partners/navien.png", w: 342, h: 46, height: 22 },
-  { name: "WorkSafeBC", src: "/partners/worksafebc.png", w: 342, h: 65, height: 26 },
+  { name: "Navien", src: "/partners/navien.png", w: 342, h: 46, height: 18 },
+  { name: "WorkSafeBC", src: "/partners/worksafebc.png", w: 342, h: 65, height: 21 },
 ];
