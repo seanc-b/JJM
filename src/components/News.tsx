@@ -29,6 +29,20 @@ function textClip(b: Band, pad: Band): Band {
   return { top: b.top + 1 + pad.top, bottom: b.bottom + 1 + pad.bottom };
 }
 
+/**
+ * Captions that come into view together play in turn, card by card across the grid, each starting a beat
+ * after the one before so they overlap a little. A caption that arrives on its own (a later row, scrolled
+ * to after the others) plays straight away. Returns how long, in seconds, this caption should wait.
+ */
+const ENTRANCE_GAP = 0.4;
+let nextSlot = 0;
+function nextEntrance() {
+  const now = performance.now() / 1000;
+  const start = Math.max(now, nextSlot);
+  nextSlot = start + ENTRANCE_GAP;
+  return start - now;
+}
+
 function WipeCaption({ text }: { text: string }) {
   const box = useRef<HTMLSpanElement>(null);
   const base = useRef<HTMLSpanElement>(null);
@@ -98,9 +112,18 @@ function WipeCaption({ text }: { text: string }) {
       })
       .to(bars, { "--r": "0%", duration: 0.6, ease: "power3.out", stagger: 0.1 }, 0)
       .to(lines, { y: 0, duration: 1.1, ease: EASE, stagger: 0.1 }, 0.3);
-    const st = ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: () => void tl.play() });
+    let queued: gsap.core.Tween | undefined;
+    const st = ScrollTrigger.create({
+      trigger: el,
+      start: "top 90%",
+      once: true,
+      onEnter: () => {
+        queued = gsap.delayedCall(nextEntrance(), () => void tl.play());
+      },
+    });
     return () => {
       st.kill();
+      queued?.kill();
       tl.kill();
     };
   }, [bands, pad]);
