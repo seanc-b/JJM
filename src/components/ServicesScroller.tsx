@@ -129,6 +129,7 @@ export default function ServicesScroller() {
   const markActive = (si: number) => {
     const el = root.current;
     if (!el) return;
+    el.querySelector<HTMLElement>("[data-switcher]")?.style.setProperty("--active", String(si));
     el.querySelectorAll<HTMLElement>("[data-rail]").forEach((button, i) => {
       button.classList.toggle("is-active", i === si);
       if (i === si) button.setAttribute("aria-current", "true");
@@ -434,40 +435,36 @@ export default function ServicesScroller() {
                 ))}
               </div>
 
-              {/* Service switcher: a block bar like the site's buttons. A blue fill (white labels) grows from the
-                  left as you scroll through the whole section, showing how far along the four services you are;
-                  --progress (0–1) is set by the scroll timeline. */}
+              {/* Service switcher: a block bar like the site's buttons. The current service is a solid blue block
+                  (white label) that slides to whichever is active (--active). Along the bottom edge a light line
+                  fills in darker from the left as you scroll through the whole section (--progress, 0–1, set by
+                  the scroll timeline), showing how far along the four services you are. */}
               <nav
                 data-switcher
                 aria-label="Jump to a service"
-                className="absolute bottom-[6svh] left-0 z-10 w-full min-w-[22rem] bg-frost [--progress:0]"
+                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 bg-frost [--active:0] [--progress:0]"
               >
-                <div className="grid grid-cols-4">
-                  {sections.map((s, si) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      data-rail
-                      aria-label={s.title.join(" ")}
-                      onClick={() => jumpTo(si)}
-                      className={`h-12 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-navy/70 transition-colors duration-500 hover:text-navy [&.is-active]:text-navy ${si === 0 ? "is-active" : ""}`}
-                    >
-                      {s.navLabel}
-                    </button>
-                  ))}
-                </div>
-                {/* The fill: the same labels in white on blue, clipped to the progress. Clicks pass through to the buttons. */}
-                <div
+                <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 grid grid-cols-4 bg-blue text-white"
-                  style={{ clipPath: "inset(0 calc((1 - var(--progress)) * 100%) 0 0)" }}
-                >
-                  {sections.map((s) => (
-                    <span key={s.id} className="flex items-center justify-center text-[0.75rem] font-semibold uppercase tracking-[0.14em]">
-                      {s.navLabel}
-                    </span>
-                  ))}
-                </div>
+                  className="absolute inset-y-0 left-0 w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
+                  style={{ transform: "translateX(calc(var(--active) * 100%))" }}
+                />
+                {sections.map((s, si) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    data-rail
+                    aria-label={s.title.join(" ")}
+                    onClick={() => jumpTo(si)}
+                    className={`relative h-12 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-navy/70 transition-colors duration-500 hover:text-navy [&.is-active]:text-white ${si === 0 ? "is-active" : ""}`}
+                  >
+                    {s.navLabel}
+                  </button>
+                ))}
+                {/* Progress: a light track along the bottom, filling in navy. */}
+                <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] bg-mist">
+                  <span className="absolute inset-0 origin-left bg-navy" style={{ transform: "scaleX(var(--progress))" }} />
+                </span>
               </nav>
             </div>
           </div>
