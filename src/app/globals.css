@@ -249,6 +249,19 @@ html.motion [data-caption]:not([data-risen]) [data-line-rise] {
 html.motion [data-caption]:not([data-risen]) [data-bar] {
   --r: 100%;
 }
+/* Home services scroller: all four services share one spot, and the script shows one at a time. Until it
+   runs (say, on a refresh) only the first shows, so the others never stack on top of it. The scroller only
+   exists where its script runs (md and up, motion allowed), and the script's inline styles win. */
+[data-text-stack] > [data-text]:not(:first-child),
+[data-icons] > [data-bg]:not(:first-child) {
+  visibility: hidden;
+  opacity: 0;
+}
+/* The photos are animated on opacity alone, so they're hidden on opacity alone. */
+[data-stage] > [data-slide]:not(:first-child) {
+  opacity: 0;
+}
+
 /* Footer contact chips: white closed and text below its mask until the entrance (Motion). */
 html.motion [data-chip-intro]:not([data-risen]) [data-chip-bg] {
   clip-path: inset(0 100% 0 0);
