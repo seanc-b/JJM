@@ -232,6 +232,32 @@ html.motion .navdot-pop {
   transition: clip-path 0.45s cubic-bezier(0.33, 1, 0.68, 1) calc(var(--i) * 0.09s);
 }
 
+/* Header contact icons: a panel with the address and a Copy button, on hover or focus, for mouse and
+   trackpad users only (Header.tsx). Touch taps go straight to mail or the dialler. */
+.contact-pop {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s var(--ease-out-expo),
+    visibility 0s linear 0.35s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contact-pop-trigger:hover .contact-pop,
+  .contact-pop-trigger:focus-within .contact-pop {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition:
+      opacity 0.25s ease,
+      transform 0.35s var(--ease-out-expo),
+      visibility 0s;
+  }
+}
+
 /* ---------- Motion initial states (only when motion is allowed) ---------- */
 html.motion [data-reveal] {
   opacity: 0;

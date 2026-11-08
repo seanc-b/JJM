@@ -111,3 +111,16 @@ export const IconPerson = (p: P) => (
     <path d="M5 19.5a7 7 0 0 1 14 0" />
   </svg>
 );
+
+export const IconCopy = (p: P) => (
+  <svg {...base(p)}>
+    <rect x="8.5" y="8.5" width="11" height="11" rx="1.5" />
+    <path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5" />
+  </svg>
+);
+
+export const IconCheck = (p: P) => (
+  <svg {...base(p)}>
+    <path d="m5 12.5 4.5 4.5L19 7.5" />
+  </svg>
+);

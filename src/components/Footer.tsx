@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import CopyButton from "@/components/CopyButton";
 import { IconInstagram, IconPhone } from "@/components/Icons";
 import { company, nav, partners, sameDay } from "@/content/home";
 
@@ -9,7 +10,7 @@ import { company, nav, partners, sameDay } from "@/content/home";
  * A linked chip also carries a navy copy of itself, white text and all, laid exactly on top and clipped to
  * nothing; hovering or focusing it opens the clip from left to right (.wipe in globals.css).
  */
-function Chip({ label, value, href }: { label: string; value: string; href?: string }) {
+function Chip({ label, value, href, copy }: { label: string; value: string; href?: string; copy?: string }) {
   const layout = "inline-flex flex-wrap items-baseline gap-x-3 px-5 py-2.5";
   const labelCls = "label";
   const valueCls = "text-[clamp(1rem,1.3vw,1.3rem)] font-bold";
@@ -35,13 +36,29 @@ function Chip({ label, value, href }: { label: string; value: string; href?: str
     </>
   );
   if (!href) return <span className={`relative ${layout}`}>{content}</span>;
-  return (
+  const link = (
     <a href={href} className={`wipe relative ${layout}`}>
       {content}
       <span aria-hidden className={`wipe-fill absolute inset-0 ${layout} bg-navy`}>
         {plain("light")}
       </span>
     </a>
+  );
+  if (!copy) return link;
+  // The link still opens mail or dials; a copy button sits just off its right edge, showing on hover or
+  // focus, on devices with a mouse or trackpad only (touch taps do the native thing). The padding bridges
+  // the gap so the pointer can cross to it without the chip losing hover.
+  return (
+    <span className="group/chip relative inline-flex">
+      {link}
+      <span className="absolute inset-y-0 left-full hidden pl-1.5 [@media(hover:hover)_and_(pointer:fine)]:flex">
+        <CopyButton
+          value={copy}
+          label={`${label.toLowerCase()} ${copy.includes("@") ? "email" : "phone number"}`}
+          className="flex aspect-square h-full cursor-pointer items-center justify-center bg-white text-navy opacity-0 transition-[opacity,background-color,color] duration-300 group-hover/chip:opacity-100 hover:bg-navy hover:text-white focus-visible:opacity-100"
+        />
+      </span>
+    </span>
   );
 }
 
@@ -68,9 +85,9 @@ export default function Footer({ tagline = sameDay, current }: Props) {
         </div>
         <div className="site relative grid gap-10 md:grid-cols-[1fr_auto]" data-reveal>
           <ul data-chip-intro className="flex flex-col items-start gap-3">
-            <li><Chip label="Office" value={company.phone} href={company.phoneHref} /></li>
-            <li><Chip label="General inquiries" value={company.email} href={`mailto:${company.email}`} /></li>
-            <li><Chip label="Accounting" value={company.accountingEmail} href={`mailto:${company.accountingEmail}`} /></li>
+            <li><Chip label="Office" value={company.phone} href={company.phoneHref} copy={company.phone} /></li>
+            <li><Chip label="General inquiries" value={company.email} href={`mailto:${company.email}`} copy={company.email} /></li>
+            <li><Chip label="Accounting" value={company.accountingEmail} href={`mailto:${company.accountingEmail}`} copy={company.accountingEmail} /></li>
             <li><Chip label="Address" value={company.address} href="https://maps.google.com/?q=8331+Eastlake+Dr+%23107+Burnaby+BC+V5A+4W2" /></li>
             <li className="mt-2">
               <a href={company.instagramHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-navy transition-opacity duration-300 hover:opacity-70">

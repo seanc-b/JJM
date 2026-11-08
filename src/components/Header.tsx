@@ -3,14 +3,41 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap, useGSAP, EASE, motionAllowed } from "@/lib/gsap";
 import { useLenis } from "@/components/SmoothScroll";
 import { company, nav, type NavLink } from "@/content/home";
+import CopyButton from "@/components/CopyButton";
 import { IconClose, IconMail, IconMenu, IconPhone } from "@/components/Icons";
 
 /** White ring icons for the menu, with a navy twin shown on hover and for the current page. */
 const menuIcon = (icon: NavLink["icon"], tone: "white" | "navy") => `/icons/menu/${icon}-${tone}.svg`;
+
+/**
+ * A header contact icon. Clicking it does the native thing (open mail, dial). On devices with a mouse or
+ * trackpad, hovering or focusing it shows a small panel with the address or number and a Copy button
+ * (.contact-pop in globals.css); the panel's top padding bridges the gap so the pointer can reach it.
+ */
+function ContactIcon({ href, label, value, copyLabel, children }: { href: string; label: string; value: string; copyLabel: string; children: ReactNode }) {
+  return (
+    <div className="contact-pop-trigger relative hidden sm:block">
+      <a href={href} aria-label={label} className="block transition-opacity duration-300 hover:opacity-70">
+        {children}
+      </a>
+      <div className="contact-pop absolute right-0 top-full z-40 pt-3">
+        <div className="flex items-center gap-3 whitespace-nowrap bg-white py-1.5 pl-4 pr-1.5 text-navy shadow-[0_12px_32px_-12px_rgba(23,53,93,0.5)]">
+          <span className="text-[0.9375rem] font-semibold">{value}</span>
+          <CopyButton
+            value={value}
+            label={copyLabel}
+            text="Copy"
+            className="inline-flex cursor-pointer items-center gap-1.5 bg-navy px-2.5 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-blue"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /**
  * The nav dot pops in on a fresh page load only (.navdot-pop in globals.css). After a client navigation the
@@ -122,12 +149,12 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-5">
-            <a href={`mailto:${company.email}`} aria-label="Email JJM" className="hidden transition-opacity duration-300 hover:opacity-70 sm:block">
+            <ContactIcon href={`mailto:${company.email}`} label="Email JJM" value={company.email} copyLabel="email address">
               <IconMail className="size-6" />
-            </a>
-            <a href={company.phoneHref} aria-label={`Call ${company.phone}`} className="hidden transition-opacity duration-300 hover:opacity-70 sm:block">
+            </ContactIcon>
+            <ContactIcon href={company.phoneHref} label={`Call ${company.phone}`} value={company.phone} copyLabel="phone number">
               <IconPhone className="size-6" />
-            </a>
+            </ContactIcon>
             <button
               type="button"
               onClick={() => setOpen(true)}
