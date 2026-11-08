@@ -18,6 +18,8 @@ const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-ou
  * they're measured after layout, and again on resize; each line gets its own copy, clipped to that
  * line's band. Before measuring, a single copy covers the whole caption.
  */
+const BLEED = 6;
+
 function WipeCaption({ text }: { text: string }) {
   const box = useRef<HTMLSpanElement>(null);
   const base = useRef<HTMLSpanElement>(null);
@@ -31,8 +33,13 @@ function WipeCaption({ text }: { text: string }) {
       const outer = el.getBoundingClientRect();
       const next: { top: number; bottom: number }[] = [];
       for (const r of Array.from(span.getClientRects())) {
-        // A pixel of overlap each way, so no white edge survives between the copy and the bar.
-        const band = { top: Math.max(0, r.top - outer.top - 1), bottom: Math.max(0, outer.bottom - r.bottom - 1) };
+        // Measured from the copy's box, which reaches BLEED px past the caption on every side: a line's bar
+        // (its padding) can stick out above or below the caption. One more pixel of overlap each way, so
+        // no white edge survives between the copy and the bar.
+        const band = {
+          top: Math.max(0, r.top - outer.top + BLEED - 1),
+          bottom: Math.max(0, outer.bottom - r.bottom + BLEED - 1),
+        };
         if (!next.some((b) => Math.abs(b.top - band.top) < 2)) next.push(band);
       }
       setBands((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
@@ -52,8 +59,9 @@ function WipeCaption({ text }: { text: string }) {
         <span
           key={i}
           aria-hidden
-          className="wipe-line absolute inset-0"
-          style={{ "--t": `${b.top}px`, "--b": `${b.bottom}px`, "--i": i } as CSSProperties}
+          className="wipe-line absolute"
+          // Grown by BLEED on every side and padded back in, so the text wraps exactly as in the caption.
+          style={{ inset: -BLEED, padding: BLEED, "--t": `${b.top}px`, "--b": `${b.bottom}px`, "--i": i } as CSSProperties}
         >
           {/* The navy bars carry a 1px navy edge so they fully cover the white bars beneath. */}
           <span className={`${caption} bg-navy text-white shadow-[0_0_0_1px_var(--color-navy)]`}>{text}</span>
