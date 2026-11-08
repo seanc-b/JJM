@@ -194,14 +194,6 @@ export default function Header() {
       {open && (
         <div className="fixed inset-0 z-[35]" role="dialog" aria-modal="true" aria-label="Site menu" id="site-menu">
           <button type="button" aria-label="Close menu" onClick={close} className="absolute inset-0 bg-navy/30 backdrop-blur-[8px]" />
-          <button
-            type="button"
-            onClick={close}
-            aria-label="Close menu"
-            className="absolute right-[clamp(16px,4vw,48px)] top-5 z-10 p-2 text-white transition-opacity duration-300 hover:opacity-70"
-          >
-            <IconClose className="size-7" />
-          </button>
 
           <div ref={menuRef} className="invisible absolute left-1/2 top-[56px] grid w-[min(92vw,812px)] -translate-x-1/2 grid-cols-1 overflow-hidden text-white md:grid-cols-[402fr_410fr]">
             <div data-panel className="bg-blue py-[25px] pl-[clamp(20px,3vw,38px)] pr-[clamp(20px,3vw,40px)]">
