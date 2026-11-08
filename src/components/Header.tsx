@@ -237,9 +237,28 @@ export default function Header() {
             <div data-panel className="relative flex items-center overflow-hidden bg-navy py-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
               {/* Placed from the mockup: flame tip near the top right, rings centred low on the left edge. */}
               <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} aria-hidden className="pointer-events-none absolute left-[4.4%] top-[-40%] h-[211%] w-auto max-w-none opacity-20" />
-              <p data-item className="relative text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
-                We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
-              </p>
+              <div className="relative">
+                <p data-item className="text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
+                  We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
+                </p>
+                {/* Phone and email, so they're one tap away once the full header has scrolled off. Styled like the
+                    hero's emergency line: a small blue disc with the icon, then the detail. */}
+                <ul data-item className="mt-7 flex flex-col gap-3 text-[0.9375rem] font-semibold md:text-[1.0625rem]">
+                  {[
+                    { href: company.phoneHref, label: `Call ${company.phone}`, text: company.phone, icon: <IconPhone className="size-4" /> },
+                    { href: `mailto:${company.email}`, label: `Email ${company.email}`, text: company.email, icon: <IconMail className="size-4" /> },
+                  ].map((c) => (
+                    <li key={c.href}>
+                      <a href={c.href} aria-label={c.label} onClick={close} className="group inline-flex items-center gap-3 transition-opacity duration-300 hover:opacity-80">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue transition-colors duration-300 group-hover:bg-glacier">
+                          {c.icon}
+                        </span>
+                        {c.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
