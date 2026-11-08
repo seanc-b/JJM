@@ -93,7 +93,7 @@ export default function Header() {
             <ul className="flex items-center gap-[clamp(18px,2.2vw,34px)]">
               {nav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} aria-current={item.href === pathname ? "page" : undefined} className="navlink text-[0.8125rem] font-semibold uppercase tracking-[0.06em] xl:text-[0.875rem]">
+                  <Link href={item.href} aria-current={item.href === pathname ? "page" : undefined} data-label={item.label} className="navlink text-[0.8125rem] font-medium uppercase tracking-[0.06em] aria-[current=page]:font-bold xl:text-[0.875rem]">
                     {item.label}
                     {/* One dot per page, under the current link. Its view-transition name lets the browser
                         glide it from the old link to the new one as the page changes (globals.css). */}
