@@ -425,7 +425,7 @@ export default function ServicesScroller() {
                       {noWidow(s.body)}
                     </p>
                     <div className="mt-8">
-                      <Button href={s.href} icon={<IconPlus />}>
+                      <Button href={s.href} tone="solid" icon={<IconPlus />}>
                         {s.cta}
                       </Button>
                     </div>

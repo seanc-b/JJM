@@ -9,6 +9,7 @@ const labelCls = "mb-2 block pl-1 text-[clamp(0.85rem,1.2vw,1.125rem)] font-bold
 const boxCls = "rounded-md bg-white shadow-[0_1px_3px_rgb(23_53_93/0.12)] transition-[box-shadow] duration-300";
 const focusCls = "focus-within:ring-2 focus-within:ring-blue";
 const invalidCls = "ring-2 ring-[#b42318]";
+const sendCls = "inline-flex items-center px-5 py-3 text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.14em] text-white";
 
 function FieldError({ id, text }: { id: string; text?: string }) {
   return text ? (
@@ -101,15 +102,12 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={pending}
-                className="group inline-flex items-center rounded-xl border border-navy/80 px-5 py-2.5 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] text-navy transition-colors duration-500 hover:border-navy hover:bg-navy hover:text-white disabled:cursor-wait disabled:opacity-60"
+                // The site's block button (Button.tsx): a navy copy wipes across on hover or focus.
+                className={`wipe relative ${sendCls} cursor-pointer bg-blue disabled:cursor-wait disabled:opacity-60`}
               >
-                <span className="relative block overflow-hidden leading-none">
-                  <span className="block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full">
-                    {pending ? "Sending" : "Send"}
-                  </span>
-                  <span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full">
-                    {pending ? "Sending" : "Send"}
-                  </span>
+                {pending ? "Sending" : "Send"}
+                <span aria-hidden className={`wipe-fill absolute inset-0 ${sendCls} bg-navy`}>
+                  {pending ? "Sending" : "Send"}
                 </span>
               </button>
             </div>

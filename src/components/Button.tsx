@@ -5,33 +5,43 @@ type Props = {
   href: string;
   children: string;
   icon?: ReactNode;
+  /** solid: blue block, the main call to action. dark: pale block on white, the secondary one. light: white block on a photo. */
   tone?: "light" | "dark" | "solid";
   className?: string;
   external?: boolean;
 };
 
+/** Each tone's resting colours, and the copy that wipes across on hover. */
 const tones = {
-  light: "border-white/80 text-white hover:bg-white hover:text-navy",
-  dark: "border-navy/45 text-navy hover:bg-navy hover:text-white hover:border-navy",
-  solid: "border-blue bg-blue text-white hover:bg-navy hover:border-navy",
+  solid: { base: "bg-blue text-white", fill: "bg-navy text-white" },
+  dark: { base: "bg-frost text-navy", fill: "bg-navy text-white" },
+  light: { base: "bg-white text-navy", fill: "bg-blue text-white" },
 };
 
-/** Outlined button with softly rounded corners. On hover the label slides up and its twin slides in from below. */
+const layout = "inline-flex items-center gap-2.5 px-5 py-3 text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.14em]";
+const iconCls = "flex size-4 items-center justify-center transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5 [&>svg]:size-4";
+
+/**
+ * A square block button in the style of the news Play button: on hover or focus a navy copy of it (white
+ * text) wipes across from left to right (.wipe and .wipe-fill in globals.css).
+ */
 export default function Button({ href, children, icon, tone = "dark", className = "", external }: Props) {
-  const inner = (
+  const t = tones[tone];
+  const content = (
     <>
-      <span className="relative block overflow-hidden leading-none">
-        <span className="block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full">
-          {children}
-        </span>
-        <span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full">
-          {children}
-        </span>
-      </span>
-      {icon && <span className="ml-2 -mr-1 flex size-4 items-center justify-center [&>svg]:size-4">{icon}</span>}
+      {children}
+      {icon && <span className={iconCls}>{icon}</span>}
     </>
   );
-  const cls = `group inline-flex items-center rounded-xl border px-6 py-3 text-[0.8125rem] font-medium uppercase tracking-[0.12em] transition-colors duration-500 ${tones[tone]} ${className}`;
+  const inner = (
+    <>
+      {content}
+      <span aria-hidden className={`wipe-fill absolute inset-0 ${layout} ${t.fill}`}>
+        {content}
+      </span>
+    </>
+  );
+  const cls = `wipe group relative ${layout} ${t.base} ${className}`;
 
   if (external) {
     return (
