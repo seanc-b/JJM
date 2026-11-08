@@ -38,17 +38,27 @@ export default function Marquee() {
   useEffect(() => {
     if (!lenis) return;
     let last = 0;
+    let idle: ReturnType<typeof setTimeout> | undefined;
+    // Back to the resting pace (keeping the last direction), with a long, soft glide down.
+    const settle = () => {
+      if (tween.current) gsap.to(tween.current, { timeScale: last || 1, duration: 1.4, ease: "power2.out", overwrite: true });
+    };
     const onScroll = ({ velocity, direction }: { velocity: number; direction: number }) => {
       // velocity is px per frame; direction is 1 (down), -1 (up) or 0.
-      // Speeds up with scroll speed: up to 3x the resting pace on a fast flick.
-      const boost = Math.min(Math.abs(velocity) / 10, 2);
+      // Speeds up sharply with scroll speed: up to 7x the resting pace on a fast flick.
+      const boost = Math.min(Math.abs(velocity) / 4, 6);
       const dir = direction === 0 ? (last || 1) : direction;
       last = dir;
-      const target = dir * (1 + boost);
-      if (tween.current) gsap.to(tween.current, { timeScale: target, duration: 0.8, ease: "power2.out", overwrite: true });
+      if (tween.current) gsap.to(tween.current, { timeScale: dir * (1 + boost), duration: 0.35, ease: "power2.out", overwrite: true });
+      // Once scrolling stops, glide back to normal.
+      clearTimeout(idle);
+      idle = setTimeout(settle, 120);
     };
     lenis.on("scroll", onScroll);
-    return () => lenis.off("scroll", onScroll);
+    return () => {
+      clearTimeout(idle);
+      lenis.off("scroll", onScroll);
+    };
   }, [lenis]);
 
   const items = [...marquee, ...marquee];
