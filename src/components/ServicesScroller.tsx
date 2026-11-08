@@ -108,7 +108,8 @@ export default function ServicesScroller() {
   const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
   const jump = useRef<gsap.core.Timeline | null>(null);
-  const showService = useRef<((si: number, instant?: boolean) => void) | null>(null);
+  /** "scroll": crossfade as the photos cross. "leave": fade the current service out. "enter": swap in at once and animate in. */
+  const showService = useRef<((si: number, mode?: "scroll" | "leave" | "enter") => void) | null>(null);
   const lenis = useLenis();
 
   /** Moves the switcher's marker and marks the active button. */
@@ -146,28 +147,44 @@ export default function ServicesScroller() {
 
         // Text, hairlines and the background icon switch as a timed fade, not on the scrub, so
         // stopping the scroll can never leave them half faded. The crossing point sets it off.
+        // Every mode kills what the last one queued first: a delayed tween that hasn't started yet
+        // survives `overwrite`, and would restart the text halfway through its entrance.
         let active = 0;
-        showService.current = (si, instant = false) => {
-          if (si === active && !instant) return;
-          active = si;
-          markActive(si);
-          const hide = (i: number) => i !== si;
-          if (instant) {
-            texts.forEach((t, i) => gsap.set(t, { autoAlpha: hide(i) ? 0 : 1, y: hide(i) ? 24 : 0, overwrite: "auto" }));
-            rules.forEach((r, i) => gsap.set(r, { "--rule": hide(i) ? 0 : 1, overwrite: "auto" }));
-            icons.forEach((c, i) => gsap.set(c, { autoAlpha: hide(i) ? 0 : 1, scale: hide(i) ? 0.9 : 1, overwrite: "auto" }));
+        // The gear's parallax tween animates `y` on icons[0], so only fade and scale tweens are killed on icons.
+        const killQueued = () => {
+          gsap.killTweensOf(texts, "autoAlpha,opacity,visibility,y");
+          gsap.killTweensOf(rules, "--rule");
+          gsap.killTweensOf(icons, "autoAlpha,opacity,visibility,scale");
+        };
+        const leave = (i: number) => {
+          gsap.to(texts[i], { autoAlpha: 0, y: -12, duration: 0.3, ease: "power2.in" });
+          gsap.to(icons[i], { autoAlpha: 0, scale: 0.94, duration: 0.3, ease: "power2.in" });
+        };
+        const enter = (i: number, delay: number) => {
+          gsap.fromTo(texts[i], { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.8, delay, ease: "power3.out" });
+          gsap.fromTo(rules[i], { "--rule": 0 }, { "--rule": 1, duration: 1, delay, ease: "power3.out" });
+          gsap.fromTo(icons[i], { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.9, delay, ease: "power3.out" });
+        };
+        showService.current = (si, mode = "scroll") => {
+          if (mode === "leave") {
+            killQueued();
+            leave(active);
             return;
           }
-          // "auto" only replaces tweens on the same properties, leaving the gear's parallax alone.
-          texts.forEach((t, i) => {
-            if (hide(i)) gsap.to(t, { autoAlpha: 0, y: -16, duration: 0.25, ease: "power2.in", overwrite: "auto" });
-          });
-          icons.forEach((c, i) => {
-            if (hide(i)) gsap.to(c, { autoAlpha: 0, scale: 0.9, duration: 0.3, ease: "power2.in", overwrite: "auto" });
-          });
-          gsap.fromTo(texts[si], { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.7, delay: 0.2, ease: "expo.out", overwrite: "auto" });
-          gsap.fromTo(rules[si], { "--rule": 0 }, { "--rule": 1, duration: 1, delay: 0.2, ease: "expo.out", overwrite: "auto" });
-          gsap.fromTo(icons[si], { autoAlpha: 0, scale: 0.92 }, { autoAlpha: 1, scale: 1, duration: 0.8, delay: 0.15, ease: "expo.out", overwrite: "auto" });
+          if (si === active && mode === "scroll") return;
+          killQueued();
+          const prev = active;
+          active = si;
+          markActive(si);
+          if (mode === "enter") {
+            texts.forEach((t, i) => i !== si && gsap.set(t, { autoAlpha: 0, y: 0 }));
+            rules.forEach((r, i) => i !== si && gsap.set(r, { "--rule": 0 }));
+            icons.forEach((c, i) => i !== si && gsap.set(c, { autoAlpha: 0, scale: 0.94 }));
+            enter(si, 0);
+            return;
+          }
+          leave(prev);
+          enter(si, 0.2);
         };
 
         const dockDistance = () => window.innerHeight * DOCK_VH;
@@ -253,9 +270,9 @@ export default function ServicesScroller() {
   );
 
   /**
-   * Goes straight to a service without playing the photos in between: the content fades out,
-   * the scroll position and timeline jump while it's hidden, and the service's first photo
-   * grows in from its corner. Scrolling carries on normally from there.
+   * Goes straight to a service without playing the photos in between: the current text drifts up and
+   * fades while the photos fade, the scroll position and timeline jump while they're hidden, then the
+   * new text rises in and the service's first photo grows from its corner. Scrolling carries on from there.
    */
   const jumpTo = (si: number) => {
     const st = trigger.current;
@@ -265,29 +282,26 @@ export default function ServicesScroller() {
     if (Math.abs(window.scrollY - y) < 2) return;
 
     const stage = el.querySelector("[data-stage]");
-    const text = el.querySelector("[data-text-stack]");
-    const icons = el.querySelector("[data-icons]");
     const origin = CORNER_ORDER[si % CORNER_ORDER.length][0].origin;
 
     markActive(si);
     jump.current?.kill();
+    showService.current?.(si, "leave");
     jump.current = gsap
       .timeline()
-      .to([stage, text, icons], { opacity: 0, duration: 0.22, ease: "power2.in" })
+      .to(stage, { opacity: 0, duration: 0.3, ease: "power2.in" })
       .add(() => {
+        // Swap the text before scrolling. Lenis reports the jump to ScrollTrigger synchronously, and
+        // its update then finds this service already showing instead of starting a second entrance.
+        showService.current?.(si, "enter");
         if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
         else window.scrollTo(0, y);
-        // Swap the text first, so the update below finds nothing left to fade.
-        showService.current?.(si, true);
         st.update();
         // Finish the scrub now, so the timeline lands on the service instead of playing up to it.
         st.getTween()?.progress(1);
-        markActive(si);
       })
       .fromTo(stage, { scale: 0.9, transformOrigin: origin, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "expo.out" })
-      .fromTo(text, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "expo.out" }, "<0.05")
-      .fromTo(icons, { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.out" }, "<")
-      .set([stage, text, icons], { clearProps: "transform,transformOrigin,opacity" });
+      .set(stage, { clearProps: "transform,transformOrigin,opacity" });
   };
 
   return (
