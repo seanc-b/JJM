@@ -435,19 +435,21 @@ export default function ServicesScroller() {
                 ))}
               </div>
 
-              {/* Service switcher: a block bar like the site's buttons. Behind the labels a slightly darker grey
-                  fills in from the left as you scroll through the whole section (--progress, 0–1, set by the scroll
-                  timeline), showing how far along the four services you are. The current service is marked by a
-                  blue underline that slides to it (--active) and a darker label. */}
+              {/* Service switcher: hairlines top and bottom, like the section headings. The top one fills in blue
+                  from the left as you scroll through the whole section (--progress, 0–1, set by the scroll timeline),
+                  showing how far along the four services you are. The current service is marked by a heavier blue
+                  underline that slides to it (--active) and a darker label. */}
               <nav
                 data-switcher
                 aria-label="Jump to a service"
-                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 bg-frost [--active:0] [--progress:0]"
+                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 border-b border-blue/30 bg-white [--active:0] [--progress:0]"
               >
-                <span aria-hidden className="absolute inset-0 origin-left bg-mist/70" style={{ transform: "scaleX(var(--progress))" }} />
+                <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-blue/30">
+                  <span className="absolute inset-x-0 top-0 h-[2px] origin-left bg-blue" style={{ transform: "scaleX(var(--progress))" }} />
+                </span>
                 <span
                   aria-hidden
-                  className="absolute bottom-0 left-0 h-[3px] w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
+                  className="absolute -bottom-px left-0 h-[3px] w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
                   style={{ transform: "translateX(calc(var(--active) * 100%))" }}
                 />
                 {sections.map((s, si) => (
