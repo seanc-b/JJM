@@ -18,13 +18,30 @@ const menuIcon = (icon: NavLink["icon"], tone: "white" | "navy") => `/icons/menu
  * trackpad, hovering or focusing it shows a small panel with the address or number and a Copy button
  * (.contact-pop in globals.css); the panel's top padding bridges the gap so the pointer can reach it.
  */
-function ContactIcon({ href, label, value, copyLabel, children }: { href: string; label: string; value: string; copyLabel: string; children: ReactNode }) {
+function ContactIcon({
+  href,
+  label,
+  value,
+  copyLabel,
+  children,
+  above = false,
+  className = "hidden sm:block",
+}: {
+  href: string;
+  label: string;
+  value: string;
+  copyLabel: string;
+  children: ReactNode;
+  /** Open the panel above the icon (for icons near the bottom of a box) instead of below. */
+  above?: boolean;
+  className?: string;
+}) {
   return (
-    <div className="contact-pop-trigger relative hidden sm:block">
+    <div className={`contact-pop-trigger relative ${className}`}>
       <a href={href} aria-label={label} className="block transition-opacity duration-300 hover:opacity-70">
         {children}
       </a>
-      <div className="contact-pop absolute right-0 top-full z-40 pt-3">
+      <div className={`contact-pop absolute right-0 z-40 ${above ? "bottom-full pb-3" : "top-full pt-3"}`}>
         <div className="flex items-center gap-3 whitespace-nowrap bg-white py-1.5 pl-4 pr-1.5 text-navy shadow-[0_12px_32px_-12px_rgba(23,53,93,0.5)]">
           <span className="text-[0.9375rem] font-semibold">{value}</span>
           <CopyButton
@@ -234,30 +251,22 @@ export default function Header() {
                 })}
               </ul>
             </div>
-            <div data-panel className="relative flex items-center overflow-hidden bg-navy py-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
+            <div data-panel className="relative flex items-center overflow-hidden bg-navy pb-16 pt-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
               {/* Placed from the mockup: flame tip near the top right, rings centred low on the left edge. */}
               <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} aria-hidden className="pointer-events-none absolute left-[4.4%] top-[-40%] h-[211%] w-auto max-w-none opacity-20" />
-              <div className="relative">
-                <p data-item className="text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
-                  We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
-                </p>
-                {/* Phone and email, so they're one tap away once the full header has scrolled off. Styled like the
-                    hero's emergency line: a small blue disc with the icon, then the detail. */}
-                <ul data-item className="mt-7 flex flex-col gap-3 text-[0.9375rem] font-semibold md:text-[1.0625rem]">
-                  {[
-                    { href: company.phoneHref, label: `Call ${company.phone}`, text: company.phone, icon: <IconPhone className="size-4" /> },
-                    { href: `mailto:${company.email}`, label: `Email ${company.email}`, text: company.email, icon: <IconMail className="size-4" /> },
-                  ].map((c) => (
-                    <li key={c.href}>
-                      <a href={c.href} aria-label={c.label} onClick={close} className="group inline-flex items-center gap-3 transition-opacity duration-300 hover:opacity-80">
-                        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue transition-colors duration-300 group-hover:bg-glacier">
-                          {c.icon}
-                        </span>
-                        {c.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+              <p data-item className="relative text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
+                We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
+              </p>
+              {/* Email and phone as icons in the bottom-right corner, so the statement stays centred. As in the
+                  header, hovering (mouse or trackpad) shows the detail with a Copy button; a tap mails or dials. Email
+                  sits in the corner so its wider panel, opening right-aligned above it, stays inside the box. */}
+              <div data-item className="absolute bottom-[clamp(16px,2.2vw,28px)] right-[clamp(16px,2.2vw,28px)] flex items-center gap-5">
+                <ContactIcon href={company.phoneHref} label={`Call ${company.phone}`} value={company.phone} copyLabel="phone number" above className="block">
+                  <IconPhone className="size-6" />
+                </ContactIcon>
+                <ContactIcon href={`mailto:${company.email}`} label="Email JJM" value={company.email} copyLabel="email address" above className="block">
+                  <IconMail className="size-6" />
+                </ContactIcon>
               </div>
             </div>
           </div>
