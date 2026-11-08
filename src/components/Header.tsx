@@ -204,18 +204,17 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Sticky call button, top right, arriving with the pill once the full header has scrolled away. Phones
-          dial straight away; from md it also shows the number. */}
+      {/* Sticky call button, top right on phones, arriving with the pill once the full header has scrolled
+          away. Desktop has none: the header's phone icon and the menu cover it. */}
       <a
         href={company.phoneHref}
         aria-label={`Call ${company.phone}`}
         tabIndex={compact && !open ? undefined : -1}
-        className={`fixed right-[clamp(12px,2vw,24px)] top-0 z-40 flex items-center gap-2.5 bg-navy px-3.5 py-3.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] transition-[transform,background-color] duration-700 ease-[var(--ease-out-expo)] hover:bg-blue md:px-4 ${
+        className={`fixed right-[clamp(12px,2vw,24px)] top-0 z-40 flex items-center gap-2.5 bg-navy px-3.5 py-3.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] transition-[transform,background-color] duration-700 ease-[var(--ease-out-expo)] hover:bg-blue md:hidden ${
           compact && !open ? "translate-y-0" : "-translate-y-[120%]"
         }`}
       >
         <IconPhone className="size-6" />
-        <span className="hidden text-[0.9375rem] font-bold tracking-[0.02em] md:inline">{company.phone}</span>
       </a>
 
       {/* Menu */}
