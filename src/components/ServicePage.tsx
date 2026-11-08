@@ -47,7 +47,7 @@ export function PageIntro({ heading, children, className = "pb-[clamp(56px,7.3vw
     <div className={`site pt-[clamp(48px,6.9vw,104px)] ${className}`}>
       <div className="mx-auto grid max-w-[966px] gap-10 md:grid-cols-[450fr_466fr] md:gap-[clamp(32px,3.33vw,50px)]">
         <div data-reveal data-rules className="ruled self-start py-4">
-          <h3 className="text-[clamp(1.3rem,2vw,1.875rem)] font-bold uppercase leading-[1.04] tracking-[-0.005em] text-navy">
+          <h3 className="text-[clamp(1.125rem,2vw,1.875rem)] font-bold uppercase leading-[1.04] tracking-[-0.005em] text-navy">
             {heading.map((line, i) => (
               <span key={line} className="md:block">
                 {line}
