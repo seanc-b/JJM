@@ -98,9 +98,15 @@ a {
   text-transform: uppercase;
 }
 
+/* Dotted rule as drawn: short, thin dashes with clear gaps. A repeating gradient rather than a dotted
+   border, whose dot spacing the browser picks (and packs tight). */
 .rule-dotted {
-  height: 0;
-  border-top: 2px dotted color-mix(in srgb, var(--color-blue) 40%, transparent);
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-blue) 60%, transparent) 0 4px,
+    transparent 4px 9px
+  );
 }
 
 /* Heading block whose top and bottom hairlines draw in from the left (--rule 0 → 1) */
