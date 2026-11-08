@@ -65,20 +65,20 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "plumbing",
-    metaTitle: "Plumbing, Heating & A-Gas Fitting | JJM Mechanical Group",
+    metaTitle: "Plumbing, Heating & Gas Fitting | JJM Mechanical Group",
     metaDescription:
-      "Plumbing, heating and A-gas fitting for residential and commercial clients across the Lower Mainland. Certified Navien Service Specialists and a licensed BC gas contractor.",
+      "Plumbing, heating and gas fitting for residential and commercial clients across the Lower Mainland. Certified Navien Service Specialists and a licensed BC gas contractor.",
     hero: {
       image: { src: "/images/plumbing-hero-boiler-plant.jpg", alt: "A row of condensing boilers with grey venting rising into an old brick building" },
-      lines: ["We provide", "comprehensive", "plumbing, heating,", "HVAC, and A-gas", "services."],
+      lines: ["We provide", "comprehensive", "plumbing, heating,", "HVAC, and gas", "services."],
     },
-    title: "Plumbing, Heating & A-Gas Fitting",
+    title: "Plumbing, Heating & Gas Fitting",
     icon: "/icons/section-flame.svg",
     watermark: { src: "/icons/bg-flame.svg", ratio: 395.75 / 625.76, x: 513, y: 0, width: 455 },
     heading: ["We also offer", "customized preventative", "maintenance program"],
     lead: "JJM Mechanical Group",
     paragraphs: [
-      " provides comprehensive plumbing, heating, and A-gas fitting services for residential and commercial clients across the Lower Mainland. Our licensed technicians deliver expert installation, repair, and maintenance for all mechanical systems — including boilers, furnaces, water heaters, and gas-fired appliances.",
+      " provides comprehensive plumbing, heating, and gas fitting services for residential and commercial clients across the Lower Mainland. Our licensed technicians deliver expert installation, repair, and maintenance for all mechanical systems — including boilers, furnaces, water heaters, and gas-fired appliances.",
       "As certified Navien Service Specialists and a licensed BC gas contractor, we supply and service high-efficiency tankless water heaters and boilers, ensuring reliable performance and energy savings.",
       "We also offer customized preventative maintenance programs, same-day service for commercial contract clients, and detailed equipment assessments to help you plan for future upgrades with confidence. Whether you need emergency repairs, new system installations, or ongoing maintenance, JJM Mechanical Group is your trusted partner for safe, efficient, and long-lasting mechanical solutions.",
     ],
@@ -127,8 +127,8 @@ export const servicePages: ServicePage[] = [
     icon: "/icons/section-about.svg",
     // The icon's gear sits about 60px in from the viewport's left edge; the figures run off it.
     watermark: { src: "/icons/bg-about-team.svg", ratio: 1, x: -450, y: 164, width: 1020, anchor: "left" },
-    heading: ["JJM has over 25 years", "of experience"],
-    lead: "With over 25 years of experience",
+    heading: ["JJM has over 20 years", "of experience"],
+    lead: "With over 20 years of experience",
     paragraphs: [
       " in the mechanical trade, Jay Mallan (founder of JJM Mechanical Group) has built a reputation for delivering high-quality service and precision installations.",
       "In 2012, JJM Mechanical Group was founded on the principles of superior workmanship and exceptional customer care. After gaining valuable experience working with Vancouver’s top mechanical contractors, Jay envisioned a company that could offer even better service.",
@@ -138,6 +138,6 @@ export const servicePages: ServicePage[] = [
       { src: "/images/about-fleet.jpg", alt: "JJM's fleet of white service trucks and vans lined up outside the shop", position: "50% 60%" },
       { src: "/images/about-team-crane-wide.jpg", alt: "The JJM team in hard hats and hi-vis in front of a crane lift downtown", position: "50% 62%" },
     ],
-    tagline: "25 years of experience & a qualified team.",
+    tagline: "20 years of experience & a qualified team.",
   },
 ];

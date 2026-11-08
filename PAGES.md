@@ -26,9 +26,9 @@ Property Management, Plumbing, Backflow and About Us are **one template with dif
 | Page | Hero headline | Section title / icon | Intro heading | Photos (hero, then stack) | Tagline |
 |---|---|---|---|---|---|
 | Property Management | We specialize in property management services | Property Management Services / gear | Contact us today. | PM banner; PM 01, 02, 03 (Vancouver skyline) | Provide prompt, same-day emergency service. |
-| Plumbing | We provide comprehensive plumbing, heating, HVAC, and A-gas services. | Plumbing, Heating & A-Gas Fitting / flame | We also offer customized preventative maintenance program | Plumbing banner; Plumbing 01, 02, 03 | We provide same-day service for urgent issues. |
+| Plumbing | We provide comprehensive plumbing, heating, HVAC, and gas services. | Plumbing, Heating & Gas Fitting / flame | We also offer customized preventative maintenance program | Plumbing banner; Plumbing 01, 02, 03 | We provide same-day service for urgent issues. |
 | Backflow | Proud member of the BCWWA since 2007 | Backflow Certification / bookmark | No project is too small or too big for us | PIC-BG-Backflow-3; PIC-01 backflow, PIC-02 backflow (portrait, cropped) | We provide prompt, same-day service for urgent issues |
-| About Us | We deliver high-quality service & precision installations (+ Contact us) | About Us / about | JJM has over 25 years of experience | About PIC-01 (process piping); vehicles, team crane | 25 years of experience & a qualified team. |
+| About Us | We deliver high-quality service & precision installations (+ Contact us) | About Us / about | JJM has over 20 years of experience | About PIC-01 (process piping); vehicles, team crane | 20 years of experience & a qualified team. |
 
 Copy for each page lives in `src/content/pages.ts`, taken verbatim from the PDFs. Each page is its own static route (`src/app/<slug>/page.tsx`) rendering `ServicePage`.
 
@@ -42,8 +42,7 @@ Same hero (van photo, "Providing services across the Lower Mainland") and title 
 
 Open items for Contact: the pin, person and pen icons must be exported from `JJM website CONTACT_vf.ai` (or drawn); the form needs a destination (deferred decision: email service or Payload); the map needs a provider (a Google Maps embed is simplest).
 
-## Copy conflicts to confirm with Sean
+## Copy decisions
 
-- About says "over 25 years of experience" (Jay's career); the home About section says "over 20 years". Both can be true, but they read as a contradiction side by side.
-- Plumbing says "A-gas" throughout; home was changed to "Gas fitting".
+- About and Plumbing follow the home page, not the mockups (Sean, 2026-11-08): "over 20 years" instead of "over 25 years", and "gas" / "Gas Fitting" instead of "A-gas" / "A-Gas Fitting".
 - The mockup's footer and contact labels spell "Adress"; the site uses "Address".
