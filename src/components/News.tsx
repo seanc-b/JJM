@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState, type MouseEvent } from "react";
+import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { IconPlay } from "@/components/Icons";
 import Placeholder from "@/components/Placeholder";
 import VideoModal from "@/components/VideoModal";
@@ -11,6 +11,57 @@ import { news, type NewsItem } from "@/content/home";
 const caption = "box-decoration-clone px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-bold leading-[1.55]";
 const play = "inline-flex items-center gap-2 px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-white";
 const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5";
+
+/**
+ * The photo caption: white bars of navy text, one per line. On hover a navy copy with white text wipes
+ * across each line in turn (.wipe-line in globals.css). Where the lines break depends on the width, so
+ * they're measured after layout, and again on resize; each line gets its own copy, clipped to that
+ * line's band. Before measuring, a single copy covers the whole caption.
+ */
+function WipeCaption({ text }: { text: string }) {
+  const box = useRef<HTMLSpanElement>(null);
+  const base = useRef<HTMLSpanElement>(null);
+  const [bands, setBands] = useState<{ top: number; bottom: number }[]>([{ top: 0, bottom: 0 }]);
+
+  useLayoutEffect(() => {
+    const el = box.current;
+    const span = base.current;
+    if (!el || !span) return;
+    const measure = () => {
+      const outer = el.getBoundingClientRect();
+      const next: { top: number; bottom: number }[] = [];
+      for (const r of Array.from(span.getClientRects())) {
+        // A pixel of overlap each way, so no white edge survives between the copy and the bar.
+        const band = { top: Math.max(0, r.top - outer.top - 1), bottom: Math.max(0, outer.bottom - r.bottom - 1) };
+        if (!next.some((b) => Math.abs(b.top - band.top) < 2)) next.push(band);
+      }
+      setBands((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <span ref={box} className="absolute bottom-6 left-6 right-10 md:right-20">
+      <span ref={base} className={`${caption} bg-white text-navy`}>
+        {text}
+      </span>
+      {bands.map((b, i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="wipe-line absolute inset-0"
+          style={{ "--t": `${b.top}px`, "--b": `${b.bottom}px`, "--i": i } as CSSProperties}
+        >
+          {/* The navy bars carry a 1px navy edge so they fully cover the white bars beneath. */}
+          <span className={`${caption} bg-navy text-white shadow-[0_0_0_1px_var(--color-navy)]`}>{text}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export default function News() {
   const [playing, setPlaying] = useState<NewsItem | null>(null);
@@ -57,13 +108,7 @@ export default function News() {
               >
                 <Image src={item.image.src} alt={item.image.alt} fill sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
                 <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-navy/60 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
-                <span className="absolute bottom-6 left-6 right-10 md:right-20">
-                  <span className={`${caption} bg-white text-navy`}>{item.title}</span>
-                  {/* Same box, navy with white text, revealed left to right on hover. */}
-                  <span aria-hidden className="wipe-fill absolute inset-0">
-                    <span className={`${caption} bg-navy text-white`}>{item.title}</span>
-                  </span>
-                </span>
+                <WipeCaption text={item.title} />
                 {item.placeholder && <Placeholder className="absolute left-3 top-3" />}
               </a>
 
