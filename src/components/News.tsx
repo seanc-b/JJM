@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import { gsap, ScrollTrigger, EASE, motionAllowed } from "@/lib/gsap";
 import { IconPlay } from "@/components/Icons";
 import Placeholder from "@/components/Placeholder";
 import VideoModal from "@/components/VideoModal";
@@ -13,10 +14,12 @@ const play = "inline-flex items-center gap-2 px-4 py-2 text-[0.8125rem] font-sem
 const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5";
 
 /**
- * The photo caption: white bars of navy text, one per line. On hover a navy copy with white text wipes
- * across each line in turn (.wipe-line in globals.css). Where the lines break depends on the width, so
- * they're measured after layout, and again on resize; each line gets its own copy, clipped to that
- * line's band. Before measuring, a single copy covers the whole caption.
+ * The photo caption: white bars of navy text, one per line. Where the lines break depends on the width,
+ * so they're measured after layout, and again on resize, and each line gets its own copies, clipped to
+ * that line's band. Before measuring, a single band covers the whole caption.
+ *  - What shows is a white copy per line. When the caption first scrolls into view, each rises out of its
+ *    band in turn, like the hero headline. The caption itself stays, invisible, for layout and readers.
+ *  - On hover a navy copy with white text wipes across each line in turn (.wipe-line in globals.css).
  */
 const BLEED = 6;
 
@@ -50,14 +53,57 @@ function WipeCaption({ text }: { text: string }) {
     return () => ro.disconnect();
   }, []);
 
+  // The entrance, once per page view. Lines start below their bands (CSS sets that before paint, until
+  // data-risen), and rise in turn when the caption nears the viewport. Re-runs if the lines are
+  // re-measured before it has played; after that, newly drawn lines simply show.
+  useEffect(() => {
+    const el = box.current;
+    if (!el || el.dataset.risen !== undefined) return;
+    if (!motionAllowed()) {
+      el.dataset.risen = "";
+      return;
+    }
+    const lines = Array.from(el.querySelectorAll<HTMLElement>("[data-line-rise]"));
+    const height = el.getBoundingClientRect().height + 2 * BLEED;
+    gsap.set(lines, { y: (i: number) => (height - bands[i].top - bands[i].bottom) * 1.1, yPercent: 0 });
+    const tween = gsap.to(lines, {
+      y: 0,
+      duration: 1.2,
+      ease: EASE,
+      stagger: 0.12,
+      paused: true,
+      onComplete: () => {
+        el.dataset.risen = "";
+        gsap.set(lines, { clearProps: "transform" });
+      },
+    });
+    const st = ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: () => void tween.play() });
+    return () => {
+      st.kill();
+      tween.kill();
+    };
+  }, [bands]);
+
   return (
-    <span ref={box} className="absolute bottom-6 left-6 right-10 md:right-20">
-      <span ref={base} className={`${caption} bg-white text-navy`}>
+    <span ref={box} data-caption className="absolute bottom-6 left-6 right-10 md:right-20">
+      <span ref={base} className={`${caption} bg-white text-navy opacity-0`}>
         {text}
       </span>
       {bands.map((b, i) => (
         <span
-          key={i}
+          key={`show-${i}`}
+          aria-hidden
+          className="absolute"
+          style={{ inset: -BLEED, padding: BLEED, clipPath: `inset(${b.top}px 0 ${b.bottom}px 0)` }}
+        >
+          <span data-line-rise className="block">
+            <span className={`${caption} bg-white text-navy`}>{text}</span>
+          </span>
+        </span>
+      ))}
+      {bands.map((b, i) => (
+        <span
+          key={`wipe-${i}`}
           aria-hidden
           className="wipe-line absolute"
           // Grown by BLEED on every side and padded back in, so the text wraps exactly as in the caption.
