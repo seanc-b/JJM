@@ -40,8 +40,8 @@ export default function Marquee() {
     let last = 0;
     const onScroll = ({ velocity, direction }: { velocity: number; direction: number }) => {
       // velocity is px per frame; direction is 1 (down), -1 (up) or 0.
-      // A gentle lift with scroll speed: up to about 2.2x the resting pace on a fast flick.
-      const boost = Math.min(Math.abs(velocity) / 16, 1.2);
+      // Speeds up with scroll speed: up to 3x the resting pace on a fast flick.
+      const boost = Math.min(Math.abs(velocity) / 10, 2);
       const dir = direction === 0 ? (last || 1) : direction;
       last = dir;
       const target = dir * (1 + boost);
