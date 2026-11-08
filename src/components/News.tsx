@@ -7,6 +7,11 @@ import Placeholder from "@/components/Placeholder";
 import VideoModal from "@/components/VideoModal";
 import { news, type NewsItem } from "@/content/home";
 
+/** The caption's white bar (one per line), and the Play button; each is drawn twice for the wipe hover. */
+const caption = "box-decoration-clone px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-bold leading-[1.55]";
+const play = "inline-flex items-center gap-2 px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-white";
+const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5";
+
 export default function News() {
   const [playing, setPlaying] = useState<NewsItem | null>(null);
   const close = useCallback(() => setPlaying(null), []);
@@ -33,7 +38,8 @@ export default function News() {
       <ul className="site mt-[clamp(32px,4vw,64px)] grid gap-x-[clamp(24px,3.5vw,52px)] gap-y-12 md:grid-cols-2">
         {news.map((item) => (
           <li key={item.title} data-reveal>
-            <article>
+            {/* Hovering either link wipes navy across the caption and the Play button (.wipe-group). */}
+            <article className="wipe-group">
               <header className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-blue/40 pt-3">
                 <span className="text-[clamp(1.25rem,1.9vw,1.8rem)] font-medium uppercase leading-none text-blue">{item.source}</span>
                 <span className="text-[0.9375rem] text-ink">{item.subtitle}</span>
@@ -52,7 +58,11 @@ export default function News() {
                 <Image src={item.image.src} alt={item.image.alt} fill sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
                 <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-navy/60 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
                 <span className="absolute bottom-6 left-6 right-10 md:right-20">
-                  <span className="box-decoration-clone bg-white px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-bold leading-[1.55] text-navy">{item.title}</span>
+                  <span className={`${caption} bg-white text-navy`}>{item.title}</span>
+                  {/* Same box, navy with white text, revealed left to right on hover. */}
+                  <span aria-hidden className="wipe-fill absolute inset-0">
+                    <span className={`${caption} bg-navy text-white`}>{item.title}</span>
+                  </span>
                 </span>
                 {item.placeholder && <Placeholder className="absolute left-3 top-3" />}
               </a>
@@ -65,10 +75,14 @@ export default function News() {
                   onClick={open(item)}
                   aria-haspopup="dialog"
                   aria-label={`Play video: ${item.title}`}
-                  className="group inline-flex items-center gap-2 bg-blue px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors duration-400 hover:bg-navy"
+                  className={`group relative ${play} bg-blue`}
                 >
                   Play
-                  <IconPlay className="size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5" />
+                  <IconPlay className={playIcon} />
+                  <span aria-hidden className={`wipe-fill absolute inset-0 ${play} bg-navy`}>
+                    Play
+                    <IconPlay className={playIcon} />
+                  </span>
                 </a>
               </div>
             </article>

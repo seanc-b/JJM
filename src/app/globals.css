@@ -201,13 +201,16 @@ html.motion .navdot-pop {
   transform: scale(1);
 }
 
-/* Footer contact chips: the navy fill wipes in from the left on hover or focus, easing to a stop. */
-.chip-fill {
+/* Wipe hover: a navy copy of an element (.wipe-fill) sits on top of it, clipped to nothing, and opens from
+   left to right when its trigger is hovered or focused. .wipe is a trigger on its own (the footer chips);
+   .wipe-group triggers when any link inside it is (a news card: its photo link and its Play button). */
+.wipe-fill {
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.chip:hover .chip-fill,
-.chip:focus-visible .chip-fill {
+.wipe:hover .wipe-fill,
+.wipe:focus-visible .wipe-fill,
+.wipe-group:has(a:hover, a:focus-visible) .wipe-fill {
   clip-path: inset(0 0 0 0);
   transition: clip-path 0.45s cubic-bezier(0.33, 1, 0.68, 1);
 }

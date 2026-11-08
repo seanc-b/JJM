@@ -6,7 +6,7 @@ import { company, nav, partners, sameDay } from "@/content/home";
 /**
  * A white contact chip. A linked chip carries a navy copy of itself, white text and all, laid exactly
  * on top and clipped to nothing; hovering or focusing it opens the clip from left to right, so the
- * navy wipes across and reveals the white text along its leading edge (.chip-fill in globals.css).
+ * navy wipes across and reveals the white text along its leading edge (.wipe in globals.css).
  */
 function Chip({ label, value, href }: { label: string; value: string; href?: string }) {
   const layout = "inline-flex flex-wrap items-baseline gap-x-3 px-5 py-2.5";
@@ -18,9 +18,9 @@ function Chip({ label, value, href }: { label: string; value: string; href?: str
   );
   if (!href) return <span className={`${layout} bg-white`}>{inner("dark")}</span>;
   return (
-    <a href={href} className={`chip relative ${layout} bg-white`}>
+    <a href={href} className={`wipe relative ${layout} bg-white`}>
       {inner("dark")}
-      <span aria-hidden className={`chip-fill absolute inset-0 ${layout} bg-navy`}>
+      <span aria-hidden className={`wipe-fill absolute inset-0 ${layout} bg-navy`}>
         {inner("light")}
       </span>
     </a>
