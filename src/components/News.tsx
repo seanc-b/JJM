@@ -34,7 +34,7 @@ function textClip(b: Band, pad: Band): Band {
  * after the one before so they overlap a little. A caption that arrives on its own (a later row, scrolled
  * to after the others) plays straight away. Returns how long, in seconds, this caption should wait.
  */
-const ENTRANCE_GAP = 0.3;
+const ENTRANCE_GAP = 0.4;
 let nextSlot = 0;
 function nextEntrance() {
   const now = performance.now() / 1000;
@@ -110,12 +110,14 @@ function WipeCaption({ text }: { text: string }) {
           gsap.set(lines, { clearProps: "transform" });
         },
       })
-      .to(bars, { "--r": "0%", duration: 0.45, ease: "power3.out", stagger: 0.08 }, 0)
-      .to(lines, { y: 0, duration: 0.7, ease: EASE, stagger: 0.08 }, 0.2);
+      .to(bars, { "--r": "0%", duration: 0.6, ease: "power3.out", stagger: 0.1 }, 0)
+      .to(lines, { y: 0, duration: 1.1, ease: EASE, stagger: 0.1 }, 0.3);
     let queued: gsap.core.Tween | undefined;
     const st = ScrollTrigger.create({
+      // Starts as soon as the caption peeks onto the screen (it sits low on the photo, so waiting for it
+      // to scroll well into view left the text lagging behind the photo's fade-in).
       trigger: el,
-      start: "top 90%",
+      start: "top bottom",
       once: true,
       onEnter: () => {
         queued = gsap.delayedCall(nextEntrance(), () => void tl.play());
