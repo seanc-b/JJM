@@ -19,7 +19,12 @@ export default function Marquee() {
   useGSAP(
     () => {
       if (!track.current || !motionAllowed()) return;
-      tween.current = gsap.to(track.current, { xPercent: -50, duration: 48, ease: "none", repeat: -1 });
+      const loop = 48;
+      tween.current = gsap.to(track.current, { xPercent: -50, duration: loop, ease: "none", repeat: -1 });
+      // Scrolling up runs the loop backwards, and a repeating tween stops dead at its own start. Begin
+      // a thousand loops in (about 13 hours), so reversing never runs out. The track looks the same.
+      tween.current.totalTime(loop * 1000);
+      // Plays whenever any part of the marquee is on screen; pauses only once it's fully off.
       ScrollTrigger.create({
         trigger: root.current,
         start: "top bottom",
@@ -35,7 +40,8 @@ export default function Marquee() {
     let last = 0;
     const onScroll = ({ velocity, direction }: { velocity: number; direction: number }) => {
       // velocity is px per frame; direction is 1 (down), -1 (up) or 0.
-      const boost = Math.min(Math.abs(velocity) / 14, 3.5);
+      // A gentle lift with scroll speed: up to about 2.2x the resting pace on a fast flick.
+      const boost = Math.min(Math.abs(velocity) / 16, 1.2);
       const dir = direction === 0 ? (last || 1) : direction;
       last = dir;
       const target = dir * (1 + boost);
