@@ -9,13 +9,25 @@ import { gsap, ScrollTrigger, useGSAP, EASE } from "@/lib/gsap";
  *  - data-wipe            clip-path wipe upward + inner image settles from 1.15 scale
  *  - data-parallax="n"    inner element drifts n% of its height while its parent scrolls through
  */
+/**
+ * With Cache Components, Next keeps up to three visited pages in the DOM, hidden by React's <Activity>
+ * (an inline `display: none !important` on each top-level node), and evicts the oldest. A document-wide
+ * query would also pick up those hidden pages, leaving this page's ScrollTriggers on elements that are
+ * removed later, which crashes ScrollTrigger ("reading 'end'"). So skip anything inside a hidden page;
+ * each page sets up its own Motion again when it is shown.
+ */
+const HIDDEN_PAGE = '[style*="display: none"]';
+function onPage(selector: string) {
+  return gsap.utils.toArray<HTMLElement>(selector).filter((el) => !el.closest(HIDDEN_PAGE));
+}
+
 export default function Motion() {
   useGSAP(() => {
     const mm = gsap.matchMedia();
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       // Reveals: "load" ones run on mount (first viewport); the rest on scroll-enter.
-      const reveals = gsap.utils.toArray<HTMLElement>("[data-reveal]");
+      const reveals = onPage("[data-reveal]");
       gsap.set(reveals, { y: 28 });
       const onLoad = reveals.filter((el) => el.dataset.reveal === "load");
       const onScroll = reveals.filter((el) => el.dataset.reveal !== "load");
@@ -28,7 +40,7 @@ export default function Motion() {
       });
 
       // Rising headline lines
-      gsap.utils.toArray<HTMLElement>("[data-rise]").forEach((block) => {
+      onPage("[data-rise]").forEach((block) => {
         const lines = block.querySelectorAll<HTMLElement>(":scope > span > span");
         // Take over from the CSS initial state with GSAP's own transform so the tween owns it.
         gsap.set(lines, { yPercent: 115, y: 0 });
@@ -42,12 +54,12 @@ export default function Motion() {
       });
 
       // Heading hairlines draw in from the left
-      gsap.utils.toArray<HTMLElement>("[data-rules]").forEach((block) => {
+      onPage("[data-rules]").forEach((block) => {
         gsap.to(block, { "--rule": 1, duration: 1.4, ease: EASE, scrollTrigger: { trigger: block, start: "top 88%", once: true } });
       });
 
       // Photo wipes
-      gsap.utils.toArray<HTMLElement>("[data-wipe]").forEach((box) => {
+      onPage("[data-wipe]").forEach((box) => {
         const img = box.querySelector("img");
         const tl = gsap.timeline({ scrollTrigger: { trigger: box, start: "top 82%", once: true } });
         tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 1.4, ease: EASE }, 0);
@@ -55,7 +67,7 @@ export default function Motion() {
       });
 
       // Parallax
-      gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
+      onPage("[data-parallax]").forEach((el) => {
         const amount = Number(el.dataset.parallax ?? 8);
         const trigger = el.parentElement ?? el;
         gsap.fromTo(
