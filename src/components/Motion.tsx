@@ -78,6 +78,33 @@ export default function Motion() {
         if (img) tl.fromTo(img, { scale: 1.18 }, { scale: 1, duration: 1.6, ease: EASE }, 0);
       });
 
+      // Footer contact chips: each chip's white wipes in from the left, a beat after the one above, and
+      // its label and value rise into their masks as the white finishes. Like the news captions.
+      onPage("[data-chip-intro]").forEach((group) => {
+        const chips = Array.from(group.querySelectorAll<HTMLElement>("[data-chip-bg]")).map((bg) => bg.parentElement!);
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: group, start: "top 88%", once: true },
+          onComplete: () => {
+            group.dataset.risen = "";
+            gsap.set(group.querySelectorAll("[data-chip-bg], [data-chip-text]"), { clearProps: "clipPath,transform" });
+          },
+        });
+        chips.forEach((chip, i) => {
+          tl.fromTo(
+            chip.querySelector("[data-chip-bg]"),
+            { clipPath: "inset(0% 100% 0% 0%)" },
+            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.out" },
+            i * 0.1,
+          );
+          tl.fromTo(
+            chip.querySelectorAll("[data-chip-text]"),
+            { yPercent: 110, y: 0 },
+            { yPercent: 0, duration: 1.1, ease: EASE, stagger: 0.04 },
+            0.3 + i * 0.1,
+          );
+        });
+      });
+
       // Parallax
       onPage("[data-parallax]").forEach((el) => {
         const amount = Number(el.dataset.parallax ?? 8);

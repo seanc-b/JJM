@@ -4,24 +4,42 @@ import { IconInstagram, IconPhone } from "@/components/Icons";
 import { company, nav, partners, sameDay } from "@/content/home";
 
 /**
- * A white contact chip. A linked chip carries a navy copy of itself, white text and all, laid exactly
- * on top and clipped to nothing; hovering or focusing it opens the clip from left to right, so the
- * navy wipes across and reveals the white text along its leading edge (.wipe in globals.css).
+ * A white contact chip. Its white is a layer of its own (data-chip-bg) and its label and value each sit in
+ * a mask (data-chip-text), so the panel's entrance can wipe the white in and raise the text (Motion).
+ * A linked chip also carries a navy copy of itself, white text and all, laid exactly on top and clipped to
+ * nothing; hovering or focusing it opens the clip from left to right (.wipe in globals.css).
  */
 function Chip({ label, value, href }: { label: string; value: string; href?: string }) {
   const layout = "inline-flex flex-wrap items-baseline gap-x-3 px-5 py-2.5";
-  const inner = (tone: "dark" | "light") => (
+  const labelCls = "label";
+  const valueCls = "text-[clamp(1rem,1.3vw,1.3rem)] font-bold";
+  // The mask clips only below each text's box, so the text can rise into it without being seen first.
+  const masked = (cls: string, tone: string, text: string) => (
+    <span className={`relative ${cls} [clip-path:inset(-0.5em_-0.5em_0_-0.5em)]`}>
+      <span data-chip-text className={`block ${tone}`}>
+        {text}
+      </span>
+    </span>
+  );
+  const plain = (tone: "dark" | "light") => (
     <>
-      <span className={`label ${tone === "dark" ? "text-ink" : "text-white"}`}>{label}</span>
-      <span className={`text-[clamp(1rem,1.3vw,1.3rem)] font-bold ${tone === "dark" ? "text-navy" : "text-white"}`}>{value}</span>
+      <span className={`${labelCls} ${tone === "dark" ? "text-ink" : "text-white"}`}>{label}</span>
+      <span className={`${valueCls} ${tone === "dark" ? "text-navy" : "text-white"}`}>{value}</span>
     </>
   );
-  if (!href) return <span className={`${layout} bg-white`}>{inner("dark")}</span>;
+  const content = (
+    <>
+      <span data-chip-bg aria-hidden className="absolute inset-0 bg-white" />
+      {masked(labelCls, "text-ink", label)}
+      {masked(valueCls, "text-navy", value)}
+    </>
+  );
+  if (!href) return <span className={`relative ${layout}`}>{content}</span>;
   return (
-    <a href={href} className={`wipe relative ${layout} bg-white`}>
-      {inner("dark")}
+    <a href={href} className={`wipe relative ${layout}`}>
+      {content}
       <span aria-hidden className={`wipe-fill absolute inset-0 ${layout} bg-navy`}>
-        {inner("light")}
+        {plain("light")}
       </span>
     </a>
   );
@@ -49,7 +67,7 @@ export default function Footer({ tagline = sameDay, current }: Props) {
           <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} data-parallax="8" className="h-full w-auto" />
         </div>
         <div className="site relative grid gap-10 md:grid-cols-[1fr_auto]" data-reveal>
-          <ul className="flex flex-col items-start gap-3">
+          <ul data-chip-intro className="flex flex-col items-start gap-3">
             <li><Chip label="Office" value={company.phone} href={company.phoneHref} /></li>
             <li><Chip label="General inquiries" value={company.email} href={`mailto:${company.email}`} /></li>
             <li><Chip label="Accounting" value={company.accountingEmail} href={`mailto:${company.accountingEmail}`} /></li>

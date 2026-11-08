@@ -249,6 +249,13 @@ html.motion [data-caption]:not([data-risen]) [data-line-rise] {
 html.motion [data-caption]:not([data-risen]) [data-bar] {
   --r: 100%;
 }
+/* Footer contact chips: white closed and text below its mask until the entrance (Motion). */
+html.motion [data-chip-intro]:not([data-risen]) [data-chip-bg] {
+  clip-path: inset(0 100% 0 0);
+}
+html.motion [data-chip-intro]:not([data-risen]) [data-chip-text] {
+  transform: translateY(110%);
+}
 html.motion [data-hero-photo] {
   opacity: 0;
 }
