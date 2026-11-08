@@ -149,12 +149,10 @@ export default function ServicesScroller() {
         // +1 drifts up from below (icons on the bottom edge), -1 down from above (icons hung from the top).
         const drift = sections.map((s) => (BG_ICONS[s.id].top === undefined ? 1 : -1));
 
+        // Nothing shows until the scroll position is known (see `start` below); then the service in view enters.
         gsap.set(texts, { autoAlpha: 0 });
         gsap.set(rules, { "--rule": 0 });
-        gsap.set(texts[0], { autoAlpha: 1 });
-        gsap.set(rules[0], { "--rule": 1 });
         gsap.set(icons, { autoAlpha: 0 });
-        gsap.set(icons[0], { autoAlpha: 1 });
         gsap.set(slides, { scale: SMALL, opacity: 0 });
         gsap.set(slides[0], { scale: 1, opacity: 1 });
 
@@ -187,9 +185,10 @@ export default function ServicesScroller() {
             { autoAlpha: 1, yPercent: 0, duration: 1.4, delay: delay + 0.05, ease: "power3.out" },
           );
         };
+        let ready = false;
         showService.current = (si, mode = "scroll") => {
           if (mode === "scroll") scrollService = si;
-          if (mode === "scroll" && jumping.current) return;
+          if (mode === "scroll" && (jumping.current || !ready)) return;
           if (mode === "leave") {
             killQueued();
             leave(active);
@@ -283,8 +282,32 @@ export default function ServicesScroller() {
         });
         tl.to({}, { duration: TAIL });
 
+        // On load (and so after a refresh's restored scroll position), go straight to the service in view:
+        // photos land on it at once and fade in, and only that service's text and icon play their entrance.
+        // Until then the section shows nothing (globals.css) and scroll updates don't crossfade.
+        const stage = el.querySelector("[data-stage]");
+        let raf = 0;
+        const start = () => {
+          raf = requestAnimationFrame(() => {
+            const st = tl.scrollTrigger;
+            if (!st) return;
+            st.update();
+            st.getTween()?.progress(1);
+            const k = Math.floor(st.progress * TOTAL + 0.5);
+            ready = true;
+            showService.current?.(steps[Math.min(steps.length - 1, k)].si, "enter");
+            el.dataset.ready = "";
+            gsap.fromTo(stage, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out", clearProps: "opacity" });
+          });
+        };
+        if (document.readyState === "complete") start();
+        else window.addEventListener("load", start, { once: true });
+
         return () => {
           trigger.current = null;
+          window.removeEventListener("load", start);
+          cancelAnimationFrame(raf);
+          delete el.dataset.ready;
         };
       });
       return () => {
@@ -341,6 +364,7 @@ export default function ServicesScroller() {
     // This outer box sets the scroll length; the section sticks to the top of the viewport inside it.
     <div
       ref={root}
+      data-services
       className="hidden md:block motion-reduce:md:hidden"
       style={{ height: `calc(100svh + ${((DOCK_VH + TOTAL * STEP_VH) * 100).toFixed(2)}svh)` }}
     >
