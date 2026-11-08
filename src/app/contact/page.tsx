@@ -8,6 +8,7 @@ import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import ContactForm from "@/components/ContactForm";
 import CopyButton from "@/components/CopyButton";
+import BrandMap from "@/components/BrandMap";
 import { PageIntro, WatermarkIcon, artboardUnit, heroIcon } from "@/components/ServicePage";
 import { company } from "@/content/home";
 
@@ -118,12 +119,10 @@ export default function Page() {
             <div aria-hidden className="relative z-[1] h-[clamp(6px,0.67vw,10px)] bg-navy">
               <div className="absolute left-1/2 top-full h-[clamp(10px,1.07vw,16px)] w-[clamp(20px,2.13vw,32px)] -translate-x-1/2 bg-navy [clip-path:polygon(0_0,100%_0,50%_100%)]" />
             </div>
-            <iframe
+            <BrandMap
               title={`Map showing ${company.name} at ${company.address}`}
-              src={`https://www.google.com/maps?q=${mapQuery}&z=15&output=embed`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="block h-[clamp(340px,32.4vw,486px)] w-full border-0 [filter:saturate(0.55)_contrast(0.95)]"
+              fallbackSrc={`https://www.google.com/maps?q=${mapQuery}&z=15&output=embed`}
+              className="h-[clamp(340px,32.4vw,486px)]"
             />
           </div>
         </section>
