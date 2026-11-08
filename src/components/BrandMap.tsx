@@ -77,15 +77,51 @@ const PAINT: Record<string, Record<string, string>> = {
   label_other: { "text-color": C.ink, "text-halo-color": C.frost },
 };
 
-/** Fetches Positron and recolours it in the brand palette. */
+/** Positron hides most street names until you're zoomed right in; these bring them in sooner (zoom levels). */
+const MINZOOM: Record<string, number> = { "highway-name-major": 11, "highway-name-minor": 13.5, "highway-name-path": 15 };
+
+/** Detail Positron leaves out, added in the palette: place and business names (no icons), and house numbers. */
+const EXTRA_LAYERS = [
+  {
+    id: "brand_poi",
+    type: "symbol",
+    source: "openmaptiles",
+    "source-layer": "poi",
+    minzoom: 15.5,
+    filter: ["all", ["match", ["geometry-type"], ["MultiPoint", "Point"], true, false], ["has", "name"]],
+    layout: {
+      "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+      "text-font": ["Noto Sans Italic"],
+      "text-size": 11.5,
+      "text-max-width": 9,
+      "symbol-sort-key": ["get", "rank"],
+    },
+    paint: { "text-color": C.muted, "text-halo-color": C.frost, "text-halo-width": 1.5 },
+  },
+  {
+    id: "brand_housenumber",
+    type: "symbol",
+    source: "openmaptiles",
+    "source-layer": "housenumber",
+    minzoom: 17,
+    layout: { "text-field": ["get", "housenumber"], "text-font": ["Noto Sans Regular"], "text-size": 10.5 },
+    paint: { "text-color": C.muted, "text-halo-color": C.frost, "text-halo-width": 1.5 },
+  },
+] as StyleSpecification["layers"];
+
+/** Fetches Positron, recolours it in the brand palette, and adds detail. */
 async function brandStyle(): Promise<StyleSpecification> {
   const res = await fetch(STYLE_URL);
   if (!res.ok) throw new Error(`Map style failed to load (${res.status})`);
   const style = (await res.json()) as StyleSpecification;
   style.layers = style.layers.map((layer) => {
     const over = PAINT[layer.id] ?? (layer.id.startsWith("label_") ? { "text-color": C.navy, "text-halo-color": C.frost } : null);
-    return over ? ({ ...layer, paint: { ...("paint" in layer ? layer.paint : {}), ...over } } as typeof layer) : layer;
+    const next = over ? ({ ...layer, paint: { ...("paint" in layer ? layer.paint : {}), ...over } } as typeof layer) : layer;
+    return layer.id in MINZOOM ? { ...next, minzoom: MINZOOM[layer.id] } : next;
   });
+  // Above the roads, below the street names and place labels, so road names win where they collide.
+  const at = style.layers.findIndex((l) => l.id === "highway-name-path");
+  style.layers.splice(at < 0 ? style.layers.length : at, 0, ...EXTRA_LAYERS);
   return style;
 }
 
@@ -126,7 +162,8 @@ export default function BrandMap({ title, fallbackSrc, className = "" }: Props) 
           container: el,
           style,
           center: OFFICE,
-          zoom: 14.6,
+          zoom: 15,
+          maxZoom: 19,
           attributionControl: { compact: true },
           // Two fingers (or Ctrl/Cmd + scroll) to move the map, so the page still scrolls past it.
           cooperativeGestures: true,
