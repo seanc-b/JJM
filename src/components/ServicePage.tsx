@@ -85,6 +85,7 @@ export default function ServicePage({ slug }: { slug: string }) {
   const page = getPage(slug);
   const href = `/${page.slug}`;
   const titleId = `${page.slug}-title`;
+  const contentId = `${page.slug}-content`;
   return (
     <>
       <Header />
@@ -94,11 +95,12 @@ export default function ServicePage({ slug }: { slug: string }) {
           size="page"
           image={page.hero.image}
           lines={page.hero.lines}
-          cta={page.hero.cta}
           eyebrow={{ label: page.title, icon: heroIcon(href) }}
+          scrollTo={{ target: contentId, label: `Skip to ${page.title}` }}
         />
 
         <section
+          id={contentId}
           aria-labelledby={titleId}
           className="relative isolate overflow-hidden"
           style={artboardUnit}

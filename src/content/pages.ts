@@ -45,7 +45,6 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/pm-hero-heater-wall.jpg", alt: "A long row of tankless water heaters with colour-coded supply piping in a residential plant room" },
       lines: ["We specialize", "in property", "management", "services"],
-      cta: { label: "Contact us", href: "/contact" },
     },
     title: "Property Management Services",
     icon: "/icons/section-property.svg",
@@ -72,7 +71,6 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/plumbing-hero-boiler-plant.jpg", alt: "A row of condensing boilers with grey venting rising into an old brick building" },
       lines: ["We provide", "comprehensive", "plumbing, heating,", "HVAC, and gas", "services."],
-      cta: { label: "Contact us", href: "/contact" },
     },
     title: "Plumbing, Heating & Gas Fitting",
     icon: "/icons/section-flame.svg",
@@ -99,7 +97,6 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/backflow-hero-rpz.jpg", alt: "A bronze reduced-pressure backflow assembly between two yellow-handled ball valves" },
       lines: ["Proud member", "of the BCWWA", "since 2007"],
-      cta: { label: "Contact us", href: "/contact" },
     },
     title: "Backflow Certification",
     icon: "/icons/section-backflow.svg",
@@ -124,7 +121,6 @@ export const servicePages: ServicePage[] = [
     hero: {
       image: { src: "/images/plumbing-process-piping.jpg", alt: "Two JJM technicians installing process piping on a concrete wall" },
       lines: ["We deliver", "high-quality", "service &", "precision", "installations"],
-      cta: { label: "Contact us", href: "/contact" },
     },
     title: "About Us",
     icon: "/icons/section-about.svg",

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Button from "@/components/Button";
+import ScrollCue from "@/components/ScrollCue";
 import { IconInstagram, IconPhone } from "@/components/Icons";
 import { company } from "@/content/home";
 
@@ -9,11 +10,13 @@ type Props = {
   cta?: { label: string; href: string };
   /** A small line above the headline naming the page, beside its white menu icon. Inner pages only. */
   eyebrow?: { label: string; icon: string };
+  /** A long down arrow under the headline linking to the page content (an element id). Inner pages only. */
+  scrollTo?: { target: string; label: string };
   /** Both are full viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
   size?: "home" | "page";
 };
 
-export default function Hero({ image, lines, cta, eyebrow, size = "home" }: Props) {
+export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "home" }: Props) {
   const home = size === "home";
   return (
     <section
@@ -48,6 +51,16 @@ export default function Hero({ image, lines, cta, eyebrow, size = "home" }: Prop
               <Button href={cta.href} tone="light">
                 {cta.label}
               </Button>
+            </div>
+          )}
+          {scrollTo && (
+            // Rises into a mask like the headline, starting as its last line lands.
+            <div data-rise="load" data-rise-delay={lines.length * 0.09 + 0.15} className="mt-8">
+              <span>
+                <span>
+                  <ScrollCue target={scrollTo.target} label={scrollTo.label} />
+                </span>
+              </span>
             </div>
           )}
         </div>

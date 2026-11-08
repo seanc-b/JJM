@@ -60,7 +60,8 @@ export default function Motion() {
         gsap.set(lines, { yPercent: 115, y: 0 });
         const tween = { yPercent: 0, duration: 1.3, ease: EASE, stagger: 0.09 };
         if (block.dataset.rise === "load") {
-          gsap.to(lines, { ...tween, delay: start + 0.5 });
+          // data-rise-delay holds a block back (seconds), so it can follow another, such as the hero arrow after its headline.
+          gsap.to(lines, { ...tween, delay: start + 0.5 + Number(block.dataset.riseDelay ?? 0) });
         } else {
           // Wait until the whole heading is on screen, so the rise is seen from the first line to the last.
           gsap.to(lines, { ...tween, scrollTrigger: { trigger: block, start: "center 70%", once: true } });
