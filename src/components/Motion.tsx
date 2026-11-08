@@ -48,7 +48,9 @@ export default function Motion() {
         start: "top 92%",
         once: true,
         onEnter: (batch) =>
-          gsap.to(batch, { autoAlpha: 1, y: 0, duration: 1.1, ease: EASE, stagger: 0.09, overwrite: true }),
+          // "auto", not true: true would also kill other tweens on the same element, such as a heading's
+          // hairlines drawing in (data-rules), leaving them undrawn or stopped partway.
+          gsap.to(batch, { autoAlpha: 1, y: 0, duration: 1.1, ease: EASE, stagger: 0.09, overwrite: "auto" }),
       });
 
       // Rising headline lines
