@@ -41,8 +41,9 @@ export default function Page() {
           lines={["Providing", "services", "across the", "Lower", "Mainland"]}
         />
 
-        {/* The map-pin watermark runs from the intro down into the top of the form photo, so one
-            container holds all three and the pin sits above the photo but under everything else. */}
+        {/* The map-pin watermark runs from the intro down towards the form, so one container holds
+            them all; the pin sits under everything, the form's photo band included, so it never
+            covers the form however far its parallax carries it. */}
         <div className="relative isolate overflow-hidden" style={artboardUnit}>
           <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
             <WatermarkIcon src="/icons/bg-pin.svg" ratio={469.39 / 735.57} x={510} y={112} width={469} />
@@ -82,7 +83,7 @@ export default function Page() {
               <SectionTitle id="message-title" title="Send us a message" icon="/icons/section-pen.svg" />
             </div>
 
-            <div className={`relative ${bandGap}`}>
+            <div className={`relative z-[2] ${bandGap}`}>
               <div aria-hidden className="absolute inset-0 z-0">
                 <Image src="/images/contact-form-ductwork.jpg" alt="" fill sizes="100vw" className="object-cover object-[50%_40%] grayscale" />
                 {/* Washed back to the mockup's pale steel so the fields read; a soft shade along the top edge. */}
