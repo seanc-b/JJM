@@ -59,7 +59,7 @@
       "title": { "displayName": "Title", "purpose": "Service section headings inside the ruled block; News heading and menu tagline at adjusted sizes." },
       "statement": { "displayName": "Statement", "purpose": "The services marquee and the same-day line: large, regular weight, sentence case." },
       "body": { "displayName": "Body", "purpose": "Service paragraphs, ink, max 42ch, bold black lead-in." },
-      "label": { "displayName": "Label", "purpose": "Tracked uppercase for hero strip, chip labels, partner names, dates; nav uses it at 0.06em." },
+      "label": { "displayName": "Label", "purpose": "Tracked uppercase for hero strip, chip labels, dates; nav uses it at 0.06em." },
       "button": { "displayName": "Button", "purpose": "Button labels." },
       "fine": { "displayName": "Fine", "purpose": "Copyright line only (Work Sans Light)." }
     },
@@ -94,7 +94,7 @@
       "brand": ["/brand/jjm-logo-white.svg (hero header, 42-46px tall)", "/brand/jjm-wordmark-white.svg (compact header pill, 24px tall)"],
       "sectionIcons": ["/icons/section-property.svg", "/icons/section-flame.svg", "/icons/section-backflow.svg", "/icons/section-about.svg"],
       "backgroundIcons": ["/icons/bg-gear.svg", "/icons/bg-flame.svg", "/icons/bg-backflow.svg", "/icons/bg-about.svg (brand blue, 12% opacity baked into the SVG)", "/icons/bg-jjm-mark.svg (circular JJM mark, white at 25%, contact panel watermark with 8% parallax)"],
-      "placeholders": ["Partner logos (seven names rendered as text with a Placeholder tag)", "News items (both cards: thumbnails, titles, video links)", "Contact menu icon (drawn person glyph with a Placeholder tag)"]
+      "placeholders": ["News items (both cards: thumbnails, titles, video links)", "Contact menu icon (drawn person glyph with a Placeholder tag)"]
     }
   },
   "components": [

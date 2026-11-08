@@ -176,7 +176,7 @@ Two blues on white, with a grey ink for reading and two cool greys reserved for 
 - **Cobalt** (`{colors.cobalt}`) and **Sky** (`{colors.sky}`): secondary icon-set colours. They appear only inside the About section icon SVG and are declared as tokens so future icons can match. Do not use them for UI chrome or text.
 
 ### Neutral
-- **Ink** (`{colors.ink}`): body text, the subtitle and date on news cards, contact-chip labels, partner names and the copyright line. Body copy is ink, never navy.
+- **Ink** (`{colors.ink}`): body text, the subtitle and date on news cards, contact-chip labels and the copyright line. Body copy is ink, never navy.
 - **Mist** (`{colors.mist}`): the contact panel background in the footer, carrying white contact chips.
 - **Frost** (`{colors.frost}`): the footer navigation strip, and the placeholder ground behind a photo while it loads.
 - **White** (`{colors.white}`): page background, all text on photographs, the chip faces on mist, the news-title plate on photos.
@@ -200,7 +200,7 @@ Two blues on white, with a grey ink for reading and two cool greys reserved for 
 - **Title** (700, `clamp(1.5rem, 2.1vw, 1.9rem)`, 1.04, uppercase, navy): service section headings inside a ruled block, with the section icon at the right. The News heading uses the same style at `clamp(1.5rem, 2.6vw, 2.5rem)`; the menu tagline uses it at 1.25–1.375rem with 1.15 line height.
 - **Statement** (400, `clamp(1.6rem, 3.7vw, 3.5rem)`, 1, navy, sentence case): the services marquee, and the footer's same-day line at `clamp(1.5rem, 3.2vw, 3rem)` with line-height 1.25. Large, regular weight, not uppercase.
 - **Body** (400, `clamp(1.1rem, 1.6vw, 1.5rem)`, 1.45, ink, max 42ch): service paragraphs. The lead-in phrase is bold black.
-- **Label** (600, 0.8125rem, 0.08em, uppercase): hero bottom strip, contact-chip labels, partner names, news dates (tabular-nums). Navigation uses the same weight at 0.8125–0.875rem with 0.06em tracking; the menu links are 700 at 0.9375rem.
+- **Label** (600, 0.8125rem, 0.08em, uppercase): hero bottom strip, contact-chip labels, news dates (tabular-nums). Navigation uses the same weight at 0.8125–0.875rem with 0.06em tracking; the menu links are 700 at 0.9375rem.
 - **Button** (500, 0.8125rem, 0.12em, uppercase): button labels. The Play tag uses 600 at 0.14em.
 - **Fine** (300, 0.75rem, ink): the copyright line only.
 
@@ -272,7 +272,7 @@ A full-width band between two edges of the page with a 2px dotted blue-40% botto
 - **Two-panel menu:** a modal dialog over a navy-30% scrim with an 8px backdrop blur; `min(92vw, 820px)` wide, two columns from md. Left panel blue: the five links in white bold 0.9375rem uppercase, divided by white-40% dotted rules, each with a 32px white roundel holding the section icon; links turn navy on hover and the roundel scales 1.1. Right panel navy: the tagline in `.display` at 1.25–1.375rem over a brightened background flame. Panels wipe open from the bottom (900ms, 60ms stagger) and items rise 18px (50ms stagger). Escape closes, focus moves to the first link and returns to the opener, everything else is inert and Lenis stops.
 
 ### Placeholder tag
-A development-only marker, not a brand element: amber ground, dark amber uppercase 0.625rem / 600 / 0.12em text, 2px radius, title attribute "Placeholder content: replace before launch". Currently on both news cards, all seven partner names and the Contact menu link (which uses a drawn person icon because no icon was supplied). Remove, do not restyle, when the real asset lands.
+A development-only marker, not a brand element: amber ground, dark amber uppercase 0.625rem / 600 / 0.12em text, 2px radius, title attribute "Placeholder content: replace before launch". Currently on both news cards and the Contact menu link (which uses a drawn person icon because no icon was supplied). Remove, do not restyle, when the real asset lands.
 
 ### Icons
 Two families. Brand icons are supplied SVG files (four 40–44px section icons in brand blue, with cobalt and sky inside the About mark; four oversized background icons in blue at 12%; the circular JJM mark in white at 25%, `/icons/bg-jjm-mark.svg`, as the contact panel's watermark: 165% of the panel height, bleeding off the right edge, with an 8% parallax, 110% tall below md). UI icons are inline 24-grid strokes at 1.6 (2 for menu/close) in currentColor: mail, phone, Instagram, menu, close, play (filled), plus, arrow, person.

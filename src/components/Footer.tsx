@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { IconInstagram, IconPhone } from "@/components/Icons";
-import Placeholder from "@/components/Placeholder";
 import { company, nav, partners, sameDay } from "@/content/home";
 
 function Chip({ label, value, href }: { label: string; value: string; href?: string }) {
@@ -75,12 +74,21 @@ export default function Footer() {
 
       {/* Partners */}
       <div className="site">
-        <ul aria-label="Memberships and partners" className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4 py-8">
-          {partners.map((name) => (
-            <li key={name} className="flex items-center gap-2 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-ink">
-              <span className="block h-7 w-[1.5px] bg-blue/40" aria-hidden />
-              {name}
-              <Placeholder />
+        {/* Logos shrink to 80% on small screens so the row wraps less. */}
+        <ul
+          aria-label="Memberships and partners"
+          className="flex flex-wrap items-center justify-center gap-x-[clamp(28px,3.5vw,56px)] gap-y-6 py-9 [--logo-scale:0.8] md:[--logo-scale:1]"
+        >
+          {partners.map((p) => (
+            <li key={p.src} className="flex items-center">
+              <Image
+                src={p.src}
+                alt={p.name}
+                width={p.w}
+                height={p.h}
+                className="w-auto"
+                style={{ height: `calc(${p.height}px * var(--logo-scale))` }}
+              />
             </li>
           ))}
         </ul>

@@ -79,14 +79,14 @@ Copy decisions (confirmed 2026-11-07):
 - Header nav label is "Plumbing" (not "Plumbing & Heating") to save space; footer nav matches.
 - Fix "ADRESS" → "Address" and "JJMmechanical Group" → "JJM Mechanical Group".
 
-Placeholders are acceptable for now for: partner logos (Safety Authority, BCWWA, Canada badge, FortisBC, TECA, Navien, WorkSafeBC appear in the footer mockup, files not supplied), news thumbnails and videos, and the small menu icons. Mark them clearly so they are replaced before launch.
+Placeholders are acceptable for now for: news thumbnails and videos, and the small menu icons. Mark them clearly so they are replaced before launch.
 
 Undecided:
 - Hosting provider and deployment setup.
 - Whether the site is English-only or needs other languages.
 - Whether case studies are in the initial launch, and their content.
 - Whether more original video files are coming.
-- Approved testimonials or partner logos.
+- Approved testimonials. (Partner logos were supplied on 2026-11-08 and are in the footer.)
 - What the initials JJM stand for. Do not expand them in copy.
 
 ## Brand Commitments
@@ -108,7 +108,7 @@ The client has supplied these, kept outside the repo at `../Assets/` (copy only 
 - Home page copy, as set in the mockup.
 
 Not available, so do not fabricate:
-- Testimonials, client or partner logos, case studies, project counts, response-time statistics and awards beyond the credentials listed under Positioning.
+- Testimonials, client logos, logos beyond the seven footer partners, case studies, project counts, response-time statistics and awards beyond the credentials listed under Positioning.
 
 ## Product Principles
 
