@@ -5,7 +5,6 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useLenis } from "@/components/SmoothScroll";
 import Button from "@/components/Button";
-import { IconPlus } from "@/components/Icons";
 import { sections } from "@/content/home";
 import { noWidow } from "@/lib/text";
 
@@ -425,7 +424,7 @@ export default function ServicesScroller() {
                       {noWidow(s.body)}
                     </p>
                     <div className="mt-8">
-                      <Button href={s.href} tone="solid" icon={<IconPlus />}>
+                      <Button href={s.href} tone="solid">
                         {s.cta}
                       </Button>
                     </div>

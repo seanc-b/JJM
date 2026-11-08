@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, type MouseEvent } from "react";
 import Button from "@/components/Button";
 import { useLenis } from "@/components/SmoothScroll";
-import { IconChevron, IconPlus } from "@/components/Icons";
+import { IconChevron } from "@/components/Icons";
 import { sections } from "@/content/home";
 import { noWidow } from "@/lib/text";
 
@@ -90,7 +90,7 @@ export default function ServicesAccordion() {
                       {noWidow(s.body)}
                     </p>
                     <div className="mt-6">
-                      <Button href={s.href} tone="solid" icon={<IconPlus />}>
+                      <Button href={s.href} tone="solid">
                         {s.cta}
                       </Button>
                     </div>
