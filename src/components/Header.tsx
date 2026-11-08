@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, useGSAP, EASE, motionAllowed } from "@/lib/gsap";
 import { useLenis } from "@/components/SmoothScroll";
@@ -21,6 +22,7 @@ export default function Header() {
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   const lenis = useLenis();
+  const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
@@ -92,7 +94,7 @@ export default function Header() {
             <ul className="flex items-center gap-[clamp(18px,2.2vw,34px)]">
               {nav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="navlink text-[0.8125rem] font-semibold uppercase tracking-[0.06em] xl:text-[0.875rem]">
+                  <Link href={item.href} aria-current={item.href === pathname ? "page" : undefined} className="navlink text-[0.8125rem] font-semibold uppercase tracking-[0.06em] xl:text-[0.875rem]">
                     {item.label}
                   </Link>
                 </li>

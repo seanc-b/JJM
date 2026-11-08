@@ -6,14 +6,14 @@ import Banner from "@/components/Banner";
 import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
-import { bannerCustomers, bannerSince } from "@/content/home";
+import { bannerCustomers, bannerSince, hero } from "@/content/home";
 
 export default function Home() {
   return (
     <>
       <Header />
       <main>
-        <Hero />
+        <Hero image={hero.image} lines={hero.lines} cta={hero.cta} />
         <Marquee />
         <News />
         <Banner image={bannerSince.image} lines={bannerSince.lines} />

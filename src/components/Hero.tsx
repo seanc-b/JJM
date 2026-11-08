@@ -1,31 +1,46 @@
 import Image from "next/image";
 import Button from "@/components/Button";
 import { IconInstagram, IconPhone } from "@/components/Icons";
-import { company, hero } from "@/content/home";
+import { company } from "@/content/home";
 
-export default function Hero() {
+type Props = {
+  image: { src: string; alt: string };
+  lines: string[];
+  cta?: { label: string; href: string };
+  /** "home": the full-viewport landing hero. "page": the shorter inner-page hero, 1500×806 on the artboard. */
+  size?: "home" | "page";
+};
+
+export default function Hero({ image, lines, cta, size = "home" }: Props) {
+  const home = size === "home";
   return (
-    <section className="relative isolate min-h-[640px] overflow-hidden bg-navy text-white" style={{ height: "100svh" }}>
+    <section
+      className={`relative isolate overflow-hidden bg-navy text-white ${home ? "min-h-[640px]" : "min-h-[560px]"}`}
+      style={{ height: home ? "100svh" : "clamp(560px, 53.73vw, 100svh)" }}
+    >
       <div className="tint absolute inset-0">
         <div data-parallax="10" className="absolute inset-0">
-          <Image src={hero.image.src} alt={hero.image.alt} fill priority sizes="100vw" className="scale-[1.12] object-cover object-[60%_center]" />
+          <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="scale-[1.12] object-cover object-[60%_center]" />
         </div>
       </div>
 
-      <div className="site relative grid h-full grid-cols-12 items-center pt-[84px]">
-        <div className="col-span-12 md:col-span-7 md:col-start-6 lg:col-span-6 lg:col-start-7">
+      {/* The page hero centres its headline on the whole photo, as drawn; home clears the header first. */}
+      <div className={`site relative grid h-full grid-cols-12 items-center ${home ? "pt-[84px]" : ""}`}>
+        <div className={`col-span-12 md:col-span-7 md:col-start-6 ${home ? "lg:col-span-6 lg:col-start-7" : "lg:col-span-5 lg:col-start-8"}`}>
           <h1 data-rise="load" className="display text-[clamp(2.1rem,4.6vw,3.05rem)]">
-            {hero.lines.map((line) => (
+            {lines.map((line) => (
               <span key={line}>
                 <span>{line}</span>
               </span>
             ))}
           </h1>
-          <div data-reveal="load" className="mt-8">
-            <Button href={hero.cta.href} tone="light">
-              {hero.cta.label}
-            </Button>
-          </div>
+          {cta && (
+            <div data-reveal="load" className="mt-8">
+              <Button href={cta.href} tone="light">
+                {cta.label}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

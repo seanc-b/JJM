@@ -1,0 +1,105 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import type { CSSProperties } from "react";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import SectionTitle from "@/components/SectionTitle";
+import Footer from "@/components/Footer";
+import Motion from "@/components/Motion";
+import { servicePages, type ServicePage as Page, type Watermark } from "@/content/pages";
+
+/**
+ * The oversized 12% brand icon behind the title band and intro, placed in 1500-wide artboard px.
+ * --u is one artboard px: 1px at 1500 wide and up, scaling down with the viewport to a 0.5px floor
+ * so the icon still reads on phones.
+ */
+function WatermarkIcon({ src, ratio, x, y, width, anchor = "centre" }: Watermark) {
+  const style: CSSProperties = {
+    left: anchor === "left" ? `calc(${x} * var(--u))` : `calc(50% + ${x - 750} * var(--u))`,
+    top: `calc(${y} * var(--u))`,
+    width: `calc(${width} * var(--u))`,
+  };
+  return (
+    <Image
+      src={src}
+      alt=""
+      aria-hidden
+      width={Math.round(width)}
+      height={Math.round(width / ratio)}
+      className="pointer-events-none absolute h-auto max-w-none select-none"
+      style={style}
+    />
+  );
+}
+
+function getPage(slug: string): Page {
+  const page = servicePages.find((p) => p.slug === slug);
+  if (!page) throw new Error(`No service page content for "${slug}"`);
+  return page;
+}
+
+export function serviceMetadata(slug: string): Metadata {
+  const page = getPage(slug);
+  return { title: page.metaTitle, description: page.metaDescription };
+}
+
+export default function ServicePage({ slug }: { slug: string }) {
+  const page = getPage(slug);
+  const href = `/${page.slug}`;
+  const titleId = `${page.slug}-title`;
+  return (
+    <>
+      <Header />
+      <main>
+        <Hero size="page" image={page.hero.image} lines={page.hero.lines} cta={page.hero.cta} />
+
+        <section
+          aria-labelledby={titleId}
+          className="relative isolate overflow-hidden"
+          style={{ "--u": "clamp(0.5px, calc(100vw / 1500), 1px)" } as CSSProperties}
+        >
+          <WatermarkIcon {...page.watermark} />
+
+          <div className="relative pt-[clamp(32px,3.9vw,58px)]">
+            <SectionTitle id={titleId} title={page.title} icon={page.icon} />
+
+            <div className="site pb-[clamp(56px,7.3vw,110px)] pt-[clamp(48px,6.9vw,104px)]">
+              <div className="mx-auto grid max-w-[966px] gap-10 md:grid-cols-[450fr_466fr] md:gap-[clamp(32px,3.33vw,50px)]">
+                <div data-reveal data-rules className="ruled self-start py-4">
+                  <h3 className="text-[clamp(1.3rem,2vw,1.875rem)] font-bold uppercase leading-[1.04] tracking-[-0.005em] text-navy">
+                    {page.heading.map((line, i) => (
+                      <span key={line} className="md:block">
+                        {line}
+                        {i < page.heading.length - 1 && " "}
+                      </span>
+                    ))}
+                  </h3>
+                </div>
+
+                <div className="space-y-[1.25em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.3] text-ink">
+                  {page.paragraphs.map((text, i) => (
+                    <p key={i} data-reveal>
+                      {i === 0 && <strong className="font-bold text-black">{page.lead}</strong>}
+                      {text}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="flex flex-col gap-[clamp(10px,1.6vw,24px)]">
+          {page.photos.map((photo) => (
+            <div key={photo.src} data-wipe className="frame relative aspect-[4/3] bg-frost md:aspect-[1500/806]">
+              <Image src={photo.src} alt={photo.alt} fill sizes="100vw" className="object-cover" style={{ objectPosition: photo.position }} />
+            </div>
+          ))}
+        </div>
+      </main>
+      <Footer tagline={page.tagline} current={href} />
+      {/* Mounted last so its effects run after this page's DOM has hydrated. */}
+      <Motion />
+    </>
+  );
+}

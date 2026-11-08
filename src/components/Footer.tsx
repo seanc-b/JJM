@@ -20,11 +20,18 @@ function Chip({ label, value, href }: { label: string; value: string; href?: str
   );
 }
 
-export default function Footer() {
+type Props = {
+  /** The statement line above the contact panel; each page sets its own. */
+  tagline?: string;
+  /** The current page's href, set in bold in the footer nav as drawn. */
+  current?: string;
+};
+
+export default function Footer({ tagline = sameDay, current }: Props) {
   return (
     <footer>
       <p data-reveal className="site py-[clamp(36px,5vw,72px)] text-center text-[clamp(1.5rem,3.2vw,3rem)] leading-tight text-navy">
-        {sameDay}
+        {tagline}
       </p>
 
       {/* Contact panel */}
@@ -64,7 +71,11 @@ export default function Footer() {
         <ul className="site flex flex-wrap justify-center gap-x-[clamp(20px,3.5vw,52px)] gap-y-2 py-5">
           {nav.map((item) => (
             <li key={item.href}>
-              <Link href={item.href} className="navlink text-[0.875rem] font-semibold uppercase tracking-[0.06em] text-navy">
+              <Link
+                href={item.href}
+                aria-current={item.href === current ? "page" : undefined}
+                className={`text-[0.875rem] uppercase tracking-[0.06em] ${item.href === current ? "font-bold text-black" : "navlink font-semibold text-navy"}`}
+              >
                 {item.label}
               </Link>
             </li>
