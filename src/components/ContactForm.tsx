@@ -6,7 +6,7 @@ import { sendMessage, type ContactState, type Field } from "@/app/contact/action
 const initial: ContactState = { status: "idle" };
 
 const labelCls = "mb-2 block pl-1 text-[clamp(0.85rem,1.2vw,1.125rem)] font-bold uppercase tracking-[0.01em] text-navy";
-const boxCls = "rounded-md bg-white shadow-[0_1px_3px_rgb(23_53_93/0.12)] transition-[box-shadow] duration-300";
+const boxCls = "bg-white shadow-[0_1px_3px_rgb(23_53_93/0.12)] transition-[box-shadow] duration-300";
 const focusCls = "focus-within:ring-2 focus-within:ring-blue";
 const invalidCls = "ring-2 ring-[#b42318]";
 const sendCls = "inline-flex items-center px-5 py-3 text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.14em] text-white";
@@ -53,7 +53,7 @@ export default function ContactForm() {
           defaultValue={val[name]}
           aria-invalid={err[name] ? true : undefined}
           aria-describedby={err[name] ? `contact-${name}-error` : undefined}
-          className="block h-[clamp(44px,3.33vw,50px)] w-full rounded-md bg-transparent px-4 text-[1.0625rem] text-ink outline-none"
+          className="block h-[clamp(44px,3.33vw,50px)] w-full bg-transparent px-4 text-[1.0625rem] text-ink outline-none"
         />
       </div>
       <FieldError id={`contact-${name}-error`} text={err[name]} />
@@ -74,7 +74,7 @@ export default function ContactForm() {
         <label htmlFor="contact-message" className={labelCls}>
           Message
         </label>
-        <div className={`${boxCls} rounded-lg px-[clamp(16px,2.9vw,44px)] pb-[clamp(16px,1.9vw,28px)] pt-[clamp(14px,1.6vw,24px)] ${err.message ? invalidCls : focusCls}`}>
+        <div className={`${boxCls} px-[clamp(16px,2.9vw,44px)] pb-[clamp(16px,1.9vw,28px)] pt-[clamp(14px,1.6vw,24px)] ${err.message ? invalidCls : focusCls}`}>
           <textarea
             id="contact-message"
             data-no-ring
