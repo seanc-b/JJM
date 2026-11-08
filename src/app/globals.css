@@ -216,38 +216,29 @@ html.motion .navdot-pop {
   }
 }
 
-/* Contact map (BrandMap): the zoom buttons as the site's block buttons: square navy blocks with white
-   icons, and on hover or focus a blue fill wipes across from the left, like the CTAs. */
-.brand-map .maplibregl-ctrl-group {
+/* Contact map (BrandMap): the zoom buttons as white squares with the office card's soft shadow, dark icons,
+   a faint divider between them, and a quiet hover: the square turns light grey. */
+/* :not(:empty) to outrank MapLibre's own rule, which draws a grey border with its shadow. */
+.brand-map .maplibregl-ctrl-group:not(:empty) {
   border-radius: 0;
-  background: none;
+  background: #fff;
   box-shadow: 0 12px 32px -12px rgb(23 53 93 / 0.45);
 }
 .brand-map .maplibregl-ctrl-group button {
   width: 42px;
   height: 42px;
-  background: linear-gradient(90deg, var(--color-blue) 50%, var(--color-navy) 50%) right / 200% 100% no-repeat;
-  transition: background-position 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+  transition: background-color 0.3s ease;
 }
 .brand-map .maplibregl-ctrl-group button + button {
-  border-top: 1px solid rgb(255 255 255 / 0.18);
+  border-top: 1px solid var(--color-frost);
 }
-.brand-map .maplibregl-ctrl-group button:hover,
-.brand-map .maplibregl-ctrl-group button:focus-visible {
-  background-color: transparent;
-  background-position: left;
+.brand-map .maplibregl-ctrl-group button:not(:disabled):hover {
+  background-color: var(--color-frost);
 }
 .brand-map .maplibregl-ctrl-group button:focus-visible {
   outline: 2px solid var(--color-blue);
   outline-offset: 2px;
   box-shadow: none;
-}
-/* MapLibre's icons are dark images; turn them white. */
-.brand-map .maplibregl-ctrl-group .maplibregl-ctrl-icon {
-  filter: brightness(0) invert(1);
-}
-.brand-map .maplibregl-ctrl-group button:disabled {
-  opacity: 0.5;
 }
 
 /* Wipe hover: a navy copy of an element (.wipe-fill) sits on top of it, clipped to nothing, and opens from
