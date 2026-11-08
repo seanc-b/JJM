@@ -43,11 +43,11 @@ export default function Page() {
             container holds all three and the pin sits above the photo but under everything else. */}
         <div className="relative isolate overflow-hidden" style={artboardUnit}>
           <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
-            <WatermarkIcon src="/icons/bg-pin.svg" ratio={470 / 712} x={510} y={112} width={470} />
+            <WatermarkIcon src="/icons/bg-pin.svg" ratio={469.39 / 735.57} x={510} y={112} width={469} />
           </div>
 
           <section aria-labelledby="contact-title" className="relative z-[2] pt-[clamp(32px,3.9vw,58px)]">
-            <SectionTitle id="contact-title" title="Let’s talk" icon="/icons/section-contact.svg" />
+            <SectionTitle id="contact-title" title="Let’s talk" icon="/icons/section-person.svg" />
             <PageIntro heading={["Contact us for more", "information"]} className="pb-[clamp(48px,5.2vw,78px)]">
               <dl className="space-y-[1.15em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.25]">
                 {details.map((d) => (

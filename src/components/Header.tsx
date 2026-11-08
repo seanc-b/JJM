@@ -14,7 +14,7 @@ const menuIcon: Record<NavLink["icon"], string> = {
   flame: "/icons/section-flame.svg",
   backflow: "/icons/section-backflow.svg",
   about: "/icons/section-about.svg",
-  contact: "/icons/section-contact.svg",
+  contact: "/icons/section-person.svg",
 };
 
 export default function Header() {

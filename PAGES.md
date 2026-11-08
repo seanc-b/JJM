@@ -40,7 +40,7 @@ Same hero (`news-van.jpg`, the mockup's van photo, "Providing services across th
 - "Find us" band (flame icon), 50 gap, a 10px navy bar with a downward notch, then a keyless Google Maps embed (486 tall, slightly desaturated), lazy-loaded.
 - Tagline: "We are located in Burnaby, BC." (the mockup ends in "Lorem ipsum").
 
-Icons `section-contact.svg`, `section-pen.svg` and `bg-pin.svg` were redrawn from the PDF to match the other section icons; the person icon also replaces the drawn placeholder in the header menu.
+Icons `section-person.svg`, `section-pen.svg` and `bg-pin.svg` are the designer's (`../Assets/website-assets/icons/`); the pin was supplied pre-tinted (#e8eef6) and is recoloured to blue at 12% opacity like the other watermarks, so its tip stays translucent over the form photo. The person icon also replaces the drawn placeholder in the header menu.
 
 Still open for Contact:
 - **Form delivery.** `deliver()` in `actions.ts` logs in development and reports failure in production (with the office email and phone), so nothing is dropped silently. Wire it to an email service or Payload before launch.
