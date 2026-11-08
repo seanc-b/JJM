@@ -203,7 +203,7 @@ html.motion .navdot-pop {
    allowed: the reduced-motion rule below shortens animations rather than stopping them. */
 @media (prefers-reduced-motion: no-preference) {
   .cue-bob {
-    animation: cue-bob 2.6s ease-in-out infinite;
+    animation: cue-bob 1.8s ease-in-out infinite;
   }
 }
 @keyframes cue-bob {
