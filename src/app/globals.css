@@ -202,3 +202,53 @@ html.motion [data-wipe] {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ---------- Page transitions (PageTransition + React <ViewTransition>) ---------- */
+/* The old page fades out quickly; the new one fades in a beat later, rising a few px into place. */
+::view-transition-old(.page-fade) {
+  animation: 200ms ease-in both page-out;
+}
+::view-transition-new(.page-fade) {
+  animation: 650ms var(--ease-out-quart) 140ms both page-in;
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+/* The header over the hero is the same on every page, so it holds still while the content changes. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+/* The pages fade through navy, not the white page canvas, so hero-to-hero reads as one dark dissolve.
+   The root snapshot (the bare canvas, plus the compact pill or menu if open) is hidden for the same
+   reason. Clicks during the fade reach the live page. */
+::view-transition {
+  background: var(--color-navy);
+  pointer-events: none;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

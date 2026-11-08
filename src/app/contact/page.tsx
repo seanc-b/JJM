@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import SectionTitle from "@/components/SectionTitle";
 import Footer from "@/components/Footer";
+import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import ContactForm from "@/components/ContactForm";
 import { PageIntro, WatermarkIcon, artboardUnit } from "@/components/ServicePage";
@@ -32,6 +33,7 @@ export default function Page() {
   return (
     <>
       <Header />
+      <PageTransition>
       <main>
         <Hero
           size="page"
@@ -114,6 +116,7 @@ export default function Page() {
       </main>
       {/* The mockup's line ends in "Lorem ipsum"; the rest of the sentence is still to be written. */}
       <Footer tagline="We are located in Burnaby, BC." current="/contact" />
+      </PageTransition>
       <Motion />
     </>
   );

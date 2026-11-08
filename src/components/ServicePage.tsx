@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import SectionTitle from "@/components/SectionTitle";
 import Footer from "@/components/Footer";
+import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import { servicePages, type ServicePage as Page, type Watermark } from "@/content/pages";
 
@@ -77,6 +78,7 @@ export default function ServicePage({ slug }: { slug: string }) {
   return (
     <>
       <Header />
+      <PageTransition>
       <main>
         <Hero size="page" image={page.hero.image} lines={page.hero.lines} cta={page.hero.cta} />
 
@@ -112,6 +114,7 @@ export default function ServicePage({ slug }: { slug: string }) {
         </div>
       </main>
       <Footer tagline={page.tagline} current={href} />
+      </PageTransition>
       {/* Mounted last so its effects run after this page's DOM has hydrated. */}
       <Motion />
     </>
