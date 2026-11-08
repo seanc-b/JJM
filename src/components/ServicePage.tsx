@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Motion from "@/components/Motion";
 import { servicePages, type ServicePage as Page, type Watermark } from "@/content/pages";
+import { noWidow } from "@/lib/text";
 
 /**
  * The oversized 12% brand icon behind the title band and intro, placed in 1500-wide artboard px.
@@ -100,7 +101,7 @@ export default function ServicePage({ slug }: { slug: string }) {
                 {page.paragraphs.map((text, i) => (
                   <p key={i} data-reveal>
                     {i === 0 && <strong className="font-bold text-black">{page.lead}</strong>}
-                    {text}
+                    {noWidow(text)}
                   </p>
                 ))}
               </div>

@@ -58,6 +58,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Paragraphs rebalance their last lines so none ends on a lone word, where the browser supports it.
+   Key paragraphs also join their last two words (noWidow in src/lib/text.ts) for the rest. */
+p {
+  text-wrap: pretty;
+}
+
 ::selection {
   background: var(--color-blue);
   color: #ffffff;
