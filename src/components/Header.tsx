@@ -155,7 +155,7 @@ export default function Header() {
           </button>
 
           <div ref={menuRef} className="invisible absolute left-1/2 top-[56px] grid w-[min(92vw,812px)] -translate-x-1/2 grid-cols-1 overflow-hidden text-white md:grid-cols-[402fr_410fr]">
-            <div data-panel className="bg-blue py-[clamp(24px,3vw,34px)] pl-[clamp(20px,3vw,38px)] pr-[clamp(20px,3vw,40px)]">
+            <div data-panel className="bg-blue py-[25px] pl-[clamp(20px,3vw,38px)] pr-[clamp(20px,3vw,40px)]">
               <ul className="divide-y divide-dashed divide-white/35">
                 {nav.map((item, i) => {
                   const current = item.href === pathname;
@@ -180,7 +180,8 @@ export default function Header() {
               </ul>
             </div>
             <div data-panel className="relative flex items-center overflow-hidden bg-navy py-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
-              <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} aria-hidden className="pointer-events-none absolute left-[6%] top-[-12%] h-[215%] w-auto max-w-none opacity-45" />
+              {/* Placed from the mockup: flame tip near the top right, rings centred low on the left edge. */}
+              <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} aria-hidden className="pointer-events-none absolute left-[4.4%] top-[-40%] h-[211%] w-auto max-w-none opacity-30" />
               <p data-item className="relative text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
                 We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
               </p>
