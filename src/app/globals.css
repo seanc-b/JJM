@@ -201,6 +201,17 @@ html.motion .navdot-pop {
   transform: scale(1);
 }
 
+/* Footer contact chips: the navy fill wipes in from the left on hover or focus, easing to a stop. */
+.chip-fill {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.chip:hover .chip-fill,
+.chip:focus-visible .chip-fill {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* ---------- Motion initial states (only when motion is allowed) ---------- */
 html.motion [data-reveal] {
   opacity: 0;

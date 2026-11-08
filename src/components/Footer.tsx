@@ -3,20 +3,27 @@ import Link from "next/link";
 import { IconInstagram, IconPhone } from "@/components/Icons";
 import { company, nav, partners, sameDay } from "@/content/home";
 
+/**
+ * A white contact chip. A linked chip carries a navy copy of itself, white text and all, laid exactly
+ * on top and clipped to nothing; hovering or focusing it opens the clip from left to right, so the
+ * navy wipes across and reveals the white text along its leading edge (.chip-fill in globals.css).
+ */
 function Chip({ label, value, href }: { label: string; value: string; href?: string }) {
-  const inner = (
+  const layout = "inline-flex flex-wrap items-baseline gap-x-3 px-5 py-2.5";
+  const inner = (tone: "dark" | "light") => (
     <>
-      <span className="label text-ink">{label}</span>
-      <span className="text-[clamp(1rem,1.3vw,1.3rem)] font-bold text-navy">{value}</span>
+      <span className={`label ${tone === "dark" ? "text-ink" : "text-white"}`}>{label}</span>
+      <span className={`text-[clamp(1rem,1.3vw,1.3rem)] font-bold ${tone === "dark" ? "text-navy" : "text-white"}`}>{value}</span>
     </>
   );
-  const cls = "inline-flex flex-wrap items-baseline gap-x-3 bg-white px-5 py-2.5 transition-colors duration-400";
-  return href ? (
-    <a href={href} className={`${cls} hover:bg-navy [&>span]:transition-colors [&>span]:duration-400 hover:[&>span]:text-white`}>
-      {inner}
+  if (!href) return <span className={`${layout} bg-white`}>{inner("dark")}</span>;
+  return (
+    <a href={href} className={`chip relative ${layout} bg-white`}>
+      {inner("dark")}
+      <span aria-hidden className={`chip-fill absolute inset-0 ${layout} bg-navy`}>
+        {inner("light")}
+      </span>
     </a>
-  ) : (
-    <span className={cls}>{inner}</span>
   );
 }
 
