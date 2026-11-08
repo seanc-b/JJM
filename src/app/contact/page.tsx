@@ -117,7 +117,8 @@ export default function Page() {
           <div className="relative mt-[clamp(32px,3.33vw,50px)]">
             {/* Navy bar with a notch pointing down at the map, as drawn. */}
             <div aria-hidden className="relative z-[1] h-[clamp(6px,0.67vw,10px)] bg-navy">
-              <div className="absolute left-1/2 top-full h-[clamp(10px,1.07vw,16px)] w-[clamp(20px,2.13vw,32px)] -translate-x-1/2 bg-navy [clip-path:polygon(0_0,100%_0,50%_100%)]" />
+              {/* Overlaps the bar by 1px so no hairline of map shows between them at fractional sizes. */}
+              <div className="absolute left-1/2 top-[calc(100%-1px)] h-[calc(clamp(10px,1.07vw,16px)+1px)] w-[clamp(20px,2.13vw,32px)] -translate-x-1/2 bg-navy [clip-path:polygon(0_0,100%_0,50%_100%)]" />
             </div>
             <BrandMap
               title={`Map showing ${company.name} at ${company.address}`}
