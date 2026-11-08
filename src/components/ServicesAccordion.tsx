@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import { useLenis } from "@/components/SmoothScroll";
 import { IconChevron, IconPlus } from "@/components/Icons";
 import { sections } from "@/content/home";
+import { noWidow } from "@/lib/text";
 
 /** Gap left between the sticky menu pill and an opened item's top edge. */
 const PILL_GAP = 24;
@@ -84,9 +85,9 @@ export default function ServicesAccordion() {
               >
                 <div className="min-h-0 overflow-hidden">
                   <div className={`pb-8 transition-opacity duration-500 ${isOpen ? "opacity-100 delay-150" : "opacity-0"}`}>
-                    <p className="max-w-[42ch] text-[clamp(1.05rem,4vw,1.3rem)] leading-[1.45] text-ink">
+                    <p className="max-w-[42ch] text-pretty text-[clamp(1.05rem,4vw,1.3rem)] leading-[1.45] text-ink">
                       <strong className="font-bold text-black">{s.lead}</strong>
-                      {s.body}
+                      {noWidow(s.body)}
                     </p>
                     <div className="mt-6">
                       <Button href={s.href} icon={<IconPlus />}>

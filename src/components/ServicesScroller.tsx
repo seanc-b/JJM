@@ -7,6 +7,7 @@ import { useLenis } from "@/components/SmoothScroll";
 import Button from "@/components/Button";
 import { IconPlus } from "@/components/Icons";
 import { sections } from "@/content/home";
+import { noWidow } from "@/lib/text";
 
 /** Scroll distance per photo, as a fraction of the viewport height. */
 const STEP_VH = 0.85;
@@ -419,9 +420,9 @@ export default function ServicesScroller() {
                       </h2>
                       <Image src={s.icon} alt="" width={44} height={44} className="size-11 shrink-0" />
                     </div>
-                    <p className="mt-7 max-w-[42ch] text-[clamp(1.1rem,1.6vw,1.5rem)] leading-[1.45] text-ink">
+                    <p className="mt-7 max-w-[42ch] text-pretty text-[clamp(1.1rem,1.6vw,1.5rem)] leading-[1.45] text-ink">
                       <strong className="font-bold text-black">{s.lead}</strong>
-                      {s.body}
+                      {noWidow(s.body)}
                     </p>
                     <div className="mt-8">
                       <Button href={s.href} icon={<IconPlus />}>
