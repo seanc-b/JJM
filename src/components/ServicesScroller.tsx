@@ -30,6 +30,13 @@ const TAIL = 0.1;
  */
 const LINEAR_MIX = 0.2;
 const gentle = (p: number) => LINEAR_MIX * p + (1 - LINEAR_MIX) * (p < 0.5 ? 2 * p * p : 1 - 2 * (1 - p) * (1 - p));
+/**
+ * Background icons drift in from the edge they're anchored to: icons hung from the top come down,
+ * icons standing on the bottom come up. This is how far, as a fraction of the icon's own height.
+ * It moves `yPercent`, which GSAP keeps apart from the gear's scroll parallax on `y`.
+ */
+const ICON_DRIFT = 14;
+
 /** The size a photo shrinks to, and grows from. */
 const SMALL = 0.3;
 
@@ -110,6 +117,9 @@ export default function ServicesScroller() {
   const jump = useRef<gsap.core.Timeline | null>(null);
   /** "scroll": crossfade as the photos cross. "leave": fade the current service out. "enter": swap in at once and animate in. */
   const showService = useRef<((si: number, mode?: "scroll" | "leave" | "enter") => void) | null>(null);
+  /** While a switcher jump plays, scroll updates leave the text alone; it syncs to the scroll after. */
+  const jumping = useRef(false);
+  const syncToScroll = useRef<(() => void) | null>(null);
   const lenis = useLenis();
 
   /** Moves the switcher's marker and marks the active button. */
@@ -134,12 +144,17 @@ export default function ServicesScroller() {
         const icons = gsap.utils.toArray<HTMLElement>("[data-bg]", el);
         const slides = gsap.utils.toArray<HTMLElement>("[data-slide]", el);
 
-        gsap.set(texts, { autoAlpha: 0, y: 24 });
+        // Each text block's parts (heading row, paragraph, button) fade up one after another.
+        const parts = texts.map((t) => Array.from(t.children) as HTMLElement[]);
+        // +1 drifts up from below (icons on the bottom edge), -1 down from above (icons hung from the top).
+        const drift = sections.map((s) => (BG_ICONS[s.id].top === undefined ? 1 : -1));
+
+        gsap.set(texts, { autoAlpha: 0 });
         gsap.set(rules, { "--rule": 0 });
-        gsap.set(texts[0], { autoAlpha: 1, y: 0 });
+        gsap.set(texts[0], { autoAlpha: 1 });
         gsap.set(rules[0], { "--rule": 1 });
-        gsap.set(icons, { autoAlpha: 0, scale: 0.9 });
-        gsap.set(icons[0], { autoAlpha: 1, scale: 1 });
+        gsap.set(icons, { autoAlpha: 0 });
+        gsap.set(icons[0], { autoAlpha: 1 });
         gsap.set(slides, { scale: SMALL, opacity: 0 });
         gsap.set(slides[0], { scale: 1, opacity: 1 });
 
@@ -147,25 +162,34 @@ export default function ServicesScroller() {
 
         // Text, hairlines and the background icon switch as a timed fade, not on the scrub, so
         // stopping the scroll can never leave them half faded. The crossing point sets it off.
-        // Every mode kills what the last one queued first: a delayed tween that hasn't started yet
+        // Every switch kills what the last one queued first: a delayed tween that hasn't started yet
         // survives `overwrite`, and would restart the text halfway through its entrance.
         let active = 0;
-        // The gear's parallax tween animates `y` on icons[0], so only fade and scale tweens are killed on icons.
+        let scrollService = 0;
+        // The gear's parallax tween animates `y` on icons[0], so icon tweens are only killed on other properties.
         const killQueued = () => {
           gsap.killTweensOf(texts, "autoAlpha,opacity,visibility,y");
+          gsap.killTweensOf(parts.flat(), "autoAlpha,opacity,visibility,y");
           gsap.killTweensOf(rules, "--rule");
-          gsap.killTweensOf(icons, "autoAlpha,opacity,visibility,scale");
+          gsap.killTweensOf(icons, "autoAlpha,opacity,visibility,yPercent");
         };
         const leave = (i: number) => {
-          gsap.to(texts[i], { autoAlpha: 0, y: -12, duration: 0.3, ease: "power2.in" });
-          gsap.to(icons[i], { autoAlpha: 0, scale: 0.94, duration: 0.3, ease: "power2.in" });
+          gsap.to(texts[i], { autoAlpha: 0, y: -12, duration: 0.35, ease: "power2.in" });
+          gsap.to(icons[i], { autoAlpha: 0, yPercent: drift[i] * (ICON_DRIFT / 2), duration: 0.45, ease: "power2.in" });
         };
         const enter = (i: number, delay: number) => {
-          gsap.fromTo(texts[i], { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.8, delay, ease: "power3.out" });
-          gsap.fromTo(rules[i], { "--rule": 0 }, { "--rule": 1, duration: 1, delay, ease: "power3.out" });
-          gsap.fromTo(icons[i], { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.9, delay, ease: "power3.out" });
+          gsap.set(texts[i], { autoAlpha: 1, y: 0 });
+          gsap.fromTo(parts[i], { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.9, delay, stagger: 0.09, ease: "power3.out" });
+          gsap.fromTo(rules[i], { "--rule": 0 }, { "--rule": 1, duration: 1.1, delay, ease: "power3.out" });
+          gsap.fromTo(
+            icons[i],
+            { autoAlpha: 0, yPercent: drift[i] * ICON_DRIFT },
+            { autoAlpha: 1, yPercent: 0, duration: 1.4, delay: delay + 0.05, ease: "power3.out" },
+          );
         };
         showService.current = (si, mode = "scroll") => {
+          if (mode === "scroll") scrollService = si;
+          if (mode === "scroll" && jumping.current) return;
           if (mode === "leave") {
             killQueued();
             leave(active);
@@ -179,13 +203,15 @@ export default function ServicesScroller() {
           if (mode === "enter") {
             texts.forEach((t, i) => i !== si && gsap.set(t, { autoAlpha: 0, y: 0 }));
             rules.forEach((r, i) => i !== si && gsap.set(r, { "--rule": 0 }));
-            icons.forEach((c, i) => i !== si && gsap.set(c, { autoAlpha: 0, scale: 0.94 }));
+            icons.forEach((c, i) => i !== si && gsap.set(c, { autoAlpha: 0, yPercent: 0 }));
             enter(si, 0);
             return;
           }
           leave(prev);
-          enter(si, 0.2);
+          enter(si, 0.25);
         };
+        // After a jump: if the scroll moved on to another service meanwhile, crossfade to it.
+        syncToScroll.current = () => showService.current?.(scrollService);
 
         const dockDistance = () => window.innerHeight * DOCK_VH;
         const dock = el.querySelector("[data-dock]");
@@ -263,6 +289,7 @@ export default function ServicesScroller() {
       });
       return () => {
         jump.current?.kill();
+        jumping.current = false;
         mm.revert();
       };
     },
@@ -286,10 +313,11 @@ export default function ServicesScroller() {
 
     markActive(si);
     jump.current?.kill();
+    jumping.current = true;
     showService.current?.(si, "leave");
     jump.current = gsap
       .timeline()
-      .to(stage, { opacity: 0, duration: 0.3, ease: "power2.in" })
+      .to(stage, { opacity: 0, duration: 0.35, ease: "power2.in" })
       .add(() => {
         // Swap the text before scrolling. Lenis reports the jump to ScrollTrigger synchronously, and
         // its update then finds this service already showing instead of starting a second entrance.
@@ -301,7 +329,12 @@ export default function ServicesScroller() {
         st.getTween()?.progress(1);
       })
       .fromTo(stage, { scale: 0.9, transformOrigin: origin, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "expo.out" })
-      .set(stage, { clearProps: "transform,transformOrigin,opacity" });
+      .set(stage, { clearProps: "transform,transformOrigin,opacity" })
+      // Hand the text back to the scroll once the new service has settled.
+      .add(() => {
+        jumping.current = false;
+        syncToScroll.current?.();
+      }, "+=0.3");
   };
 
   return (
