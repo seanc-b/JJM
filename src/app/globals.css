@@ -158,7 +158,7 @@ html.motion .ruled {
 }
 
 /* Nav: the current page is marked by a light blue dot under its link (.navdot, rendered by Header).
-   Hovering another link shows a fainter dot in the same spot. */
+   Hovering another link shows a fainter dot in the same spot. Header only; the footer nav has no dot. */
 .navlink {
   position: relative;
 }

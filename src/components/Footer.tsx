@@ -74,7 +74,7 @@ export default function Footer({ tagline = sameDay, current }: Props) {
               <Link
                 href={item.href}
                 aria-current={item.href === current ? "page" : undefined}
-                className={`text-[0.875rem] uppercase tracking-[0.06em] ${item.href === current ? "font-bold text-black" : "navlink font-semibold text-navy"}`}
+                className={`text-[0.875rem] uppercase tracking-[0.06em] ${item.href === current ? "font-bold text-black" : "font-semibold text-navy transition-colors duration-300 hover:text-blue"}`}
               >
                 {item.label}
               </Link>
