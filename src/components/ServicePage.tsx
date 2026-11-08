@@ -27,7 +27,8 @@ export function WatermarkIcon({ src, ratio, x, y, width, anchor = "centre" }: Wa
       aria-hidden
       width={Math.round(width)}
       height={Math.round(width / ratio)}
-      data-parallax="10"
+      data-parallax="18"
+      data-parallax-lag="1.2"
       className="pointer-events-none absolute h-auto max-w-none select-none"
       style={style}
     />

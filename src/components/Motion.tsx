@@ -8,6 +8,7 @@ import { gsap, ScrollTrigger, useGSAP, EASE } from "@/lib/gsap";
  *  - data-rise            headline lines rise from a clipped box ("load" = on mount, else on enter)
  *  - data-wipe            clip-path wipe upward + inner image settles from 1.15 scale
  *  - data-parallax="n"    inner element drifts n% of its height while its parent scrolls through
+ *    data-parallax-lag="s" optional: it eases after the scroll, catching up over s seconds
  */
 /**
  * With Cache Components, Next keeps up to three visited pages in the DOM, hidden by React's <Activity>
@@ -80,11 +81,12 @@ export default function Motion() {
       // Parallax
       onPage("[data-parallax]").forEach((el) => {
         const amount = Number(el.dataset.parallax ?? 8);
+        const scrub = el.dataset.parallaxLag ? Number(el.dataset.parallaxLag) : true;
         const trigger = el.parentElement ?? el;
         gsap.fromTo(
           el,
           { yPercent: -amount },
-          { yPercent: amount, ease: "none", scrollTrigger: { trigger, start: "top bottom", end: "bottom top", scrub: true } },
+          { yPercent: amount, ease: "none", scrollTrigger: { trigger, start: "top bottom", end: "bottom top", scrub } },
         );
       });
 
