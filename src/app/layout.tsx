@@ -24,7 +24,8 @@ const motionScript =
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // suppressHydrationWarning: the inline script below adds a class before React hydrates.
-    <html lang="en" className={`${workSans.variable} h-full`} suppressHydrationWarning>
+    // The navy background is inline so the canvas is navy from the very first paint, before CSS loads.
+    <html lang="en" className={`${workSans.variable} h-full`} style={{ backgroundColor: "#17355d" }} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: motionScript }} />
       </head>

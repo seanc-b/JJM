@@ -31,7 +31,10 @@ html.lenis body {
 }
 
 /* ---------- Base ---------- */
+/* The canvas behind the page is navy: it is what shows before the first paint, in overscroll, and
+   between pages during the fade (where the root snapshot is hidden). The body stays white. */
 html {
+  background: var(--color-navy);
   scrollbar-color: var(--color-navy) #ffffff;
 }
 ::-webkit-scrollbar {
@@ -207,21 +210,20 @@ html.motion [data-wipe] {
 }
 
 /* ---------- Page transitions (PageTransition + React <ViewTransition>) ---------- */
-/* The old page fades out quickly; the new one fades in on the navy a beat later. Its hero photo starts
-   hidden, so it arrives as plain navy and the photo fades up after (Motion). */
-::view-transition-old(.page-fade) {
-  animation: 200ms ease-in both page-out;
+/* The new page is in place at once (its hero is plain navy: the photo starts hidden and Motion fades it
+   up), and the old page sits above it and fades away. Nothing is ever see-through, so the white page
+   canvas never shows between the two. */
+::view-transition-group(.page-out) {
+  z-index: 1;
 }
-::view-transition-new(.page-fade) {
-  animation: 300ms ease-out 120ms both page-in;
+::view-transition-old(.page-out) {
+  animation: 380ms ease-in-out both page-out;
+}
+::view-transition-new(.page-in) {
+  animation: none;
 }
 @keyframes page-out {
   to {
-    opacity: 0;
-  }
-}
-@keyframes page-in {
-  from {
     opacity: 0;
   }
 }
@@ -236,11 +238,9 @@ html.motion [data-wipe] {
 ::view-transition-new(site-header) {
   animation: none;
 }
-/* The pages fade through navy, not the white page canvas, so hero-to-hero reads as one dark dissolve.
-   The root snapshot (the bare canvas, plus the compact pill or menu if open) is hidden for the same
-   reason. Clicks during the fade reach the live page. */
+/* The root snapshot (the white body, plus the compact pill or menu if open) is hidden so only the two
+   pages take part. Clicks during the fade reach the live page. */
 ::view-transition {
-  background: var(--color-navy);
   pointer-events: none;
 }
 ::view-transition-old(root),
