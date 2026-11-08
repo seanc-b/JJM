@@ -1,79 +1,99 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import Button from "@/components/Button";
 import { company } from "@/content/home";
 
 /**
- * The "Find us" map, in the site's colours: pale grey-blue land, white roads, muted labels, no business
- * icons, and a navy JJM pin (a square with the flame mark and a notch pointing at the spot, like the navy
- * bar above the map). A card in the corner names the office with a Get directions button.
+ * The "Find us" map, in the site's colours: pale grey-blue land, white roads, navy and ink labels, blue-tinted
+ * water, and a navy JJM pin (a square with the flame mark and a notch pointing at the spot, like the navy bar
+ * above the map). A card in the corner names the office with a Get directions button (Google Maps).
  *
- * It uses the Google Maps JavaScript API, which needs a key in NEXT_PUBLIC_GOOGLE_MAPS_API_KEY (see
- * .env.example). Without one, or if the API fails to load, it falls back to Google's plain embed.
+ * Free and keyless: MapLibre (open source) draws OpenFreeMap's Positron style (OpenStreetMap data), recoloured
+ * here. The library loads only when the map nears the screen. If it can't load, Google's plain embed shows.
  */
 
-const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 
-/** 8331 Eastlake Dr Unit 107, Burnaby. */
-const OFFICE = { lat: 49.25902, lng: -122.92251 };
+/** 8331 Eastlake Dr Unit 107, Burnaby. [longitude, latitude], as MapLibre takes them. */
+const OFFICE: [number, number] = [-122.92251, 49.25902];
 
 const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${company.name}, ${company.address}`)}`;
 
-/** Brand palette for Google's map styling: frost land, white roads, ink labels, glacier-tinted water. */
-const STYLES = [
-  { elementType: "geometry", stylers: [{ color: "#e9ecf2" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#5d6b7b" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#e9ecf2" }, { weight: 3 }] },
-  { featureType: "administrative", elementType: "geometry", stylers: [{ visibility: "off" }] },
-  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#17355d" }] },
-  { featureType: "administrative.neighborhood", elementType: "labels.text.fill", stylers: [{ color: "#3e4d5d" }] },
-  { featureType: "landscape.man_made", elementType: "geometry", stylers: [{ color: "#e1e5ee" }] },
-  { featureType: "poi", stylers: [{ visibility: "off" }] },
-  { featureType: "poi.park", stylers: [{ visibility: "on" }] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#d8e2ea" }] },
-  { featureType: "poi.park", elementType: "labels", stylers: [{ visibility: "off" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#3e4d5d" }] },
-  { featureType: "road", elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }, { weight: 3 }] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#c3c8d5" }] },
-  { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#17355d" }] },
-  { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "simplified" }] },
-  { featureType: "transit", stylers: [{ visibility: "off" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#bfd6ec" }] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#3f74b7" }] },
-];
+const C = {
+  frost: "#e9ecf2",
+  land: "#e5e9f0",
+  park: "#d9e2eb",
+  building: "#dde2ea",
+  buildingLine: "#d0d6e0",
+  mist: "#c3c8d5",
+  water: "#bfd6ec",
+  white: "#ffffff",
+  navy: "#17355d",
+  blue: "#3f74b7",
+  ink: "#3e4d5d",
+  muted: "#66768a",
+};
 
-// The Maps API is loaded at runtime from Google, so it has no types here.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Google = any;
+/** Paint overrides by layer id, on top of Positron's own. */
+const PAINT: Record<string, Record<string, string>> = {
+  background: { "background-color": C.frost },
+  park: { "fill-color": C.park },
+  water: { "fill-color": C.water },
+  waterway: { "line-color": C.water },
+  landuse_residential: { "fill-color": C.land },
+  landcover_wood: { "fill-color": C.park },
+  building: { "fill-color": C.building, "fill-outline-color": C.buildingLine },
+  highway_path: { "line-color": "#f3f5f9" },
+  highway_minor: { "line-color": C.white },
+  highway_major_casing: { "line-color": C.buildingLine },
+  highway_major_inner: { "line-color": C.white },
+  highway_major_subtle: { "line-color": C.white },
+  highway_motorway_casing: { "line-color": C.mist },
+  highway_motorway_inner: { "line-color": "#f3f5f9" },
+  highway_motorway_subtle: { "line-color": C.white },
+  highway_motorway_bridge_casing: { "line-color": C.mist },
+  highway_motorway_bridge_inner: { "line-color": "#f3f5f9" },
+  tunnel_motorway_casing: { "line-color": C.mist },
+  tunnel_motorway_inner: { "line-color": "#f3f5f9" },
+  railway: { "line-color": C.buildingLine },
+  railway_transit: { "line-color": C.buildingLine },
+  railway_service: { "line-color": C.buildingLine },
+  railway_dashline: { "line-color": C.frost },
+  railway_transit_dashline: { "line-color": C.frost },
+  railway_service_dashline: { "line-color": C.frost },
+  boundary_2: { "line-color": C.mist },
+  boundary_3: { "line-color": C.mist },
+  boundary_disputed: { "line-color": C.mist },
+  water_name_point_label: { "text-color": C.blue, "text-halo-color": C.frost },
+  water_name_line_label: { "text-color": C.blue, "text-halo-color": C.frost },
+  waterway_line_label: { "text-color": C.blue, "text-halo-color": C.frost },
+  "highway-name-path": { "text-color": C.muted, "text-halo-color": C.white },
+  "highway-name-minor": { "text-color": C.muted, "text-halo-color": C.white },
+  "highway-name-major": { "text-color": C.ink, "text-halo-color": C.white },
+  airport: { "text-color": C.muted, "text-halo-color": C.frost },
+  label_other: { "text-color": C.ink, "text-halo-color": C.frost },
+};
 
-/** Loads the Maps JavaScript API once per page, however many maps ask for it. */
-let loading: Promise<Google> | null = null;
-function loadMaps(key: string): Promise<Google> {
-  const w = window as unknown as { google?: Google; __jjmMapsReady?: () => void };
-  if (w.google?.maps?.Map) return Promise.resolve(w.google);
-  if (loading) return loading;
-  loading = new Promise((resolve, reject) => {
-    w.__jjmMapsReady = () => resolve(w.google);
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&v=weekly&callback=__jjmMapsReady`;
-    script.async = true;
-    script.onerror = () => {
-      loading = null;
-      reject(new Error("Google Maps failed to load"));
-    };
-    document.head.appendChild(script);
+/** Fetches Positron and recolours it in the brand palette. */
+async function brandStyle(): Promise<StyleSpecification> {
+  const res = await fetch(STYLE_URL);
+  if (!res.ok) throw new Error(`Map style failed to load (${res.status})`);
+  const style = (await res.json()) as StyleSpecification;
+  style.layers = style.layers.map((layer) => {
+    const over = PAINT[layer.id] ?? (layer.id.startsWith("label_") ? { "text-color": C.navy, "text-halo-color": C.frost } : null);
+    return over ? ({ ...layer, paint: { ...("paint" in layer ? layer.paint : {}), ...over } } as typeof layer) : layer;
   });
-  return loading;
+  return style;
 }
 
 /** The pin's markup: a navy square holding the white JJM mark, with a notch below pointing at the spot. */
 function pinElement() {
   const el = document.createElement("div");
   el.setAttribute("aria-hidden", "true");
-  el.style.cssText = "position:absolute;transform:translate(-50%,-100%);pointer-events:none;filter:drop-shadow(0 8px 14px rgba(23,53,93,.35))";
+  el.style.cssText = "pointer-events:none;filter:drop-shadow(0 8px 14px rgba(23,53,93,.35))";
   el.innerHTML =
     '<div style="display:flex;width:52px;height:52px;align-items:center;justify-content:center;background:#17355d">' +
     '<img src="/brand/jjm-mark-white.svg" alt="" width="34" height="34" style="display:block;width:34px;height:34px"/></div>' +
@@ -83,7 +103,7 @@ function pinElement() {
 
 type Props = {
   title: string;
-  /** The plain Google embed, shown without an API key. */
+  /** Google's plain embed, shown if the map can't load. */
   fallbackSrc: string;
   className?: string;
 };
@@ -93,60 +113,66 @@ export default function BrandMap({ title, fallbackSrc, className = "" }: Props) 
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (!KEY || !box.current) return;
+    const el = box.current;
+    if (!el) return;
     let cancelled = false;
-    let overlay: Google = null;
-    loadMaps(KEY)
-      .then((google) => {
-        if (cancelled || !box.current) return;
-        const map = new google.maps.Map(box.current, {
-          center: OFFICE,
-          zoom: 15,
-          styles: STYLES,
-          backgroundColor: "#e9ecf2",
-          disableDefaultUI: true,
-          zoomControl: true,
-          clickableIcons: false,
-          // Two fingers (or Ctrl/Cmd + scroll) to move the map, so the page still scrolls past it.
-          gestureHandling: "cooperative",
-        });
+    let map: MapLibreMap | null = null;
 
-        // The pin is an HTML overlay pinned to the office's coordinates.
-        class Pin extends google.maps.OverlayView {
-          el = pinElement();
-          onAdd() {
-            this.getPanes().overlayMouseTarget.appendChild(this.el);
-          }
-          draw() {
-            const p = this.getProjection().fromLatLngToDivPixel(new google.maps.LatLng(OFFICE));
-            if (p) {
-              this.el.style.left = `${p.x}px`;
-              this.el.style.top = `${p.y}px`;
-            }
-          }
-          onRemove() {
-            this.el.remove();
-          }
+    const start = async () => {
+      try {
+        const [{ default: maplibregl }, style] = await Promise.all([import("maplibre-gl"), brandStyle()]);
+        if (cancelled) return;
+        map = new maplibregl.Map({
+          container: el,
+          style,
+          center: OFFICE,
+          zoom: 14.6,
+          attributionControl: { compact: true },
+          // Two fingers (or Ctrl/Cmd + scroll) to move the map, so the page still scrolls past it.
+          cooperativeGestures: true,
+          dragRotate: false,
+          pitchWithRotate: false,
+        });
+        map.touchZoomRotate.disableRotation();
+        map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+        new maplibregl.Marker({ element: pinElement(), anchor: "bottom" }).setLngLat(OFFICE).addTo(map);
+      } catch {
+        if (!cancelled) setFailed(true);
+      }
+    };
+
+    // Load the map library only when the map is about to scroll into view.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          void start();
         }
-        overlay = new Pin();
-        overlay.setMap(map);
-      })
-      .catch(() => !cancelled && setFailed(true));
+      },
+      { rootMargin: "400px" },
+    );
+    io.observe(el);
+
     return () => {
       cancelled = true;
-      overlay?.setMap(null);
+      io.disconnect();
+      map?.remove();
     };
   }, []);
 
-  if (!KEY || failed) {
+  if (failed) {
     return <iframe title={title} src={fallbackSrc} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className={`block w-full border-0 [filter:saturate(0.55)_contrast(0.95)] ${className}`} />;
   }
 
   return (
-    <div className={`relative w-full bg-frost ${className}`}>
-      <div ref={box} role="region" aria-label={title} className="absolute inset-0" />
-      {/* The office card, in the site's style, over the map's top-left corner. */}
-      <div className="absolute left-[clamp(12px,2vw,28px)] top-[clamp(12px,2vw,28px)] max-w-[calc(100%-24px)] bg-white px-5 py-4 shadow-[0_12px_32px_-12px_rgba(23,53,93,0.45)]">
+    <div className="relative w-full">
+      <div className={`relative w-full overflow-hidden bg-frost ${className}`}>
+        {/* Sized with h-full, not inset-0: MapLibre makes its container position: relative. */}
+        <div ref={box} role="region" aria-label={title} className="h-full w-full" />
+      </div>
+      {/* The office card, in the site's style: over the map's top-left corner from md, under the map on phones
+          (where it would cover the pin). */}
+      <div className="bg-white px-5 py-4 md:absolute md:left-[clamp(12px,2vw,28px)] md:top-[clamp(12px,2vw,28px)] md:z-[2] md:shadow-[0_12px_32px_-12px_rgba(23,53,93,0.45)]">
         <p className="font-bold uppercase leading-tight text-navy">{company.name}</p>
         <p className="mt-1 text-[0.9375rem] leading-snug text-ink">
           8331 Eastlake Dr Unit 107,
