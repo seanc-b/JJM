@@ -158,23 +158,9 @@ html.motion .ruled {
 }
 
 /* Nav: the current page is marked by a light blue dot under its link (.navdot, rendered by Header).
-   Hovering another link shows a fainter dot in the same spot. Header only; the footer nav has no dot.
-   The current link is bold and the rest medium. A hidden, zero-height bold copy of each label (::before,
-   from data-label) holds every link at its bold width, so the row never shifts when the bold moves. */
+   Hovering another link shows a fainter dot in the same spot. Header only; the footer nav has no dot. */
 .navlink {
   position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-}
-.navlink::before {
-  content: attr(data-label);
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-  font-weight: 700;
-  user-select: none;
-  pointer-events: none;
 }
 .navdot,
 .navlink::after {
