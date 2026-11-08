@@ -12,6 +12,20 @@ import { IconClose, IconMail, IconMenu, IconPhone } from "@/components/Icons";
 /** White ring icons for the menu, with a navy twin shown on hover and for the current page. */
 const menuIcon = (icon: NavLink["icon"], tone: "white" | "navy") => `/icons/menu/${icon}-${tone}.svg`;
 
+/**
+ * The nav dot pops in on a fresh page load only (.navdot-pop in globals.css). After a client navigation the
+ * page-change animation moves or scales it instead, so later pages skip the pop. Module state survives
+ * client navigations; on the server it is never set, so the first render matches on both sides.
+ */
+let firstPath: string | null = null;
+let navigated = false;
+function isFirstPage(pathname: string) {
+  if (typeof window === "undefined") return true;
+  if (firstPath === null) firstPath = pathname;
+  else if (pathname !== firstPath) navigated = true;
+  return !navigated;
+}
+
 export default function Header() {
   const [compact, setCompact] = useState(false);
   // Whether the header (and its dot) is still on screen; see the nav dot below.
@@ -23,6 +37,7 @@ export default function Header() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
+  const popDot = isFirstPage(pathname);
   // Compact pill once the hero has mostly scrolled away.
   useEffect(() => {
     let raf = 0;
@@ -98,7 +113,7 @@ export default function Header() {
                         header has scrolled away (say, leaving through the sticky menu) the old dot drops its
                         name, so it doesn't swoop in from above the screen: the new one scales up in place. */}
                     {item.href === pathname && (
-                      <span aria-hidden className="navdot" style={{ viewTransitionName: headerInView ? "nav-dot" : "none" }} />
+                      <span aria-hidden className={popDot ? "navdot navdot-pop" : "navdot"} style={{ viewTransitionName: headerInView ? "nav-dot" : "none" }} />
                     )}
                   </Link>
                 </li>

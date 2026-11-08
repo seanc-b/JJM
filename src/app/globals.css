@@ -178,6 +178,16 @@ html.motion .ruled {
   border-radius: 9999px;
   background: var(--color-glacier);
 }
+/* Fresh page load: the current page's dot grows from its centre, with a little overshoot. */
+html.motion .navdot-pop {
+  animation: nav-dot-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+}
+@keyframes nav-dot-pop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
 .navlink::after {
   content: "";
   opacity: 0;
