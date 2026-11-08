@@ -51,7 +51,8 @@ export default function Page() {
           <section aria-labelledby="contact-title" className="relative z-[2] pt-[clamp(32px,3.9vw,58px)]">
             <SectionTitle id="contact-title" title="Let’s talk" icon="/icons/section-person.svg" />
             <PageIntro heading={["Contact us for more", "information"]} className="pb-[clamp(48px,5.2vw,78px)]">
-              <dl className="space-y-[1.15em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.25]">
+              {/* Pulled up so the first line's capitals sit on the heading's top rule (half-leading + ascender). */}
+              <dl className="space-y-[1.15em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.25] md:-mt-[0.32em]">
                 {details.map((d) => (
                   <div key={d.label} data-reveal>
                     <dt className="font-bold uppercase text-navy">{d.label}</dt>

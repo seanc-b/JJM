@@ -95,7 +95,8 @@ export default function ServicePage({ slug }: { slug: string }) {
             <SectionTitle id={titleId} title={page.title} icon={page.icon} />
 
             <PageIntro heading={page.heading}>
-              <div className="space-y-[1.25em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.3] text-ink">
+              {/* Pulled up so the first line's capitals sit on the heading's top rule (half-leading + ascender). */}
+              <div className="space-y-[1.25em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.3] text-ink md:-mt-[0.34em]">
                 {page.paragraphs.map((text, i) => (
                   <p key={i} data-reveal>
                     {i === 0 && <strong className="font-bold text-black">{page.lead}</strong>}
