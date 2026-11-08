@@ -90,7 +90,7 @@ export default function Header() {
           </Link>
 
           <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-[clamp(18px,2.2vw,34px)]">
+            <ul className="navlist flex items-center gap-[clamp(18px,2.2vw,34px)]">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} aria-current={item.href === pathname ? "page" : undefined} className="navlink text-[0.8125rem] font-semibold uppercase tracking-[0.06em] xl:text-[0.875rem]">
