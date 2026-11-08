@@ -197,7 +197,7 @@ export default function Header() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="site-menu"
-          className="flex cursor-pointer items-center gap-5 bg-blue px-6 py-2.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] transition-colors duration-300 hover:bg-navy"
+          className="flex cursor-pointer items-center gap-5 bg-navy px-6 py-2.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] transition-colors duration-300 hover:bg-blue"
         >
           <Image src="/brand/jjm-wordmark-white.svg" alt="" width={88} height={23} className="h-[24px] w-auto" />
           <span className="p-1">{open ? <IconClose className="size-6" /> : <IconMenu className="size-6" />}</span>
@@ -210,7 +210,7 @@ export default function Header() {
         href={company.phoneHref}
         aria-label={`Call ${company.phone}`}
         tabIndex={compact && !open ? undefined : -1}
-        className={`fixed right-[clamp(12px,2vw,24px)] top-0 z-40 flex items-center gap-2.5 bg-blue px-3.5 py-3.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] transition-[transform,background-color] duration-700 ease-[var(--ease-out-expo)] hover:bg-navy md:px-4 ${
+        className={`fixed right-[clamp(12px,2vw,24px)] top-0 z-40 flex items-center gap-2.5 bg-navy px-3.5 py-3.5 text-white shadow-[0_12px_40px_-12px_rgba(23,53,93,0.6)] transition-[transform,background-color] duration-700 ease-[var(--ease-out-expo)] hover:bg-blue md:px-4 ${
           compact && !open ? "translate-y-0" : "-translate-y-[120%]"
         }`}
       >
