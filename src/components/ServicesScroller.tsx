@@ -129,7 +129,6 @@ export default function ServicesScroller() {
   const markActive = (si: number) => {
     const el = root.current;
     if (!el) return;
-    el.querySelector<HTMLElement>("[data-switcher]")?.style.setProperty("--active", String(si));
     el.querySelectorAll<HTMLElement>("[data-rail]").forEach((button, i) => {
       button.classList.toggle("is-active", i === si);
       if (i === si) button.setAttribute("aria-current", "true");
@@ -146,6 +145,7 @@ export default function ServicesScroller() {
         const rules = texts.map((t) => t.querySelector<HTMLElement>(".ruled")!);
         const icons = gsap.utils.toArray<HTMLElement>("[data-bg]", el);
         const slides = gsap.utils.toArray<HTMLElement>("[data-slide]", el);
+        const switcher = el.querySelector<HTMLElement>("[data-switcher]");
 
         // Each text block's parts (heading row, paragraph, button) fade up one after another.
         const parts = texts.map((t) => Array.from(t.children) as HTMLElement[]);
@@ -250,6 +250,8 @@ export default function ServicesScroller() {
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
+          // The switcher's fill follows the timeline as it plays (smoothed by the scrub), so it glides with the photos.
+          onUpdate: () => switcher?.style.setProperty("--progress", tl.progress().toFixed(4)),
           scrollTrigger: {
             trigger: el,
             // Photos start as the landing ends, so scrolling always moves something.
@@ -432,29 +434,40 @@ export default function ServicesScroller() {
                 ))}
               </div>
 
-              {/* Service switcher: hairlines top and bottom, like the section headings, with a heavier rule that slides to the active service */}
+              {/* Service switcher: a block bar like the site's buttons. A blue fill (white labels) grows from the
+                  left as you scroll through the whole section, showing how far along the four services you are;
+                  --progress (0–1) is set by the scroll timeline. */}
               <nav
                 data-switcher
                 aria-label="Jump to a service"
-                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 border-y border-blue/45 bg-white [--active:0]"
+                className="absolute bottom-[6svh] left-0 z-10 w-full min-w-[22rem] bg-frost [--progress:0]"
               >
-                <span
+                <div className="grid grid-cols-4">
+                  {sections.map((s, si) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      data-rail
+                      aria-label={s.title.join(" ")}
+                      onClick={() => jumpTo(si)}
+                      className={`h-12 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-navy/70 transition-colors duration-500 hover:text-navy [&.is-active]:text-navy ${si === 0 ? "is-active" : ""}`}
+                    >
+                      {s.navLabel}
+                    </button>
+                  ))}
+                </div>
+                {/* The fill: the same labels in white on blue, clipped to the progress. Clicks pass through to the buttons. */}
+                <div
                   aria-hidden
-                  className="absolute -bottom-px left-0 h-0.5 w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
-                  style={{ transform: "translateX(calc(var(--active) * 100%))" }}
-                />
-                {sections.map((s, si) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    data-rail
-                    aria-label={s.title.join(" ")}
-                    onClick={() => jumpTo(si)}
-                    className={`relative h-11 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-500 hover:text-navy [&.is-active]:text-blue ${si === 0 ? "is-active" : ""}`}
-                  >
-                    {s.navLabel}
-                  </button>
-                ))}
+                  className="pointer-events-none absolute inset-0 grid grid-cols-4 bg-blue text-white"
+                  style={{ clipPath: "inset(0 calc((1 - var(--progress)) * 100%) 0 0)" }}
+                >
+                  {sections.map((s) => (
+                    <span key={s.id} className="flex items-center justify-center text-[0.75rem] font-semibold uppercase tracking-[0.14em]">
+                      {s.navLabel}
+                    </span>
+                  ))}
+                </div>
               </nav>
             </div>
           </div>
