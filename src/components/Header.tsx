@@ -9,13 +9,8 @@ import { useLenis } from "@/components/SmoothScroll";
 import { company, nav, type NavLink } from "@/content/home";
 import { IconClose, IconMail, IconMenu, IconPhone } from "@/components/Icons";
 
-const menuIcon: Record<NavLink["icon"], string> = {
-  property: "/icons/section-property.svg",
-  flame: "/icons/section-flame.svg",
-  backflow: "/icons/section-backflow.svg",
-  about: "/icons/section-about.svg",
-  contact: "/icons/section-person.svg",
-};
+/** White ring icons for the menu, with a navy twin shown on hover and for the current page. */
+const menuIcon = (icon: NavLink["icon"], tone: "white" | "navy") => `/icons/menu/${icon}-${tone}.svg`;
 
 export default function Header() {
   const [compact, setCompact] = useState(false);
@@ -159,30 +154,35 @@ export default function Header() {
             <IconClose className="size-7" />
           </button>
 
-          <div ref={menuRef} className="invisible absolute left-1/2 top-[56px] grid w-[min(92vw,820px)] -translate-x-1/2 grid-cols-1 overflow-hidden text-white md:grid-cols-2">
-            <div data-panel className="bg-blue px-[clamp(20px,4vw,44px)] py-8">
-              <ul className="divide-y divide-dotted divide-white/40">
-                {nav.map((item, i) => (
-                  <li key={item.href} data-item>
-                    <Link
-                      ref={i === 0 ? firstLinkRef : undefined}
-                      href={item.href}
-                      onClick={close}
-                      className="group flex items-center gap-4 py-3.5 text-[0.9375rem] font-bold uppercase tracking-[0.06em] transition-colors duration-300 hover:text-navy"
-                    >
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-blue transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-110">
-                        <Image src={menuIcon[item.icon]} alt="" width={22} height={22} className="size-[22px]" />
-                      </span>
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+          <div ref={menuRef} className="invisible absolute left-1/2 top-[56px] grid w-[min(92vw,812px)] -translate-x-1/2 grid-cols-1 overflow-hidden text-white md:grid-cols-[402fr_410fr]">
+            <div data-panel className="bg-blue py-[clamp(24px,3vw,34px)] pl-[clamp(20px,3vw,38px)] pr-[clamp(20px,3vw,40px)]">
+              <ul className="divide-y divide-dashed divide-white/35">
+                {nav.map((item, i) => {
+                  const current = item.href === pathname;
+                  return (
+                    <li key={item.href} data-item>
+                      <Link
+                        ref={i === 0 ? firstLinkRef : undefined}
+                        href={item.href}
+                        onClick={close}
+                        aria-current={current ? "page" : undefined}
+                        className="group flex items-center gap-3 whitespace-nowrap py-[10px] text-[1.0625rem] font-bold uppercase leading-none tracking-[0.02em] transition-colors duration-300 hover:text-navy aria-[current=page]:text-navy md:text-[1.25rem]"
+                      >
+                        <span className="relative size-7 shrink-0 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-110">
+                          <Image src={menuIcon(item.icon, "white")} alt="" width={28} height={28} className="absolute inset-0 size-full transition-opacity duration-300 group-hover:opacity-0 group-aria-[current=page]:opacity-0" />
+                          <Image src={menuIcon(item.icon, "navy")} alt="" width={28} height={28} className="absolute inset-0 size-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-aria-[current=page]:opacity-100" />
+                        </span>
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
-            <div data-panel className="relative overflow-hidden bg-navy px-[clamp(20px,4vw,44px)] py-10 md:py-16">
-              <Image src="/icons/bg-flame.svg" alt="" width={396} height={626} aria-hidden className="pointer-events-none absolute -right-10 -top-8 h-[130%] w-auto opacity-70 brightness-200" />
-              <p data-item className="display relative max-w-[18ch] text-[1.25rem] leading-[1.15] md:text-[1.375rem]">
-                We provide comprehensive plumbing, heating, HVAC, and gas services.
+            <div data-panel className="relative flex items-center overflow-hidden bg-navy py-10 pl-[clamp(20px,6vw,90px)] pr-[clamp(20px,3vw,44px)] md:py-0">
+              <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} aria-hidden className="pointer-events-none absolute left-[6%] top-[-12%] h-[215%] w-auto max-w-none opacity-45" />
+              <p data-item className="relative text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
+                We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
               </p>
             </div>
           </div>
