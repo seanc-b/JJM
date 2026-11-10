@@ -87,8 +87,8 @@ export type Section = {
   lead: string;
   body: string;
   href: string;
-  /** The button label, naming where it goes (not a bare "Learn more"). */
-  cta: string;
+  /** What the "Learn more" button is called for screen readers, naming where it goes. */
+  ctaLabel: string;
   /** Shown in order by the pinned services scroller; w and h are the file's real pixel size. */
   images: { src: string; alt: string; w: number; h: number }[];
   aspect: string;
@@ -104,7 +104,7 @@ export const sections: Section[] = [
     lead: "At JJM Mechanical Group",
     body: ", we specialize in providing reliable and efficient mechanical services tailored to the unique needs of property management companies.",
     href: "/property-management",
-    cta: "Explore property services",
+    ctaLabel: "Learn more about property management services",
     images: [
       { src: "/images/property-crane-aerial.jpg", w: 1200, h: 1600, alt: "Aerial view of a crane lifting mechanical equipment onto a downtown rooftop" },
       { src: "/images/property-boiler-skid.jpg", w: 1980, h: 1820, alt: "A packaged boiler skid with manifold piping before installation" },
@@ -121,7 +121,7 @@ export const sections: Section[] = [
     lead: "JJM Mechanical Group",
     body: " provides comprehensive plumbing, heating, and gas fitting services for residential and commercial clients across the Lower Mainland.",
     href: "/plumbing",
-    cta: "Explore plumbing services",
+    ctaLabel: "Learn more about plumbing, heating and gas fitting",
     images: [
       { src: "/images/plumbing-boiler-room.jpg", w: 1476, h: 1129, alt: "A finished boiler room with copper piping, pumps and expansion tanks" },
       { src: "/images/plumbing-meters.jpg", w: 893, h: 1359, alt: "Three brass water meters on insulated white pipes" },
@@ -138,7 +138,7 @@ export const sections: Section[] = [
     lead: "As a proud member of the BCWWA since 2007",
     body: ", JJM Mechanical Group is fully certified to install, test, and repair all makes and sizes of backflow prevention devices.",
     href: "/backflow",
-    cta: "Explore backflow services",
+    ctaLabel: "Learn more about backflow certification",
     images: [
       { src: "/images/backflow-assembly.jpg", w: 2560, h: 1903, alt: "A red and green double check valve backflow assembly with test tags" },
       { src: "/images/backflow-gauge.jpg", w: 1220, h: 1500, alt: "A technician holding a backflow test gauge" },
@@ -155,7 +155,7 @@ export const sections: Section[] = [
     lead: "Founded in 2012 by Jay Mallan",
     body: ", JJM Mechanical Group draws on over 20 years of experience in the mechanical trade.",
     href: "/about",
-    cta: "Meet the team",
+    ctaLabel: "Learn more about us",
     images: [
       { src: "/images/about-crew-trench.jpg", w: 1014, h: 1499, alt: "The JJM crew replacing a ring main valve in an excavated trench" },
       { src: "/images/about-team-shop.jpg", w: 1500, h: 708, alt: "Five JJM team members in the shop in front of mechanical equipment" },

@@ -9,6 +9,8 @@ type Props = {
   tone?: "light" | "dark" | "solid";
   className?: string;
   external?: boolean;
+  /** A fuller name for screen readers, when the visible label is generic ("Learn more"). */
+  ariaLabel?: string;
 };
 
 /** Resting colours, the fill that sweeps in on hover, and the colours over it. */
@@ -25,7 +27,7 @@ const ease = "duration-500 ease-[var(--ease-out-expo)]";
  * sweeps in from the left behind the label, the label turns to the contrasting colour, and it rolls up as its
  * twin rolls in from below.
  */
-export default function Button({ href, children, icon, tone = "dark", className = "", external }: Props) {
+export default function Button({ href, children, icon, tone = "dark", className = "", external, ariaLabel }: Props) {
   const t = tones[tone];
   const roll = `block transition-transform ${ease} group-hover:-translate-y-full group-focus-visible:-translate-y-full`;
   const inner = (
@@ -46,13 +48,13 @@ export default function Button({ href, children, icon, tone = "dark", className 
 
   if (external) {
     return (
-      <a href={href} className={cls} target="_blank" rel="noopener noreferrer">
+      <a href={href} aria-label={ariaLabel} className={cls} target="_blank" rel="noopener noreferrer">
         {inner}
       </a>
     );
   }
   return (
-    <Link href={href} className={cls}>
+    <Link href={href} aria-label={ariaLabel} className={cls}>
       {inner}
     </Link>
   );

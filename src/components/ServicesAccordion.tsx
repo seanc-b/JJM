@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, type MouseEvent } from "react";
 import Button from "@/components/Button";
 import { useLenis } from "@/components/SmoothScroll";
-import { IconChevron } from "@/components/Icons";
+import { IconChevron, IconPlus } from "@/components/Icons";
 import { sections } from "@/content/home";
 import { noWidow } from "@/lib/text";
 
@@ -90,8 +90,8 @@ export default function ServicesAccordion() {
                       {noWidow(s.body)}
                     </p>
                     <div className="mt-6">
-                      <Button href={s.href}>
-                        {s.cta}
+                      <Button href={s.href} icon={<IconPlus />} ariaLabel={s.ctaLabel}>
+                        Learn more
                       </Button>
                     </div>
                     <ul className="mt-8 flex flex-col gap-4 md:grid md:grid-cols-3">
