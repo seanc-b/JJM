@@ -123,6 +123,8 @@ export default function ServicesScroller() {
   const showService = useRef<((si: number, mode?: "scroll" | "leave" | "enter") => void) | null>(null);
   /** While a switcher jump plays, scroll updates leave the text alone; it syncs to the scroll after. */
   const jumping = useRef(false);
+  /** The progress line's ease during a tab jump; a second click cancels the first. */
+  const lineTween = useRef<gsap.core.Tween | null>(null);
   const syncToScroll = useRef<(() => void) | null>(null);
   const lenis = useLenis();
 
@@ -253,7 +255,8 @@ export default function ServicesScroller() {
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           // The switcher's fill follows the timeline as it plays (smoothed by the scrub), so it glides with the photos.
-          onUpdate: () => switcher?.style.setProperty("--progress", tl.progress().toFixed(4)),
+          // Not during a tab jump: the jump eases the line to its new spot itself (jumpTo).
+          onUpdate: () => !jumping.current && switcher?.style.setProperty("--progress", tl.progress().toFixed(4)),
           scrollTrigger: {
             trigger: el,
             // Photos start as the landing ends, so scrolling always moves something.
@@ -344,6 +347,19 @@ export default function ServicesScroller() {
     markActive(si);
     jump.current?.kill();
     jumping.current = true;
+
+    // The progress line eases to where the new service starts, rather than snapping there with the scroll.
+    const switcher = el.querySelector<HTMLElement>("[data-switcher]");
+    if (switcher) {
+      const line = { p: parseFloat(getComputedStyle(switcher).getPropertyValue("--progress")) || 0 };
+      lineTween.current?.kill();
+      lineTween.current = gsap.to(line, {
+        p: firstStep[si] / TOTAL,
+        duration: 1.1,
+        ease: "power3.inOut",
+        onUpdate: () => switcher.style.setProperty("--progress", line.p.toFixed(4)),
+      });
+    }
     showService.current?.(si, "leave");
     jump.current = gsap
       .timeline()
