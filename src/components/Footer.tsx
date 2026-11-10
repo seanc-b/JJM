@@ -145,11 +145,12 @@ export default function Footer({ tagline = sameDay, current }: Props) {
             </li>
           ))}
         </ul>
-        <div className="rule-dotted" />
-        <p className="py-4 text-center text-[0.75rem] font-light text-ink">
-          © {company.year} {company.name} | All Rights Reserved
-        </p>
       </div>
+      {/* Edge to edge, like the section titles' dotted rules. */}
+      <div className="rule-dotted" />
+      <p className="site py-4 text-center text-[0.75rem] font-light text-ink">
+        © {company.year} {company.name} | All Rights Reserved
+      </p>
     </footer>
   );
 }
