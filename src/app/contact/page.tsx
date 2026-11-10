@@ -60,7 +60,7 @@ export default function Page() {
               <dl className="space-y-[1.15em] text-[clamp(1.05rem,1.33vw,1.25rem)] leading-[1.25] md:-mt-[0.32em]">
                 {details.map((d) => (
                   <div key={d.label} data-reveal>
-                    <dt className="font-bold uppercase text-navy">{d.label}</dt>
+                    <dt className="font-semibold uppercase text-navy">{d.label}</dt>
                     {/* The link mails or dials; the copy button beside it is for mouse and trackpad users (touch taps do the native thing). */}
                     <dd className="flex items-center gap-1">
                       <a

@@ -86,7 +86,7 @@ export default function ServicesAccordion() {
                 <div className="min-h-0 overflow-hidden">
                   <div className={`pb-8 transition-opacity duration-500 ${isOpen ? "opacity-100 delay-150" : "opacity-0"}`}>
                     <p className="max-w-[42ch] text-pretty text-[clamp(1.05rem,4vw,1.3rem)] leading-[1.45] text-ink">
-                      <strong className="font-bold text-black">{s.lead}</strong>
+                      <strong className="font-semibold text-black">{s.lead}</strong>
                       {noWidow(s.body)}
                     </p>
                     <div className="mt-6">

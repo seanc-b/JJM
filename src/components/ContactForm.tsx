@@ -5,7 +5,7 @@ import { sendMessage, type ContactState, type Field } from "@/app/contact/action
 
 const initial: ContactState = { status: "idle" };
 
-const labelCls = "mb-2 block pl-1 text-[clamp(0.85rem,1.2vw,1.125rem)] font-bold uppercase tracking-[0.01em] text-navy";
+const labelCls = "mb-2 block pl-1 text-[clamp(0.85rem,1.2vw,1.125rem)] font-semibold uppercase tracking-[0.01em] text-navy";
 const boxCls = "bg-white shadow-[0_1px_3px_rgb(23_53_93/0.12)] transition-[box-shadow] duration-300";
 const focusCls = "focus-within:ring-2 focus-within:ring-blue";
 const invalidCls = "ring-2 ring-[#b42318]";

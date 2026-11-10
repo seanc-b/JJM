@@ -13,7 +13,7 @@ import { company, nav, partners, sameDay } from "@/content/home";
 function Chip({ label, value, href, copy }: { label: string; value: string; href?: string; copy?: string }) {
   const layout = "inline-flex flex-wrap items-baseline gap-x-3 px-5 py-2.5";
   const labelCls = "label";
-  const valueCls = "text-[clamp(1rem,1.3vw,1.3rem)] font-bold";
+  const valueCls = "text-[clamp(1rem,1.3vw,1.3rem)] font-semibold";
   // The mask clips only below each text's box, so the text can rise into it without being seen first.
   const masked = (cls: string, tone: string, text: string) => (
     <span className={`relative ${cls} [clip-path:inset(-0.5em_-0.5em_0_-0.5em)]`}>
@@ -93,7 +93,7 @@ export default function Footer({ tagline = sameDay, current }: Props) {
               <a href={company.instagramHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-navy transition-opacity duration-300 hover:opacity-70">
                 <span className="label">Stay connected</span>
                 <IconInstagram className="size-7" />
-                <span className="font-bold">{company.instagram}</span>
+                <span className="font-semibold">{company.instagram}</span>
               </a>
             </li>
           </ul>
@@ -102,7 +102,7 @@ export default function Footer({ tagline = sameDay, current }: Props) {
               <IconPhone className="size-4" />
             </span>
             <span className="text-[clamp(1.1rem,1.4vw,1.4rem)] uppercase leading-none tracking-[0.04em]">
-              Emergency <strong className="ml-1 font-bold normal-case tracking-normal">{company.phone}</strong>
+              Emergency <strong className="ml-1 font-semibold normal-case tracking-normal">{company.phone}</strong>
             </span>
           </a>
         </div>
@@ -116,7 +116,7 @@ export default function Footer({ tagline = sameDay, current }: Props) {
               <Link
                 href={item.href}
                 aria-current={item.href === current ? "page" : undefined}
-                className={`text-[0.875rem] uppercase tracking-[0.06em] ${item.href === current ? "font-bold text-black" : "font-semibold text-navy transition-colors duration-300 hover:text-blue"}`}
+                className={`text-[0.875rem] uppercase tracking-[0.06em] ${item.href === current ? "font-semibold text-black" : "font-semibold text-navy transition-colors duration-300 hover:text-blue"}`}
               >
                 {item.label}
               </Link>

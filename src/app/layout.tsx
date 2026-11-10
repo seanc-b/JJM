@@ -6,7 +6,8 @@ import SmoothScroll from "@/components/SmoothScroll";
 const workSans = Work_Sans({
   variable: "--font-work-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  // No 700: the heaviest weight on the site is semibold (600).
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 

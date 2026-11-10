@@ -8,7 +8,7 @@ import VideoModal from "@/components/VideoModal";
 import { news, type NewsItem } from "@/content/home";
 
 /** The caption's white bar (one per line), and the Play button; each is drawn twice for the wipe hover. */
-const caption = "box-decoration-clone px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-bold leading-[1.55]";
+const caption = "box-decoration-clone px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-semibold leading-[1.55]";
 const play = "inline-flex items-center gap-2 px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-white";
 const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5";
 

@@ -234,7 +234,7 @@ export default function Header() {
                         href={item.href}
                         onClick={close}
                         aria-current={current ? "page" : undefined}
-                        className="group flex items-center gap-3 whitespace-nowrap py-[10px] text-[1.0625rem] font-bold uppercase leading-none tracking-[0.02em] transition-colors duration-300 hover:text-navy aria-[current=page]:text-navy md:text-[1.25rem]"
+                        className="group flex items-center gap-3 whitespace-nowrap py-[10px] text-[1.0625rem] font-semibold uppercase leading-none tracking-[0.02em] transition-colors duration-300 hover:text-navy aria-[current=page]:text-navy md:text-[1.25rem]"
                       >
                         <span className="relative size-7 shrink-0 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-110">
                           <Image src={menuIcon(item.icon, "white")} alt="" width={28} height={28} className="absolute inset-0 size-full transition-opacity duration-300 group-hover:opacity-0 group-aria-[current=page]:opacity-0" />

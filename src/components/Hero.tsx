@@ -73,7 +73,7 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
             <IconPhone className="size-4" />
           </span>
           <span>
-            Emergency <span className="ml-1 text-[1.25rem] font-bold normal-case tracking-normal">{company.phone}</span>
+            Emergency <span className="ml-1 text-[1.25rem] font-semibold normal-case tracking-normal">{company.phone}</span>
           </span>
         </a>
         <a href={company.instagramHref} data-reveal="load" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80">

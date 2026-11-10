@@ -424,7 +424,7 @@ export default function ServicesScroller() {
                       <Image src={s.icon} alt="" width={44} height={44} className="size-11 shrink-0" />
                     </div>
                     <p className="mt-7 max-w-[42ch] text-pretty text-[clamp(1.1rem,1.6vw,1.5rem)] leading-[1.45] text-ink">
-                      <strong className="font-bold text-black">{s.lead}</strong>
+                      <strong className="font-semibold text-black">{s.lead}</strong>
                       {noWidow(s.body)}
                     </p>
                     <div className="mt-8">
