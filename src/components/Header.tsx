@@ -253,7 +253,7 @@ export default function Header() {
               <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
                 <Image src="/icons/bg-jjm-mark.svg" alt="" width={571} height={557} className="absolute left-[4.4%] top-[-40%] h-[211%] w-auto max-w-none opacity-20" />
               </div>
-              <p data-item className="relative text-[1.25rem] font-bold uppercase leading-[1.04] md:text-[1.5rem]">
+              <p data-item className="relative text-[1.25rem] font-semibold uppercase leading-[1.04] md:text-[1.5rem]">
                 We provide comprehensive plumbing, heating, HVAC, and A&#8209;Gas services.
               </p>
               {/* Email and phone as icons in the bottom-right corner, so the statement stays centred. As in the

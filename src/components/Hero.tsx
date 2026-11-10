@@ -39,8 +39,7 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
               {eyebrow.label}
             </p>
           )}
-          {/* Semibold (600), a weight under .display's bold. Inline because .display sits outside Tailwind's layers and would win over a class. */}
-          <h1 data-rise="load" className="display text-[clamp(2.1rem,4.6vw,3.05rem)]" style={{ fontWeight: 600 }}>
+          <h1 data-rise="load" className="display text-[clamp(2.1rem,4.6vw,3.05rem)]">
             {lines.map((line) => (
               <span key={line}>
                 <span>{line}</span>

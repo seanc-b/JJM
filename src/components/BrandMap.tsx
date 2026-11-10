@@ -234,7 +234,7 @@ export default function BrandMap({ title, fallbackSrc, className = "" }: Props) 
       {/* The office card, in the site's style: over the map's top-left corner from md, under the map on phones
           (where it would cover the pin). */}
       <div className="bg-white px-5 py-4 md:absolute md:left-[clamp(12px,2vw,28px)] md:top-[clamp(12px,2vw,28px)] md:z-[2] md:shadow-[0_12px_32px_-12px_rgba(23,53,93,0.45)]">
-        <p className="font-bold uppercase leading-tight text-navy">{company.name}</p>
+        <p className="font-semibold uppercase leading-tight text-navy">{company.name}</p>
         <p className="mt-1 text-[0.9375rem] leading-snug text-ink">
           8331 Eastlake Dr Unit 107,
           <br />
