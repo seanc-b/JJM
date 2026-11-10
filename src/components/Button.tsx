@@ -5,43 +5,44 @@ type Props = {
   href: string;
   children: string;
   icon?: ReactNode;
-  /** solid: blue block, the main call to action. dark: pale block on white, the secondary one. light: white block on a photo. */
+  /** dark: navy outline on white (content). light: white outline on a photo (hero). solid: filled blue. */
   tone?: "light" | "dark" | "solid";
   className?: string;
   external?: boolean;
 };
 
-/** Each tone's resting colours, and the copy that wipes across on hover. */
+/** Resting colours, the fill that sweeps in on hover, and the colours over it. */
 const tones = {
-  solid: { base: "bg-blue text-white", fill: "bg-navy text-white" },
-  dark: { base: "bg-frost text-navy", fill: "bg-navy text-white" },
-  light: { base: "bg-white text-navy", fill: "bg-blue text-white" },
+  dark: { base: "border-navy/45 text-navy group-hover:border-navy group-focus-visible:border-navy", fill: "bg-navy", over: "group-hover:text-white group-focus-visible:text-white" },
+  light: { base: "border-white/80 text-white group-hover:border-white group-focus-visible:border-white", fill: "bg-white", over: "group-hover:text-navy group-focus-visible:text-navy" },
+  solid: { base: "border-blue bg-blue text-white group-hover:border-navy group-focus-visible:border-navy", fill: "bg-navy", over: "" },
 };
 
-const layout = "inline-flex items-center gap-2.5 px-5 py-3 text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.14em]";
-const iconCls = "flex size-4 items-center justify-center transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5 [&>svg]:size-4";
+const ease = "duration-500 ease-[var(--ease-out-expo)]";
 
 /**
- * A square block button in the style of the news Play button: on hover or focus a navy copy of it (white
- * text) wipes across from left to right (.wipe and .wipe-fill in globals.css).
+ * The design's button: an outline with softly rounded corners and spaced capitals. On hover or focus a fill
+ * sweeps in from the left behind the label, the label turns to the contrasting colour, and it rolls up as its
+ * twin rolls in from below.
  */
 export default function Button({ href, children, icon, tone = "dark", className = "", external }: Props) {
   const t = tones[tone];
-  const content = (
-    <>
-      {children}
-      {icon && <span className={iconCls}>{icon}</span>}
-    </>
-  );
+  const roll = `block transition-transform ${ease} group-hover:-translate-y-full group-focus-visible:-translate-y-full`;
   const inner = (
     <>
-      {content}
-      <span aria-hidden className={`wipe-fill absolute inset-0 ${layout} ${t.fill}`}>
-        {content}
+      <span aria-hidden className={`absolute inset-0 origin-left scale-x-0 transition-transform ${ease} group-hover:scale-x-100 group-focus-visible:scale-x-100 ${t.fill}`} />
+      <span className={`relative flex items-center transition-colors ${ease} ${t.over}`}>
+        <span className="relative block overflow-hidden leading-none">
+          <span className={roll}>{children}</span>
+          <span aria-hidden className={`absolute left-0 top-full ${roll}`}>
+            {children}
+          </span>
+        </span>
+        {icon && <span className="ml-2 -mr-1 flex size-4 items-center justify-center [&>svg]:size-4">{icon}</span>}
       </span>
     </>
   );
-  const cls = `wipe group relative ${layout} ${t.base} ${className}`;
+  const cls = `group relative inline-flex items-center overflow-hidden rounded-xl border px-6 py-3 text-[0.8125rem] font-medium uppercase tracking-[0.12em] transition-colors ${ease} ${t.base} ${className}`;
 
   if (external) {
     return (

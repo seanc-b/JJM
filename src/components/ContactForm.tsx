@@ -9,7 +9,6 @@ const labelCls = "mb-2 block pl-1 text-[clamp(0.85rem,1.2vw,1.125rem)] font-bold
 const boxCls = "bg-white shadow-[0_1px_3px_rgb(23_53_93/0.12)] transition-[box-shadow] duration-300";
 const focusCls = "focus-within:ring-2 focus-within:ring-blue";
 const invalidCls = "ring-2 ring-[#b42318]";
-const sendCls = "inline-flex items-center px-5 py-3 text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.14em] text-white";
 
 function FieldError({ id, text }: { id: string; text?: string }) {
   return text ? (
@@ -102,12 +101,17 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={pending}
-                // The site's block button (Button.tsx): a navy copy wipes across on hover or focus.
-                className={`wipe relative ${sendCls} cursor-pointer bg-blue disabled:cursor-wait disabled:opacity-60`}
+                // The site's outlined button (Button.tsx, dark tone): a navy fill sweeps in from the left and the label rolls.
+                className="group relative inline-flex cursor-pointer items-center overflow-hidden rounded-xl border border-navy/45 px-6 py-3 text-[0.8125rem] font-medium uppercase tracking-[0.12em] text-navy transition-colors duration-500 ease-[var(--ease-out-expo)] hover:border-navy focus-visible:border-navy disabled:cursor-wait disabled:opacity-60"
               >
-                {pending ? "Sending" : "Send"}
-                <span aria-hidden className={`wipe-fill absolute inset-0 ${sendCls} bg-navy`}>
-                  {pending ? "Sending" : "Send"}
+                <span aria-hidden className="absolute inset-0 origin-left scale-x-0 bg-navy transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-x-100 group-focus-visible:scale-x-100" />
+                <span className="relative block overflow-hidden leading-none transition-colors duration-500 group-hover:text-white group-focus-visible:text-white">
+                  <span className="block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full group-focus-visible:-translate-y-full">
+                    {pending ? "Sending" : "Send"}
+                  </span>
+                  <span aria-hidden className="absolute left-0 top-full block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full group-focus-visible:-translate-y-full">
+                    {pending ? "Sending" : "Send"}
+                  </span>
                 </span>
               </button>
             </div>

@@ -240,7 +240,7 @@ export default function BrandMap({ title, fallbackSrc, className = "" }: Props) 
           <br />
           Burnaby, BC V5A 4W2
         </p>
-        <Button href={directionsHref} tone="solid" external className="mt-3">
+        <Button href={directionsHref} external className="mt-3">
           Get directions
         </Button>
       </div>
