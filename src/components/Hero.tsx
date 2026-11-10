@@ -12,7 +12,7 @@ type Props = {
   eyebrow?: { label: string; icon: string };
   /** A long down arrow under the headline linking to the page content (an element id). */
   scrollTo?: { target: string; label: string };
-  /** Both are 90% of the viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
+  /** Both are full viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
   size?: "home" | "page";
 };
 
@@ -21,8 +21,7 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
   return (
     <section
       className={`relative isolate overflow-hidden bg-navy text-white ${home ? "min-h-[640px]" : "min-h-[560px]"}`}
-      // 90% of the screen, so the top of the next section peeks in below and the page clearly continues.
-      style={{ height: "90svh" }}
+      style={{ height: "100svh" }}
     >
       {/* The photo fades up from the navy ground on arrival (Motion, data-hero-photo), then the text follows. */}
       <div data-hero-photo className="tint absolute inset-0">

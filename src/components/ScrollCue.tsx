@@ -31,10 +31,10 @@ export default function ScrollCue({ target, label }: { target: string; label: st
       aria-label={label}
       className="group -ml-3 inline-flex p-3 text-white/85 transition-colors duration-300 hover:text-white"
     >
-      <svg width="16" height="88" viewBox="0 0 16 88" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="cue-bob overflow-visible">
+      <svg width="16" height="56" viewBox="0 0 16 56" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="cue-bob overflow-visible">
         {/* The stem grows from the top on hover; the tick moves down with its end. */}
-        <line x1="8" y1="1" x2="8" y2="86" className="origin-top transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-y-[1.12]" />
-        <polyline points="2,80 8,86 14,80" className="transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-[10px]" />
+        <line x1="8" y1="1" x2="8" y2="54" className="origin-top transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-y-[1.12]" />
+        <polyline points="2,48 8,54 14,48" className="transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-[6px]" />
       </svg>
     </a>
   );
