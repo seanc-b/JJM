@@ -4,10 +4,6 @@ import ScrollCue from "@/components/ScrollCue";
 import { IconInstagram, IconPhone } from "@/components/Icons";
 import { company } from "@/content/home";
 
-/** The scroll-down arrow under the headline (ScrollCue). Switched off for now to see the heroes without it;
- * pages still pass `scrollTo`, so setting this back to true brings it back everywhere. */
-const SHOW_SCROLL_CUE = false;
-
 type Props = {
   image: { src: string; alt: string };
   lines: string[];
@@ -16,7 +12,7 @@ type Props = {
   eyebrow?: { label: string; icon: string };
   /** A long down arrow under the headline linking to the page content (an element id). */
   scrollTo?: { target: string; label: string };
-  /** Both are full viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
+  /** Both are 90% of the viewport height. "home" clears the header before centring the headline; "page" centres it on the whole photo, headline from column 8. */
   size?: "home" | "page";
 };
 
@@ -25,7 +21,8 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
   return (
     <section
       className={`relative isolate overflow-hidden bg-navy text-white ${home ? "min-h-[640px]" : "min-h-[560px]"}`}
-      style={{ height: "100svh" }}
+      // 90% of the screen, so the top of the next section peeks in below and the page clearly continues.
+      style={{ height: "90svh" }}
     >
       {/* The photo fades up from the navy ground on arrival (Motion, data-hero-photo), then the text follows. */}
       <div data-hero-photo className="tint absolute inset-0">
@@ -57,7 +54,8 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
               </Button>
             </div>
           )}
-          {SHOW_SCROLL_CUE && scrollTo && (
+          {/* The arrow only where there's no button: a hero with a CTA already gives the eye somewhere to go. */}
+          {scrollTo && !cta && (
             // Rises into a mask like the headline, starting as its last line lands.
             <div data-rise="load" data-rise-delay={lines.length * 0.09 + 0.15} className="mt-8">
               <span>
