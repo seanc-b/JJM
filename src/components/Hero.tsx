@@ -4,6 +4,10 @@ import ScrollCue from "@/components/ScrollCue";
 import { IconInstagram, IconPhone } from "@/components/Icons";
 import { company } from "@/content/home";
 
+/** The scroll-down arrow under the headline (ScrollCue). Switched off for now to see the heroes without it;
+ * pages still pass `scrollTo`, so setting this back to true brings it back everywhere. */
+const SHOW_SCROLL_CUE = false;
+
 type Props = {
   image: { src: string; alt: string };
   lines: string[];
@@ -53,7 +57,7 @@ export default function Hero({ image, lines, cta, eyebrow, scrollTo, size = "hom
               </Button>
             </div>
           )}
-          {scrollTo && (
+          {SHOW_SCROLL_CUE && scrollTo && (
             // Rises into a mask like the headline, starting as its last line lands.
             <div data-rise="load" data-rise-delay={lines.length * 0.09 + 0.15} className="mt-8">
               <span>
