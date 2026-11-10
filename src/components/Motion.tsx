@@ -37,6 +37,9 @@ export default function Motion() {
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.to(onPage("[data-hero-photo]"), { opacity: 1, duration: 1.2, ease: "power2.out", delay: start });
+      // ...and, like the page photos (data-wipe), the image settles from a little larger into place as it fades
+      // up. GSAP takes over the image's CSS scale (1.12, its parallax room in Hero), so it ends back at 1.12.
+      gsap.fromTo(onPage("[data-hero-photo] img"), { scale: 1.12 * 1.18 }, { scale: 1.12, duration: 1.6, ease: EASE, delay: start });
 
       // Reveals: "load" ones run on mount (first viewport); the rest on scroll-enter.
       const reveals = onPage("[data-reveal]");
