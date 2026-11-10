@@ -8,12 +8,12 @@ import VideoModal from "@/components/VideoModal";
 import { news, type NewsItem } from "@/content/home";
 
 /** The caption's white bar (one per line), and the Play button; each is drawn twice for the wipe hover. */
-const caption = "box-decoration-clone px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-semibold leading-[1.55]";
+const caption = "box-decoration-clone px-2.5 py-1 text-[clamp(0.95rem,1.3vw,1.3rem)] font-semibold leading-[1.25]";
 const play = "inline-flex items-center gap-2 px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-white";
 const playIcon = "size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5";
 
 /**
- * The photo caption: white bars of navy text, one per line. Where the lines break depends on the width,
+ * The photo caption: white bars of near-black text, one per line, set tight so the bars meet. Where the lines break depends on the width,
  * so they're measured after layout, and again on resize, and each line gets its own copies, clipped to
  * that line's band. Before measuring, a single band covers the whole caption.
  *  - Each line has its own white bar and text copy. When the caption first scrolls into view, the bars
@@ -168,7 +168,7 @@ function WipeCaption({ text }: { text: string }) {
           style={{ inset: -BLEED, clipPath: textInset(b) }}
         >
           <span data-line-rise className="absolute inset-0" style={{ padding: BLEED, clipPath: textInset(b) }}>
-            <span className={`${caption} text-navy`}>{text}</span>
+            <span className={`${caption} text-[#141a22]`}>{text}</span>
           </span>
         </span>
       ))}
