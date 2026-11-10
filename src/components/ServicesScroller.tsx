@@ -436,23 +436,25 @@ export default function ServicesScroller() {
                 ))}
               </div>
 
-              {/* Service switcher: hairlines top and bottom, like the section headings. The top one fills in blue
-                  from the left as you scroll through the whole section (--progress, 0–1, set by the scroll timeline),
-                  showing how far along the four services you are. The current service is marked by a heavier blue
-                  underline that slides to it (--active) and a darker label. */}
+              {/* Service switcher: a hairline along the top fills in blue from the left as you scroll through the
+                  whole section (--progress, 0–1, set by the scroll timeline), showing how far along the four services
+                  you are. The current service has a darker label and, under it, the header nav's light blue dot,
+                  which glides to whichever service is active (--active), with the nav dot's easing. */}
               <nav
                 data-switcher
                 aria-label="Jump to a service"
-                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 border-b border-blue/30 bg-white [--active:0] [--progress:0]"
+                className="absolute bottom-[6svh] left-0 z-10 grid w-full min-w-[22rem] grid-cols-4 bg-white [--active:0] [--progress:0]"
               >
                 <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-blue/30">
                   <span className="absolute inset-0 origin-left bg-blue" style={{ transform: "scaleX(var(--progress))" }} />
                 </span>
                 <span
                   aria-hidden
-                  className="absolute -bottom-px left-0 h-[3px] w-1/4 bg-blue transition-transform duration-700 ease-[var(--ease-out-expo)]"
+                  className="pointer-events-none absolute bottom-1 left-0 flex w-1/4 justify-center transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{ transform: "translateX(calc(var(--active) * 100%))" }}
-                />
+                >
+                  <span className="size-[9px] rounded-full bg-glacier" />
+                </span>
                 {sections.map((s, si) => (
                   <button
                     key={s.id}
@@ -460,7 +462,7 @@ export default function ServicesScroller() {
                     data-rail
                     aria-label={s.title.join(" ")}
                     onClick={() => jumpTo(si)}
-                    className={`relative h-12 cursor-pointer text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink/60 transition-colors duration-500 hover:text-navy [&.is-active]:text-navy ${si === 0 ? "is-active" : ""}`}
+                    className={`relative h-14 cursor-pointer pb-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink/60 transition-colors duration-500 hover:text-navy [&.is-active]:text-navy ${si === 0 ? "is-active" : ""}`}
                   >
                     {s.navLabel}
                   </button>
